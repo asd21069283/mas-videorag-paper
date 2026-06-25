@@ -1,0 +1,19 @@
+# ===== MVP: Qwen3-VL-4B-Instruct + ms-swift LoRA(冻结ViT) 音视频问答 =====
+# ⚠️ 版本以官方文档为准: https://swift.readthedocs.io/en/latest/BestPractices/Qwen3-VL-Best-Practice.html
+# 安装顺序: 先这份, flash-attn 单独装(见下方注释)
+
+ms-swift>=4.0            # 阿里官方训练框架, Qwen3-VL 支持最快
+modelscope               # 国内/AutoDL 拉权重用(免翻墙)
+transformers>=4.57       # ⚠️ Qwen3-VL 需要; 若 4.57 未发版改用 git+https://github.com/huggingface/transformers
+qwen_vl_utils>=0.0.14    # Qwen 官方多模态预处理(解析 <video>/帧抽取)
+accelerate>=0.30
+decord                   # 视频解帧后端(快)
+av                       # 备用视频解码(pyav)
+pillow
+numpy
+
+# ---- 可选, 单独装 ----
+# qwen_vl_utils[decord]   : pip install -U "qwen_vl_utils[decord]"  (用 decord 后端抽帧)
+# flash-attn              : pip install flash-attn --no-build-isolation
+#                           ⚠️ 必须匹配 torch+CUDA 版本, 编译慢; 装不上就别加 --attn_impl flash_attn
+# bitsandbytes            : pip install bitsandbytes   (走 QLoRA --quant_method bnb 时需要)
