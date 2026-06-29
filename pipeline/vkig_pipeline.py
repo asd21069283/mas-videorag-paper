@@ -184,6 +184,11 @@ def clip_eval(keyframe, generated, instruction):
 # ========== 主流程: 跑一个样本 ==========
 def run_one(video, query, object_phrase, out_dir, gold=None):
     from PIL import Image
+    import torch
+    # ⚠️ 先抢占建立 CUDA 上下文, 再用 decord 读帧。
+    # 否则 decord 初始化会破坏后续 CUDA init, 报 "random_device could not be read"。
+    if torch.cuda.is_available():
+        torch.zeros(1, device="cuda")
     os.makedirs(out_dir, exist_ok=True)
     frames = read_frames(video, fps=1.0)
     print(f"[1] 抽帧 {len(frames)} 张")
