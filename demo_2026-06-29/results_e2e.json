@@ -1,0 +1,8 @@
+{
+  "pipeline": "Qwen3-VL-4B(理解视频帧) -> 自动构造prompt -> SDXL(生成新图) -> CLIP评测",
+  "understand_subject": "a red convertible sports car",
+  "understand_location": "A red convertible sports car is parked on the street in front of a red and gold ornate building.",
+  "generation_prompt_auto": "a red convertible sports car, driving through a neon-lit city street at night, rain reflections, cinematic",
+  "clip_subject_sim_keyframe_vs_e2e": 0.8593,
+  "clip_text_align_e2e_vs_prompt": 0.341
+}
