@@ -21,16 +21,21 @@ def _free():
 
 # ========== ① Q-driven 关键帧选择 ==========
 def read_frames(video_path, fps=1.0, max_frames=64):
-    """用 decord 按 fps 抽帧, 返回 [(ts, PIL.Image), ...]。"""
-    from decord import VideoReader
-    from PIL import Image
-    vr = VideoReader(video_path)
-    vfps = float(vr.get_avg_fps()) or 25.0
-    step = max(1, int(round(vfps / fps)))
-    idx = list(range(0, len(vr), step))[:max_frames]
-    out = []
-    for i in idx:
-        out.append((i / vfps, Image.fromarray(vr[i].asnumpy())))
+    """用 PyAV 按 fps 抽帧, 返回 [(ts, PIL.Image), ...]。
+    ⚠️ 不用 decord——decord 会破坏 PyTorch CUDA 初始化(random_device / segfault)。"""
+    import av
+    container = av.open(video_path)
+    stream = container.streams.video[0]
+    step_t = 1.0 / fps
+    out, next_t = [], 0.0
+    for i, frame in enumerate(container.decode(stream)):
+        t = float(frame.pts * stream.time_base) if frame.pts is not None else i * (1.0 / (float(stream.average_rate) or 25.0))
+        if t + 1e-6 >= next_t:
+            out.append((t, frame.to_image()))
+            next_t += step_t
+            if len(out) >= max_frames:
+                break
+    container.close()
     return out
 
 
