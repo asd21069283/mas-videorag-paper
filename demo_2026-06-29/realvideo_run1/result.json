@@ -1,0 +1,26 @@
+{
+  "video": "/root/autodl-tmp/vstar/videos/videos/7771650716.mp4",
+  "query": "what walks in front of a man in white?",
+  "object": "dog",
+  "keyframe_ts": 3.003,
+  "keyframe_score": 0.2614,
+  "grounding": {
+    "bbox": [
+      468.239990234375,
+      183.9845428466797,
+      488.2115173339844,
+      205.80686950683594
+    ],
+    "conf": 0.494
+  },
+  "understand": {
+    "answer": "Based on the images provided, a small, scruffy dog walks in front of the man in the white shirt.\n\nHere's a breakdown of the evidence:\n- In the first image, the man in the white shirt is walking a dog on a leash down a paved road.\n- The second and third images are close-ups showing the dog from a side and rear angle, with the man's hand holding the leash.\n- The dog has a gray and white, shaggy coat and is wearing a red harness.\n- The dog is positioned in front of the man, walking ahead of him.\n\nTherefore, the animal that walks in front of",
+    "subject": "a brown dog"
+  },
+  "instruction": "a brown dog, re-render in a new cinematic scene at night",
+  "gen_model": "sdxl-turbo",
+  "metrics": {
+    "clip_subject_sim": 0.6731,
+    "clip_text_align": 0.2851
+  }
+}
