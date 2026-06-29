@@ -114,9 +114,33 @@ def ground_object(image, object_phrase):
     return box, conf
 
 
-# ========== ③ Qwen3-VL 理解 ==========
-def understand(images, question):
-    """对若干关键帧(或单图)做视频理解, 返回 {answer, subject}。images=[PIL]。"""
+# ========== ③ Qwen3-VL 理解 (+自带 grounding 出框) ==========
+import re as _re
+
+
+def parse_qwen_bbox(text, W, H):
+    """【纯逻辑·可自测】从 Qwen 输出里抽 bbox_2d, 按 0-1000 归一化转像素 [x1,y1,x2,y2]。
+    Qwen3-VL grounding 坐标是相对 0-1000 (官方); 找不到返回 None。"""
+    nums = None
+    m = _re.search(r'"bbox_2d"\s*:\s*\[([^\]]+)\]', text)
+    if m:
+        nums = [float(x) for x in _re.findall(r'-?\d+\.?\d*', m.group(1))]
+    if not nums:                                     # 退而求其次: 找第一个4元数组
+        m2 = _re.search(r'\[\s*(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)\s*\]', text)
+        if m2:
+            nums = [float(x) for x in m2.groups()]
+    if not nums or len(nums) < 4:
+        return None
+    x1, y1, x2, y2 = nums[:4]
+    if max(abs(x1), abs(y1), abs(x2), abs(y2)) <= 1000:   # 0-1000 归一化 -> 像素
+        x1, x2 = x1 * W / 1000.0, x2 * W / 1000.0
+        y1, y2 = y1 * H / 1000.0, y2 * H / 1000.0
+    return [min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2)]
+
+
+def understand(images, question, ground_image=None, object_phrase=None):
+    """视频理解, 返回 {answer, subject, bbox(可选)}。images=[PIL]。
+    若给 ground_image+object_phrase, 用 Qwen 自带 grounding 在该图上对目标出框(0-1000->像素)。"""
     import torch
     from transformers import AutoProcessor
     try:
@@ -134,14 +158,20 @@ def understand(images, question):
         ii, vi = process_vision_info(msgs)
         inp = proc(text=[text], images=ii, videos=vi, padding=True, return_tensors="pt").to("cuda")
         with torch.no_grad():
-            g = model.generate(**inp, max_new_tokens=128, do_sample=False)
+            g = model.generate(**inp, max_new_tokens=160, do_sample=False)
         return proc.batch_decode(g[:, inp.input_ids.shape[1]:], skip_special_tokens=True)[0].strip()
 
     answer = ask(images, question)
     subject = ask(images[:1], "Name the single main object the question is about, as a short phrase "
                               "(type + color only, e.g. 'a red sports car'). Output only the phrase.")
+    bbox, bbox_raw = None, None
+    if ground_image is not None and object_phrase:
+        bbox_raw = ask([ground_image],
+                       f'Locate the {object_phrase} in this image. Output ONLY JSON like '
+                       f'{{"bbox_2d": [x1,y1,x2,y2]}} with integer coordinates normalized to 0-1000, top-left origin.')
+        bbox = parse_qwen_bbox(bbox_raw, ground_image.width, ground_image.height)
     del model; _free()
-    return {"answer": answer, "subject": subject}
+    return {"answer": answer, "subject": subject, "bbox": bbox, "bbox_raw": bbox_raw}
 
 
 # ========== ④ FLUX-Kontext 基于关键帧生成 ==========
@@ -201,9 +231,14 @@ def run_one(video, query, object_phrase, out_dir, gold=None):
     ts, kf_img, score = kfs[0]                        # 取相关性最高的关键帧做生成底图
     kf_img.save(os.path.join(out_dir, "keyframe.png"))
     print(f"[1] 选中关键帧 ts={ts:.1f}s score={score:.3f} (+{len(kfs)-1}张备选)")
-    box, conf = ground_object(kf_img, object_phrase)
-    print(f"[2] 定位 '{object_phrase}': box={box} conf={conf:.3f}")
-    u = understand([k[1] for k in kfs], query)
+    ground = os.environ.get("GROUND", "qwen")        # 默认用 Qwen 自带 grounding(理解+定位同源)
+    if ground == "gdino":
+        box, conf = ground_object(kf_img, object_phrase)
+        u = understand([k[1] for k in kfs], query)
+    else:
+        u = understand([k[1] for k in kfs], query, ground_image=kf_img, object_phrase=object_phrase)
+        box, conf = u.get("bbox"), (1.0 if u.get("bbox") else 0.0)
+    print(f"[2] 定位 '{object_phrase}' ({ground}): box={box} conf={conf}")
     print(f"[3] 理解 answer={u['answer'][:80]!r} subject={u['subject']!r}")
     subj = u["subject"] if 0 < len(u["subject"]) < 60 else object_phrase
     instruction = f"{subj}, {os.environ.get('VKIG_EDIT','re-render in a new cinematic scene at night')}"
@@ -242,7 +277,14 @@ def selftest():
     assert sel == sorted(sel, key=lambda i: ts[i])
     # 少于k直接全选
     assert select_by_score([0.1,0.2], [0,1], k=4) == [0,1]
-    print("✅ vkig_pipeline selftest 通过: 选帧覆盖逻辑(高相关+不扎堆)")
+    # parse_qwen_bbox: 0-1000 归一化 -> 像素(W=640,H=360)
+    b = parse_qwen_bbox('{"bbox_2d": [100, 200, 300, 400], "label": "dog"}', 640, 360)
+    assert b == [64.0, 72.0, 192.0, 144.0], b
+    # 无 bbox_2d 时退回找4元数组
+    b2 = parse_qwen_bbox('the box is [500,500,1000,1000]', 640, 360)
+    assert b2 == [320.0, 180.0, 640.0, 360.0], b2
+    assert parse_qwen_bbox("no box here", 640, 360) is None
+    print("✅ vkig_pipeline selftest 通过: 选帧覆盖逻辑 + Qwen bbox 解析(0-1000->像素)")
 
 
 if __name__ == "__main__":
