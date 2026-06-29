@@ -1,0 +1,9 @@
+{
+  "torch": "2.5.1+cu124",
+  "cuda_build": "12.4",
+  "gpu": "NVIDIA GeForce RTX 4090 D",
+  "task": "keyframe(red car@theater) --instruction--> generated(same car@snowy mountain)",
+  "clip_subject_sim_keyframe_vs_generated": 0.8178,
+  "clip_text_align_generated_vs_instruction": 0.3185,
+  "metric_note": "DreamSim weights blocked by GFW; used CLIP-ViT-B/32 as equivalent (0~1, higher=better)"
+}
