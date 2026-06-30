@@ -61,7 +61,7 @@ def main():
             inp = cp(text=[r["query"]], images=imgs, return_tensors="pt", padding=True, truncation=True).to("cuda")
             with torch.no_grad():
                 o = cm(**inp)
-            sc = F.normalize(o.image_embeds, -1) @ F.normalize(o.text_embeds, -1).T
+            sc = F.normalize(o.image_embeds, dim=-1) @ F.normalize(o.text_embeds, dim=-1).T
             sc = sc.squeeze(-1).tolist()
             idx = select_by_score(sc, [f[0] for f in frames], k=4)[0]
             r["kf_ts"] = frames[idx][0]; r["_kf"] = frames[idx][1]
@@ -128,7 +128,7 @@ def main():
                      return_tensors="pt", padding=True, truncation=True).to("cuda")
             with torch.no_grad():
                 o = cm(**inp)
-            ie = F.normalize(o.image_embeds, -1); te = F.normalize(o.text_embeds, -1)
+            ie = F.normalize(o.image_embeds, dim=-1); te = F.normalize(o.text_embeds, dim=-1)
             r["clip_subject_sim"] = round(float((ie[0]*ie[1]).sum()), 4)
             r["clip_text_align"] = round(float((ie[1]*te[0]).sum()), 4)
         except Exception as e:
