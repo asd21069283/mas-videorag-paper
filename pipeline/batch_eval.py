@@ -7,7 +7,7 @@ os.environ.setdefault("HF_HOME", "/root/autodl-tmp/hf")
 os.environ.setdefault("HF_ENDPOINT", "https://hf-mirror.com")
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from vkig_pipeline import read_frames, select_by_score, parse_qwen_bbox
+from vkig_pipeline import read_frames, select_by_score, parse_qwen_bbox, smooth_scores
 
 VID_DIR = "/root/autodl-tmp/vstar/videos/videos"
 ANN = "/root/autodl-tmp/vstar/V_STaR_test.json"
@@ -63,7 +63,8 @@ def main():
                 o = cm(**inp)
             sc = F.normalize(o.image_embeds, dim=-1) @ F.normalize(o.text_embeds, dim=-1).T
             sc = sc.squeeze(-1).tolist()
-            idx = select_by_score(sc, [f[0] for f in frames], k=4)[0]
+            sm = smooth_scores(sc, win=3)                      # 平滑抑尖峰
+            idx = max(range(len(sm)), key=lambda i: sm[i])     # 主关键帧=平滑相关性峰值
             r["kf_ts"] = frames[idx][0]; r["_kf"] = frames[idx][1]
         except Exception as e:
             r["err_A"] = str(e)[:120]; r["_kf"] = None

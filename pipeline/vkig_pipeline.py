@@ -81,11 +81,25 @@ def clip_image_text_scores(frames, text):
     return scores
 
 
+def smooth_scores(scores, win=3):
+    """【纯逻辑·可自测】移动平均平滑, 抑制单帧相关性尖峰, 让"持续相关的片段"胜出
+    —— 更贴近 gold 时间窗(单帧尖峰常落在窗外)。"""
+    n = len(scores)
+    if n <= 2 or win <= 1:
+        return list(scores)
+    h = win // 2
+    return [sum(scores[max(0, i-h):min(n, i+h+1)]) / (min(n, i+h+1) - max(0, i-h)) for i in range(n)]
+
+
 def select_keyframes(frames, query, k=4):
+    """返回 [(ts,PIL,score)], **第0个=主关键帧(平滑相关性峰值, 用于定位/生成)**, 其余为覆盖备选。"""
     scores = clip_image_text_scores(frames, query)
     ts = [f[0] for f in frames]
-    idx = select_by_score(scores, ts, k=k)
-    return [(frames[i][0], frames[i][1], scores[i]) for i in idx]   # [(ts, PIL, score)]
+    sm = smooth_scores(scores, win=3)
+    primary = max(range(len(sm)), key=lambda i: sm[i])      # 主关键帧=持续相关段的峰值(不取孤立尖峰/最早帧)
+    cover = select_by_score(sm, ts, k=k)                    # 备选: 用平滑分做覆盖选帧
+    order = [primary] + [i for i in sorted(set(cover) - {primary}, key=lambda i: ts[i])]
+    return [(frames[i][0], frames[i][1], scores[i]) for i in order]
 
 
 # ========== ② Grounding-DINO 目标定位 ==========
@@ -284,7 +298,10 @@ def selftest():
     b2 = parse_qwen_bbox('the box is [500,500,1000,1000]', 640, 360)
     assert b2 == [320.0, 180.0, 640.0, 360.0], b2
     assert parse_qwen_bbox("no box here", 640, 360) is None
-    print("✅ vkig_pipeline selftest 通过: 选帧覆盖逻辑 + Qwen bbox 解析(0-1000->像素)")
+    # smooth_scores: 孤立尖峰(i=0) vs 持续相关段(i=4,5,6) -> 平滑后峰值应落在持续段
+    sm = smooth_scores([1.0, 0, 0, 0, 1.0, 1.0, 1.0], win=3)
+    assert max(range(len(sm)), key=lambda i: sm[i]) >= 4, f"平滑应选持续相关段, got {sm}"
+    print("✅ vkig_pipeline selftest 通过: 选帧覆盖 + Qwen bbox 解析 + 平滑选帧(抑尖峰)")
 
 
 if __name__ == "__main__":
