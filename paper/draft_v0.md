@@ -212,9 +212,24 @@ We ran the full five-stage pipeline on a real V-STaR street-scene clip (`7771650
 | ④ FLUX/SDXL generation | generate a new image conditioned on keyframe | ✓ new image of a brown dog on the street (gen model: sdxl-turbo) |
 | ⑤ Evaluation | localization / consistency metrics | temporal hit ✓; **spatial IoU = 0**; subject CLIP sim **0.673**; CLIP text align **0.285** |
 
-**Honest reading.** The full chain **runs end to end on real video**, with understanding and generation both succeeding — a step up from earlier synthetic single-image proofs. **Localization is the current weakest link**: the dog is small and distant, and Grounding-DINO-base boxed adjacent empty ground (IoU = 0). This is a failure that only real data exposes, and it directly motivates the fixes below. *This is a single-sample sanity run, not a benchmark result.*
+**Honest reading.** The full chain **runs end to end on real video**, with understanding and generation both succeeding — a step up from earlier synthetic single-image proofs. Localization with Grounding-DINO-base initially failed (the small, distant dog was boxed on adjacent empty ground, IoU = 0) — a failure only real data exposes. **Fix [VERIFIED]:** replacing the detector with **Qwen3-VL's native grounding** (same model used for understanding) corrected this on the same sample to a confident box on the dog, raising **spatial IoU from 0.0 → 0.363**. *Aggregate numbers follow in §6.3.*
 
-### 6.3 Main results **[PLANNED]**
+### 6.3 Dev-set results — 50 samples, our system **[VERIFIED]**
+
+We ran the full pipeline (Qwen3-VL grounding) over the first **50 V-STaR test videos** on a single RTX 4090D 24GB (4 keyframes/clip; SDXL-Turbo generator; CLIP/0–1000-grounding). All 50 completed.
+
+| Metric | Value | Note |
+|---|---|---|
+| Mean spatial IoU (pred box vs. gold) | **0.358** | localization, object level |
+| Localization acc @IoU≥0.5 | **0.36** | |
+| Localization acc @IoU≥0.3 | **0.48** | |
+| Temporal recall (keyframe ts ∈ gold interval) | **0.28** | ⚠ weakest link — selection picks the right *time* only ~28% |
+| CLIP subject sim (generated vs. keyframe) | **0.664** | subject preservation |
+| CLIP text align (generated vs. instruction) | **0.289** | image–instruction match |
+
+**Honest reading.** With Qwen3-VL native grounding, object localization is moderate (mean IoU 0.358; 48% at IoU≥0.3) — a large gain over the Grounding-DINO baseline (IoU 0 on the failure case). The **new weakest link is temporal keyframe selection** (28% land inside the gold window): CLIP relevance scoring alone is poor at *when*. Generation preserves the subject reasonably (CLIP 0.664). *These are our-system-only numbers on a 50-sample dev split with a fast SDXL generator; baseline comparison and the full generator (FLUX-Kontext) are §6.4 TODO.*
+
+### 6.4 Main results — baseline comparison **[PLANNED]**
 
 TODO — fill VKIG-Bench test results once dev (50 → 300+) is built:
 
@@ -237,8 +252,9 @@ TODO — table to be filled. Planned ablations: A1 remove SVO conditioning (`s(o
 **Conclusion.** We formalize *video-grounded interleaved image-text generation*, position it in an open four-property slot, and propose a cooperative two-agent framework over a shared multimodal RAG with a question-driven, object-level localization-to-generation method and a keyframe-consistency-aware benchmark (VKIG-Bench). A real-video prototype runs end to end on a single 24GB GPU, with understanding and generation verified.
 
 **Limitations (honest).**
-- **Localization is the weak link.** On the verified real-video sample, spatial IoU = 0 (small, distant object; Grounding-DINO-base). Planned fixes: use Qwen3-VL's native grounding (same model for understanding and localization), stronger detectors (DINO-X / Grounding-DINO-large) at higher resolution, and folding object size into the selection score. **[PLANNED]** — not yet validated.
-- **Scale.** Only single-sample sanity runs exist; VKIG-Bench (50→300+→1–2k) and full baseline comparisons are TODO.
+- **Temporal keyframe selection is now the weak link.** On the 50-sample dev set, only **28%** of selected keyframes fall inside the gold temporal window — CLIP relevance scoring is poor at *when*. Planned fixes: question-conditioned temporal scoring (AKS-style coverage with object-size weighting), audio/subtitle cues, and a learned selector. **[PLANNED]**
+- **Localization improved but not solved.** Switching from Grounding-DINO to Qwen3-VL native grounding raised spatial IoU from 0 → 0.358 mean (acc@0.3 = 48%) **[VERIFIED, 50 samples]**, but precise small-object boxes remain hard; stronger detectors / higher resolution are future work.
+- **Scale & generator.** Results are a 50-sample dev split with a fast SDXL-Turbo generator; VKIG-Bench (→300+→1–2k), the full FLUX-Kontext generator, the proper metrics (VQAScore/DreamSim), and baseline comparisons are TODO.
 - **Cross-domain generalization.** Validated only on street-scene V-STaR; film/short-drama and other domains are unverified.
 - **Unverified design choices.** Coverage `c(I)` is our instantiation of AKS, not its published form; SVO extraction is a transfer of GROVE; several 2026 preprint references and the M2RAG metric set must be re-checked against source repos before camera-ready.
 
