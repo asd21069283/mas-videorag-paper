@@ -218,16 +218,16 @@ We ran the full five-stage pipeline on a real V-STaR street-scene clip (`7771650
 
 We ran the full pipeline (Qwen3-VL grounding) over the first **50 V-STaR test videos** on a single RTX 4090D 24GB (4 keyframes/clip; SDXL-Turbo generator; CLIP/0–1000-grounding). All 50 completed.
 
-| Metric | Value | Note |
-|---|---|---|
-| Mean spatial IoU (pred box vs. gold) | **0.358** | localization, object level |
-| Localization acc @IoU≥0.5 | **0.36** | |
-| Localization acc @IoU≥0.3 | **0.48** | |
-| Temporal recall (keyframe ts ∈ gold interval) | **0.28** | ⚠ weakest link — selection picks the right *time* only ~28% |
-| CLIP subject sim (generated vs. keyframe) | **0.664** | subject preservation |
-| CLIP text align (generated vs. instruction) | **0.289** | image–instruction match |
+**System metrics (Qwen3-VL grounding, 50 videos).** Mean spatial IoU **0.32–0.36** (selection-dependent), localization acc@IoU≥0.3 **0.40–0.48**, temporal recall **0.28–0.32**, CLIP subject sim **0.66**, CLIP text align **0.28**.
 
-**Honest reading.** With Qwen3-VL native grounding, object localization is moderate (mean IoU 0.358; 48% at IoU≥0.3) — a large gain over the Grounding-DINO baseline (IoU 0 on the failure case). The **new weakest link is temporal keyframe selection** (28% land inside the gold window): CLIP relevance scoring alone is poor at *when*. Generation preserves the subject reasonably (CLIP 0.664). *These are our-system-only numbers on a 50-sample dev split with a fast SDXL generator; baseline comparison and the full generator (FLUX-Kontext) are §6.4 TODO.*
+**Grounding head-to-head (50 videos, identical keyframes).**
+
+| Detector | mean spatial IoU | acc@IoU≥0.3 |
+|---|---|---|
+| **Qwen3-VL native** | **0.323** | **0.40** |
+| Grounding-DINO-base | 0.292 | 0.36 |
+
+**Honest reading.** (1) **Qwen3-VL native grounding beats Grounding-DINO-base head-to-head** (IoU 0.323 vs. 0.292; single-sample finding holds at scale). (2) Both plateau near ~0.3 because the **real bottleneck is keyframe selection**: temporal recall is only 28–32%, so the selected frame often lies *outside* the gold interval and is scored against a mistimed gold box — capping IoU regardless of detector. (3) A relevance-smoothing tweak raised temporal recall (28%→32%) but slightly lowered IoU — **not a clear win**; the priority is a stronger *question-conditioned temporal selector*, not the detector. Stronger detectors (Grounding-DINO-large, DINO-X) are API/less-available (future work). Generation preserves the subject reasonably (CLIP 0.66). *50-sample dev split, fast SDXL generator; FLUX-Kontext + baselines are §6.4 TODO.*
 
 ### 6.4 Main results — baseline comparison **[PLANNED]**
 
