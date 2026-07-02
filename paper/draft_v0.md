@@ -218,7 +218,7 @@ We ran the full five-stage pipeline on a real V-STaR street-scene clip (`7771650
 
 We ran the full pipeline (Qwen3-VL grounding) over the first **50 V-STaR test videos** on a single RTX 4090D 24GB (4 keyframes/clip; SDXL-Turbo generator; CLIP/0–1000-grounding). All 50 completed.
 
-**System metrics (Qwen3-VL grounding, 50 videos, best = object-conditioned selection).** Mean spatial IoU **0.415**, localization acc@IoU≥0.3 **0.50**, acc@IoU≥0.5 **0.40**, temporal recall **~0.30**, CLIP subject sim **0.67**, CLIP text align **0.28**.
+**System metrics (Qwen3-VL grounding, object-conditioned selection, n = 150 V-STaR test videos).** Mean spatial IoU **0.426**, localization acc@IoU≥0.3 **0.52**, acc@IoU≥0.5 **0.41**, temporal recall **~0.26**, CLIP subject sim **0.66**, CLIP text align **0.29**. (Result holds from the 50- to 150-sample split.)
 
 **Keyframe-selection ablation (Qwen grounding, same 50 videos).**
 
