@@ -1,0 +1,1197 @@
+{
+  "summary": {
+    "ground": "qwen",
+    "n_total": 50,
+    "n_done": 50,
+    "mean_spatial_iou": 0.4149,
+    "localization_acc@0.5": 0.4,
+    "localization_acc@0.3": 0.5,
+    "temporal_recall": 0.3,
+    "mean_clip_subject_sim": 0.6663,
+    "mean_clip_text_align": 0.2785
+  },
+  "per_sample": [
+    {
+      "vid": "7771650716",
+      "query": "what walks in front of a man in white?",
+      "object": "dog",
+      "video": "/root/autodl-tmp/vstar/videos/videos/7771650716.mp4",
+      "interval": [
+        0.0,
+        13.0
+      ],
+      "kf_ts": 48.014633333333336,
+      "answer": "Based on the image provided, there is no man in white visible. The image shows:\n\n- A small, scruffy dog with grey and white fur, wearing a red harness and a blue leash.\n- A person's leg and foot (wearing a black shoe) on the left side of the frame.\n\nThe dog is walking on a paved surface, and the person's foot is near the dog, suggesting the person is walking with the dog. However, there is no man in white in the image.\n\nTherefore, the question \"what walks in front of a man in white?\" cannot be answered as there is no man in white in",
+      "subject": "gray dog",
+      "pred_box": [
+        197.76,
+        56.16,
+        448.0,
+        358.92
+      ],
+      "instruction": "gray dog, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.675,
+      "clip_text_align": 0.3233,
+      "spatial_iou": 0.259,
+      "temporal_hit": false
+    },
+    {
+      "vid": "6297019062",
+      "query": "who is above the round and pink baby seat?",
+      "object": "baby",
+      "video": "/root/autodl-tmp/vstar/videos/videos/6297019062.mp4",
+      "interval": [
+        52.1,
+        58.3
+      ],
+      "kf_ts": 58.024633333333334,
+      "answer": "Based on the image provided, there is no one physically sitting *above* the round and pink baby seat. The baby in the pink seat is sitting *in* the seat, and the baby in the purple seat is also sitting *in* their seat.\n\nHowever, if you are referring to the baby in the **pink seat** (which is on the right side of the image), that baby is wearing a **costume** that includes a **red and black outfit with a black hat**. The hat is positioned on the baby’s head, which is above the seat.\n\nSo, to answer your question directly:\n\n> **The",
+      "subject": "purple seat",
+      "pred_box": [
+        158.72,
+        28.8,
+        391.68,
+        329.04
+      ],
+      "instruction": "purple seat, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6067,
+      "clip_text_align": 0.247,
+      "spatial_iou": 0.94,
+      "temporal_hit": true
+    },
+    {
+      "vid": "9293415110",
+      "query": "what is behind the adult in black dress at theshow?",
+      "object": "guitar",
+      "video": "/root/autodl-tmp/vstar/videos/videos/9293415110.mp4",
+      "interval": [
+        69.2,
+        90.0
+      ],
+      "kf_ts": 18.0,
+      "answer": "Behind the adult in the black dress, you can see:\n\n- A person playing a **classical guitar** (sitting on a stool, wearing a white shirt and dark pants).\n- A **cajón** (a type of box drum) to the right, with the brand name “**MFI**” visible on it.\n- A **black speaker** or subwoofer on the floor, positioned near the guitarist.\n- Some **stage equipment** and cables on the floor.\n- A **dark background**, likely the stage curtain or backdrop.\n\nThe scene appears to be a live musical performance, possibly a folk or traditional",
+      "subject": "black dress with gold trim",
+      "pred_box": [
+        115.84,
+        17.28,
+        280.32,
+        132.12
+      ],
+      "instruction": "black dress with gold trim, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.686,
+      "clip_text_align": 0.2838,
+      "spatial_iou": 0.349,
+      "temporal_hit": false
+    },
+    {
+      "vid": "8177965766",
+      "query": "what is above the female adult?",
+      "object": "electric_fan",
+      "video": "/root/autodl-tmp/vstar/videos/videos/8177965766.mp4",
+      "interval": [
+        14.8,
+        29.0
+      ],
+      "kf_ts": 1.0,
+      "answer": "Above the female adult in the image, there is a **wall-mounted light fixture**. It appears to be a **sconce-style lamp** with a warm, yellowish glow, likely providing ambient lighting for the room. The fixture is mounted on the wall to her left (from the viewer’s perspective) and is positioned above a small, framed item that looks like a clock or plaque.\n\nThe light fixture is not directly above her head, but rather to the side and slightly behind her, illuminating the area around her. The background includes a plain white wall, a vent, and some furniture, suggesting the setting is an indoor",
+      "subject": "microphone (black)",
+      "pred_box": null,
+      "instruction": "microphone (black), re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6096,
+      "clip_text_align": 0.2813,
+      "temporal_hit": false
+    },
+    {
+      "vid": "6272786009",
+      "query": "who is above the watercraft on the water?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/6272786009.mp4",
+      "interval": [
+        10.0,
+        17.9
+      ],
+      "kf_ts": 9.009,
+      "answer": "Based on the image provided, there are people above the watercraft on the water.\n\nLooking closely at the scene:\n\n- There is a large, multi-level building or dock structure on the right side of the image, situated on the shore.\n- The top deck of this structure is crowded with many people, who appear to be spectators.\n- There are also a few small boats or watercraft on the water, and people can be seen in them, likely rowers or participants in a water sport.\n- The people on the watercraft are not on the water's surface in a way that suggests they are \"above\" the watercraft in",
+      "subject": "clouds (gray)",
+      "pred_box": null,
+      "instruction": "clouds (gray), re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6798,
+      "clip_text_align": 0.2877,
+      "temporal_hit": false
+    },
+    {
+      "vid": "7786283208",
+      "query": "who holds the green toy on the ground?",
+      "object": "child",
+      "video": "/root/autodl-tmp/vstar/videos/videos/7786283208.mp4",
+      "interval": [
+        0.0,
+        3.8
+      ],
+      "kf_ts": 14.014,
+      "answer": "Based on the image provided, there is no one holding a green toy on the ground.\n\nHere's what we can see:\n- There is a small child lying on the floor in the bottom left corner, wearing a floral top and yellow shorts.\n- Next to this child, there is a small, dark-colored object that appears to be a toy or a small electronic device, but it is not green.\n- The child is lying on their back, and their hands are not visible or touching the toy.\n- The toy is on the floor, not being held by anyone.\n\nTherefore, the green toy is not present in the image, and",
+      "subject": "shredded paper",
+      "pred_box": [
+        254.72,
+        155.16,
+        478.08,
+        282.96
+      ],
+      "instruction": "shredded paper, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6724,
+      "clip_text_align": 0.2993,
+      "spatial_iou": 0.243,
+      "temporal_hit": false
+    },
+    {
+      "vid": "5766018720",
+      "query": "who holds the gray toy?",
+      "object": "child",
+      "video": "/root/autodl-tmp/vstar/videos/videos/5766018720.mp4",
+      "interval": [
+        25.0,
+        32.7
+      ],
+      "kf_ts": 26.026,
+      "answer": "The baby holds the gray toy.",
+      "subject": "baby",
+      "pred_box": [
+        217.6,
+        0.0,
+        522.88,
+        426.0
+      ],
+      "instruction": "baby, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.7812,
+      "clip_text_align": 0.2252,
+      "spatial_iou": 0.904,
+      "temporal_hit": true
+    },
+    {
+      "vid": "4263096481",
+      "query": "who cuts the fish on the table?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/4263096481.mp4",
+      "interval": [
+        0.0,
+        5.7
+      ],
+      "kf_ts": 0.0,
+      "answer": "The person in the image cuts the fish on the table. Based on the visual, it’s a person with their hands actively engaged in handling the fish — one hand is holding the fish steady while the other appears to be using a knife to cut it. The person is wearing a black watch and a bracelet, and the fish is lying on a metal, ribbed surface, likely a cutting board or table.\n\nSince the image doesn’t show any other people, and the action is clearly being performed by one individual, we can conclude:\n\n> **The person cutting the fish is the individual whose hands are visible in the image.**\n\nThere’s",
+      "subject": "silver fish",
+      "pred_box": [
+        0.0,
+        0.0,
+        188.16,
+        148.8
+      ],
+      "instruction": "silver fish, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6463,
+      "clip_text_align": 0.2972,
+      "spatial_iou": 0.919,
+      "temporal_hit": true
+    },
+    {
+      "vid": "7149153537",
+      "query": "who does the adult hug in the swimming pool?",
+      "object": "child",
+      "video": "/root/autodl-tmp/vstar/videos/videos/7149153537.mp4",
+      "interval": [
+        10.3,
+        24.6
+      ],
+      "kf_ts": 40.00663333333333,
+      "answer": "Based on the image, the adult on the left is hugging a small child in the swimming pool.\n\nThe child is a toddler, with dark hair, and is being held close to the adult's chest. The adult is shirtless and appears to be a father or caregiver, smiling down at the child.\n\nThe other adult on the right is also in the pool, facing the first adult and child, and appears to be interacting with them, possibly with a child of their own (partially visible behind them).\n\nSo, the adult is hugging the small child next to them.",
+      "subject": "pool",
+      "pred_box": [
+        138.24,
+        131.4,
+        217.6,
+        234.0
+      ],
+      "instruction": "pool, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6373,
+      "clip_text_align": 0.2575,
+      "spatial_iou": 0.116,
+      "temporal_hit": false
+    },
+    {
+      "vid": "8513603944",
+      "query": "what is towards the adult in the snow?",
+      "object": "ski",
+      "video": "/root/autodl-tmp/vstar/videos/videos/8513603944.mp4",
+      "interval": [
+        0.0,
+        9.0
+      ],
+      "kf_ts": 0.03336666666666667,
+      "answer": "Towards the adult in the snow, there is a **white box-like structure**, likely a **snowmaking machine** or **snow cannon** used to generate snow for the ski slope. The adult is standing next to it, possibly operating or maintaining it.\n\nAdditionally, there is a **green “STOP” sign** mounted on a pole nearby, indicating a designated stopping point or safety zone for skiers or snowboarders. The sign is positioned near a **blue and yellow banner** (possibly for a ski school or event) and a **snow-covered slope**.\n\nThe adult is also holding a **shovel or snow tool**, suggesting",
+      "subject": "skiing kids",
+      "pred_box": [
+        261.12,
+        360.96,
+        400.0,
+        392.16
+      ],
+      "instruction": "skiing kids, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.7667,
+      "clip_text_align": 0.3405,
+      "spatial_iou": 0.41,
+      "temporal_hit": true
+    },
+    {
+      "vid": "4013751996",
+      "query": "who rides the blue toy?",
+      "object": "child",
+      "video": "/root/autodl-tmp/vstar/videos/videos/4013751996.mp4",
+      "interval": [
+        0.0,
+        4.0
+      ],
+      "kf_ts": 0.0,
+      "answer": "Based on the image provided, a young child rides the blue toy.\n\nHere are the details:\n- The child is wearing a pink outfit and a yellow helmet.\n- The child is riding a small, blue tricycle with yellow wheels.\n- The child is on a paved path, likely in a backyard or garden area, with a fence and some greenery in the background.\n\nTherefore, the blue toy is ridden by a child.",
+      "subject": "tricycle (blue)",
+      "pred_box": [
+        166.4,
+        49.44,
+        223.04,
+        134.88
+      ],
+      "instruction": "tricycle (blue), re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6371,
+      "clip_text_align": 0.3593,
+      "spatial_iou": 0.85,
+      "temporal_hit": true
+    },
+    {
+      "vid": "7531285946",
+      "query": "who carries the black camera?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/7531285946.mp4",
+      "interval": [
+        0.0,
+        12.7
+      ],
+      "kf_ts": 36.002633333333335,
+      "answer": "Based on the image provided, there is no black camera visible. The image shows the lower bodies of two people walking on a rocky, dirt path. One person is wearing blue jeans and brown boots, and the other is wearing blue jeans and colorful sneakers. There are no cameras, black or otherwise, in the frame.\n\nTherefore, it is not possible to determine who carries a black camera, as no such object is present in the image.",
+      "subject": "brown boots",
+      "pred_box": [
+        281.6,
+        0.0,
+        496.0,
+        264.6
+      ],
+      "instruction": "brown boots, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6234,
+      "clip_text_align": 0.3572,
+      "spatial_iou": 0.489,
+      "temporal_hit": false
+    },
+    {
+      "vid": "5945172741",
+      "query": "who speaks to the child in the bed?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/5945172741.mp4",
+      "interval": [
+        22.4,
+        30.0
+      ],
+      "kf_ts": 19.0,
+      "answer": "Based on the image, the man in the light blue t-shirt is speaking to the child in the bed.\n\nHere's the reasoning:\n- The man is leaning over the child, who is lying on their back on the bed.\n- The man has a wide, joyful smile and appears to be laughing or speaking animatedly.\n- His body posture and facial expression suggest he is actively engaging with the child, likely talking to them or playing with them.\n- The child is looking up at the man, indicating they are interacting with him.\n\nThe woman in the red shirt is sitting on the couch in the background, seemingly occupied with a device,",
+      "subject": "orange pillow",
+      "pred_box": [
+        0.0,
+        127.68,
+        538.88,
+        386.4
+      ],
+      "instruction": "orange pillow, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6762,
+      "clip_text_align": 0.2598,
+      "spatial_iou": 0.893,
+      "temporal_hit": false
+    },
+    {
+      "vid": "4645926511",
+      "query": "who holds the child in white?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/4645926511.mp4",
+      "interval": [
+        8.1,
+        14.3
+      ],
+      "kf_ts": 30.03,
+      "answer": "Based on the image provided, it is not possible to definitively identify who is holding the child in white.\n\nHere’s what we can observe:\n- There is a person standing in a swimming pool, wearing a blue and black long-sleeved rash guard and a beige baseball cap.\n- This person is holding a child (or possibly a small object) that is white in color.\n- The child is partially submerged in the water, and the person appears to be supporting them.\n\nHowever, the image does not provide enough context to identify the person’s identity. The person could be:\n- A parent or guardian\n- A lifeguard",
+      "subject": "person in blue wetsuit",
+      "pred_box": [
+        211.68,
+        96.96,
+        360.0,
+        336.0
+      ],
+      "instruction": "person in blue wetsuit, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6269,
+      "clip_text_align": 0.2695,
+      "spatial_iou": 0.141,
+      "temporal_hit": false
+    },
+    {
+      "vid": "6896884547",
+      "query": "what does the child in green hold on the chair?",
+      "object": "ball/sports_ball",
+      "video": "/root/autodl-tmp/vstar/videos/videos/6896884547.mp4",
+      "interval": [
+        4.5,
+        11.7
+      ],
+      "kf_ts": 19.019,
+      "answer": "The child in green is holding a colorful ball on the chair. The ball has a rainbow-like pattern with swirls of pink, yellow, blue, and white. It appears to be a soft, possibly inflatable ball, and the child is gripping it with both hands while sitting on the chair.",
+      "subject": "ball (rainbow)",
+      "pred_box": [
+        284.16,
+        223.56,
+        456.96,
+        358.92
+      ],
+      "instruction": "ball (rainbow), re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.7807,
+      "clip_text_align": 0.2627,
+      "spatial_iou": 0.333,
+      "temporal_hit": false
+    },
+    {
+      "vid": "4757890069",
+      "query": "who is inside the red bus outdoors?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/4757890069.mp4",
+      "interval": [
+        16.0,
+        23.0
+      ],
+      "kf_ts": 27.027,
+      "answer": "Based on the image provided, there is no red bus visible. Instead, there is a red fire truck on the left side of the image. The fire truck has a red light on top and the number \"2\" visible on its side.\n\nRegarding who is inside the fire truck: The image is blurry and the view is from the side, so it is not possible to clearly identify anyone inside the vehicle. The fire truck's windows are not clearly visible, and there is no clear view of the interior.\n\nTherefore, based on the available visual information, we cannot determine who, if anyone, is inside the red fire truck.",
+      "subject": "fire truck",
+      "pred_box": [
+        370.56,
+        189.6,
+        405.76,
+        269.76
+      ],
+      "instruction": "fire truck, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6432,
+      "clip_text_align": 0.2789,
+      "spatial_iou": 0.0,
+      "temporal_hit": false
+    },
+    {
+      "vid": "3581585756",
+      "query": "who is in front of the child?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/3581585756.mp4",
+      "interval": [
+        18.0,
+        21.9
+      ],
+      "kf_ts": 0.0,
+      "answer": "Based on the image provided, the person in front of the child is an adult woman.\n\nHere are the details:\n- The woman is sitting next to the child, with her arm around the child's shoulder.\n- She is smiling and looking towards the camera.\n- She has dark hair and is wearing a green top.\n- The child, who is making a playful face, is positioned in front of her, closer to the camera.\n\nSo, the woman in front of the child is the adult woman sitting beside her.",
+      "subject": "bus seat",
+      "pred_box": [
+        133.12,
+        99.84,
+        458.88,
+        479.04
+      ],
+      "instruction": "bus seat, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.5155,
+      "clip_text_align": 0.1832,
+      "spatial_iou": 0.447,
+      "temporal_hit": false
+    },
+    {
+      "vid": "4688219212",
+      "query": "who is above the yellow chair in the gym?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/4688219212.mp4",
+      "interval": [
+        18.0,
+        32.0
+      ],
+      "kf_ts": 22.022,
+      "answer": "Based on the image provided, there is no yellow chair visible in the gym.\n\nHowever, there is a **red and white gymnast** performing on the **parallel bars**. The gymnast is hanging upside down, with their head near the floor and their feet pointing toward the ceiling.\n\nThe **yellow chair** is not present in the image. The chairs visible are **white or beige**.\n\nSo, to answer your question directly: **There is no yellow chair in the image, so no one is above it.**\n\nThe person who is above the **white chairs** (which are in the foreground) is the **gym",
+      "subject": "gymnast (red)",
+      "pred_box": [
+        318.08,
+        243.84,
+        417.28,
+        479.04
+      ],
+      "instruction": "gymnast (red), re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.8459,
+      "clip_text_align": 0.278,
+      "spatial_iou": 0.02,
+      "temporal_hit": true
+    },
+    {
+      "vid": "6621511673",
+      "query": "what does the adult point to inside the house?",
+      "object": "toy",
+      "video": "/root/autodl-tmp/vstar/videos/videos/6621511673.mp4",
+      "interval": [
+        67.0,
+        83.3
+      ],
+      "kf_ts": 38.00463333333333,
+      "answer": "Based on the image provided, the adult is pointing with their right index finger towards the **green, triangular Christmas tree decoration** mounted on the wall.\n\nThe tree is made of a green material (likely foam board or cardboard) and is decorated with various small, colorful Christmas-themed cutouts, such as Santa hats, candy canes, stockings, and other holiday icons. The adult's finger is extended and directed at this decoration, which is positioned on the left side of the image, near the wall and above a white baseboard.\n\nThe adult is partially visible on the right side of the frame, wearing glasses and a dark-colored shirt,",
+      "subject": "green christmas tree",
+      "pred_box": [
+        123.52,
+        0.0,
+        347.52,
+        357.12
+      ],
+      "instruction": "green christmas tree, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.8059,
+      "clip_text_align": 0.2858,
+      "spatial_iou": 0.185,
+      "temporal_hit": false
+    },
+    {
+      "vid": "3456030972",
+      "query": "who is in front of the other child in red clothes?",
+      "object": "child",
+      "video": "/root/autodl-tmp/vstar/videos/videos/3456030972.mp4",
+      "interval": [
+        22.1,
+        25.0
+      ],
+      "kf_ts": 0.0,
+      "answer": "In the image, the child in the red and white striped shirt is sitting at a desk in the background, to the right of the center. In front of this child (from the viewer’s perspective) is a child with short black hair, wearing a white shirt, who is also seated at a desk and appears to be writing or working on a task.\n\nSo, the child in front of the child in red and white clothes is the one wearing the white shirt.\n\nNote: The child in the red and white striped shirt is not wearing red clothes alone — they are wearing a red and white striped shirt. The child in front of them",
+      "subject": "abacus (brown)",
+      "pred_box": [
+        128.0,
+        72.0,
+        503.04,
+        479.04
+      ],
+      "instruction": "abacus (brown), re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.8196,
+      "clip_text_align": 0.1984,
+      "spatial_iou": 0.0,
+      "temporal_hit": false
+    },
+    {
+      "vid": "8575881495",
+      "query": "who holds the pink toy?",
+      "object": "child",
+      "video": "/root/autodl-tmp/vstar/videos/videos/8575881495.mp4",
+      "interval": [
+        0.0,
+        13.5
+      ],
+      "kf_ts": 25.025,
+      "answer": "The little girl in the foreground holds the pink toy. She is sitting on a dark leather couch, wearing pink and white pajamas, and is focused on the plush toy in her hands.",
+      "subject": "pink stuffed animal",
+      "pred_box": [
+        112.0,
+        0.0,
+        480.0,
+        358.92
+      ],
+      "instruction": "pink stuffed animal, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6684,
+      "clip_text_align": 0.2981,
+      "spatial_iou": 0.613,
+      "temporal_hit": false
+    },
+    {
+      "vid": "5608194207",
+      "query": "who is towards the cup in the room?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/5608194207.mp4",
+      "interval": [
+        8.0,
+        15.0
+      ],
+      "kf_ts": 22.022,
+      "answer": "Based on the image provided, there is no one clearly \"towards the cup\" in the room.\n\nHere's a breakdown of what's visible:\n\n- There is a table in the foreground with a white tablecloth.\n- On this table, there are several items, including two tall white candles in a holder, a small white floral arrangement, and a clear glass cup (or small pitcher) near the center.\n- To the left of the image, a person is visible holding a camera, seemingly taking a photo or video. This person is standing near the table, but not directly \"towards\" the cup.\n- The person is",
+      "subject": "camera",
+      "pred_box": [
+        0.0,
+        177.6,
+        83.84,
+        474.72
+      ],
+      "instruction": "camera, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.7559,
+      "clip_text_align": 0.294,
+      "spatial_iou": 0.0,
+      "temporal_hit": false
+    },
+    {
+      "vid": "7605329840",
+      "query": "what is behind the adult in the room?",
+      "object": "ball/sports_ball",
+      "video": "/root/autodl-tmp/vstar/videos/videos/7605329840.mp4",
+      "interval": [
+        8.3,
+        11.8
+      ],
+      "kf_ts": 16.016,
+      "answer": "Behind the adult in the room, there is a **bookshelf**.\n\nThe bookshelf is filled with books and appears to be made of light-colored wood. It is positioned along the left side of the image, next to the couch where the adult is sitting. The bookshelf contributes to the cozy, lived-in feel of the room, suggesting it’s a home environment, possibly a living room or family space.\n\nAdditionally, there are balloons on the adult’s head — one orange with a smiling face and one pink with a drawing — which indicate a festive or celebratory occasion, such as a birthday or party. The adult is sitting on",
+      "subject": "balloon",
+      "pred_box": [
+        568.32,
+        183.6,
+        629.76,
+        247.68
+      ],
+      "instruction": "balloon, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.4808,
+      "clip_text_align": 0.2839,
+      "spatial_iou": 0.0,
+      "temporal_hit": false
+    },
+    {
+      "vid": "4698622422",
+      "query": "what does the child in yellow hold outdoors?",
+      "object": "racket",
+      "video": "/root/autodl-tmp/vstar/videos/videos/4698622422.mp4",
+      "interval": [
+        0.0,
+        6.9
+      ],
+      "kf_ts": 4.004,
+      "answer": "The child in yellow is holding a yellow tennis racket outdoors. The racket has a black handle and a white stringed net. The child is standing on a grassy lawn, and there are some orange cones and a wooden bench visible in the background, suggesting a backyard or outdoor play area.",
+      "subject": "tennis racket (yellow)",
+      "pred_box": [
+        179.2,
+        75.84,
+        510.72,
+        395.52
+      ],
+      "instruction": "tennis racket (yellow), re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6594,
+      "clip_text_align": 0.3042,
+      "spatial_iou": 0.886,
+      "temporal_hit": true
+    },
+    {
+      "vid": "3524939594",
+      "query": "what is next to the adult?",
+      "object": "chair",
+      "video": "/root/autodl-tmp/vstar/videos/videos/3524939594.mp4",
+      "interval": [
+        12.7,
+        15.0
+      ],
+      "kf_ts": 0.0,
+      "answer": "Based on the image provided, next to the adult (who is standing on a platform or step) is a **metal ladder**.\n\nThe ladder is positioned to the right of the adult and appears to be a tall, A-frame or step ladder, likely used for reaching high places or for safety purposes in the room. It is standing on the blue floor, and its rungs are visible. The adult is standing on a platform or step that is part of the setup, possibly for a demonstration or training exercise.",
+      "subject": "treadmill",
+      "pred_box": [
+        5.12,
+        165.12,
+        64.0,
+        239.28
+      ],
+      "instruction": "treadmill, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.675,
+      "clip_text_align": 0.2811,
+      "spatial_iou": 0.0,
+      "temporal_hit": false
+    },
+    {
+      "vid": "6779825956",
+      "query": "who is holding fruits?",
+      "object": "baby",
+      "video": "/root/autodl-tmp/vstar/videos/videos/6779825956.mp4",
+      "interval": [
+        0.0,
+        25.4
+      ],
+      "kf_ts": 24.024,
+      "answer": "The baby is holding the fruit.",
+      "subject": "strawberry",
+      "pred_box": [
+        115.84,
+        0.0,
+        558.72,
+        360.0
+      ],
+      "instruction": "strawberry, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.5177,
+      "clip_text_align": 0.2909,
+      "spatial_iou": 0.932,
+      "temporal_hit": true
+    },
+    {
+      "vid": "3355698421",
+      "query": "who speaks to the other adult in the living room?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/3355698421.mp4",
+      "interval": [
+        9.2,
+        13.8
+      ],
+      "kf_ts": 0.0,
+      "answer": "Based on the image provided, there is no living room visible. The scene appears to be a restaurant or a similar dining setting, with people seated at a booth.\n\nIn the image, we can see:\n- A man in the foreground, drinking from a wine glass.\n- Another person sitting behind him, with their back to the camera.\n- A third person partially visible in the background, with their head peeking over the shoulder of the person behind the man in the foreground.\n\nThere is no indication of any conversation or interaction between these individuals, nor is there any evidence of a \"living room\" setting. Therefore, it is not possible",
+      "subject": "wine glass",
+      "pred_box": [
+        0.0,
+        0.0,
+        391.68,
+        360.0
+      ],
+      "instruction": "wine glass, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.7134,
+      "clip_text_align": 0.2418,
+      "spatial_iou": 0.71,
+      "temporal_hit": false
+    },
+    {
+      "vid": "6142416815",
+      "query": "who is beneath the orange toy?",
+      "object": "baby",
+      "video": "/root/autodl-tmp/vstar/videos/videos/6142416815.mp4",
+      "interval": [
+        33.5,
+        42.2
+      ],
+      "kf_ts": 22.022,
+      "answer": "Based on the image provided, the orange toy is hanging from the blue baby swing's mobile. Beneath the orange toy, there is a **baby**.\n\nThe baby is sleeping peacefully in the blue, polka-dotted baby swing. The baby is wearing a white shirt and blue pants. The orange toy, which appears to be a fish-shaped mobile piece, is hanging directly above the baby's head.",
+      "subject": "baby in blue bouncer",
+      "pred_box": [
+        0.0,
+        468.464,
+        456.624,
+        825.44
+      ],
+      "instruction": "baby in blue bouncer, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.7571,
+      "clip_text_align": 0.3027,
+      "spatial_iou": 0.631,
+      "temporal_hit": false
+    },
+    {
+      "vid": "5323654756",
+      "query": "who is in front of the adult in black clothes?",
+      "object": "child",
+      "video": "/root/autodl-tmp/vstar/videos/videos/5323654756.mp4",
+      "interval": [
+        52.0,
+        67.8
+      ],
+      "kf_ts": 7.007,
+      "answer": "Based on the image, there is a child in a green shirt sitting on a high chair in front of the adult in black clothes.\n\nThe adult in black clothes is standing behind the table, and the child in the green shirt is seated at the table, directly in front of them. The child appears to be holding a small object, possibly a book or a plate.\n\nSo, the child in the green shirt is in front of the adult in black clothes.",
+      "subject": "balloon",
+      "pred_box": [
+        126.08,
+        202.08,
+        211.2,
+        421.44
+      ],
+      "instruction": "balloon, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6443,
+      "clip_text_align": 0.2142,
+      "spatial_iou": 0.097,
+      "temporal_hit": false
+    },
+    {
+      "vid": "4136617240",
+      "query": "what leans on the sofa inside the room?",
+      "object": "cat",
+      "video": "/root/autodl-tmp/vstar/videos/videos/4136617240.mp4",
+      "interval": [
+        0.0,
+        40.3
+      ],
+      "kf_ts": 0.0,
+      "answer": "Based on the image provided, there is a **cat** leaning on the sofa inside the room.\n\nThe cat is resting on the dark-colored sofa, positioned on the right side of the image, with its body partially visible and its head turned slightly towards the viewer. The cat appears to be relaxed and is leaning against the armrest or side of the sofa.",
+      "subject": "toy cart",
+      "pred_box": [
+        420.0,
+        147.488,
+        480.0,
+        217.888
+      ],
+      "instruction": "toy cart, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.5502,
+      "clip_text_align": 0.3064,
+      "spatial_iou": 0.841,
+      "temporal_hit": true
+    },
+    {
+      "vid": "4321061640",
+      "query": "what is behind the baby on the bed?",
+      "object": "chair",
+      "video": "/root/autodl-tmp/vstar/videos/videos/4321061640.mp4",
+      "interval": [
+        19.1,
+        27.0
+      ],
+      "kf_ts": 7.007,
+      "answer": "Behind the baby on the bed, there is a **patterned, curved pillow or support** — likely a **baby pillow or a nursing pillow** — designed to provide comfort and support for the baby while lying down. It has a **bright, colorful design** with **cartoon-like illustrations**, possibly including animals or other playful motifs, which is common for baby products meant to be soothing and visually engaging.\n\nThis type of pillow is often used to help a baby stay in a comfortable position during sleep, feeding, or playtime, and it may also be used to support the baby’s head and neck.\n\nAdditionally, in the background,",
+      "subject": "baby (blue)",
+      "pred_box": [
+        379.52,
+        195.84,
+        640.0,
+        400.32
+      ],
+      "instruction": "baby (blue), re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.7847,
+      "clip_text_align": 0.2709,
+      "spatial_iou": 0.0,
+      "temporal_hit": false
+    },
+    {
+      "vid": "3218498932",
+      "query": "who is above the yellow white sofa?",
+      "object": "child",
+      "video": "/root/autodl-tmp/vstar/videos/videos/3218498932.mp4",
+      "interval": [
+        19.3,
+        23.0
+      ],
+      "kf_ts": 6.006,
+      "answer": "Based on the image, there are two people sitting on the yellow-white sofa:\n\n1.  **A boy in a white t-shirt** - He is sitting on the right side of the sofa, with his legs extended towards the center of the room. He is looking towards the right, where another boy is sitting on the floor.\n2.  **A boy in a black t-shirt with white stripes** - He is sitting on the floor, with his back to the camera, and his legs are resting on the sofa. He is positioned directly in front of the boy in the white t-shirt.\n\nThe boy in the white t-shirt",
+      "subject": "yellow couch",
+      "pred_box": [
+        158.72,
+        87.84,
+        398.72,
+        257.28
+      ],
+      "instruction": "yellow couch, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.7073,
+      "clip_text_align": 0.2528,
+      "spatial_iou": 0.2,
+      "temporal_hit": false
+    },
+    {
+      "vid": "6244382586",
+      "query": "what does the child in green clothes ride?",
+      "object": "horse",
+      "video": "/root/autodl-tmp/vstar/videos/videos/6244382586.mp4",
+      "interval": [
+        0.0,
+        4.8
+      ],
+      "kf_ts": 3.003,
+      "answer": "Based on the image provided, the child wearing green clothes is riding a **horse**.\n\nThe child is positioned on the back of a dark-colored horse, holding the reins, and appears to be in an indoor riding arena. The horse is in motion, as indicated by its posture and the context of the scene. The child is also wearing a helmet, which is standard safety equipment for horseback riding.\n\nTherefore, the child in green clothes rides a **horse**.",
+      "subject": "horse (black)",
+      "pred_box": [
+        469.76,
+        172.44,
+        568.32,
+        290.52
+      ],
+      "instruction": "horse (black), re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.5368,
+      "clip_text_align": 0.3193,
+      "spatial_iou": 0.833,
+      "temporal_hit": true
+    },
+    {
+      "vid": "9088819598",
+      "query": "what does the baby wearing striped shirt hold?",
+      "object": "toy",
+      "video": "/root/autodl-tmp/vstar/videos/videos/9088819598.mp4",
+      "interval": [
+        0.0,
+        9.3
+      ],
+      "kf_ts": 2.002002002002002,
+      "answer": "The baby is holding an orange **Fisher-Price Oball** toy. It's a spherical, mesh-like toy with holes, commonly used for babies to chew on and explore with their hands. The baby is also wearing a striped shirt and a diaper with a fish design.",
+      "subject": "orange ball",
+      "pred_box": [
+        288.0,
+        106.56,
+        396.16,
+        210.24
+      ],
+      "instruction": "orange ball, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.5616,
+      "clip_text_align": 0.3011,
+      "spatial_iou": 0.927,
+      "temporal_hit": true
+    },
+    {
+      "vid": "3960291106",
+      "query": "what is next to the adult in white clothes?",
+      "object": "bottle",
+      "video": "/root/autodl-tmp/vstar/videos/videos/3960291106.mp4",
+      "interval": [
+        36.7,
+        45.8
+      ],
+      "kf_ts": 0.0,
+      "answer": "Based on the image provided, there is no adult in white clothes visible. The image is completely black and contains no discernible figures, objects, or details.\n\nTherefore, there is nothing next to an adult in white clothes — because no such person exists in the image.\n\nIf you have a different image or need clarification, feel free to provide more details!",
+      "subject": "black object",
+      "pred_box": null,
+      "instruction": "black object, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.8874,
+      "clip_text_align": 0.2143,
+      "temporal_hit": false
+    },
+    {
+      "vid": "4925211209",
+      "query": "who leans on the truck?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/4925211209.mp4",
+      "interval": [
+        0.0,
+        3.9
+      ],
+      "kf_ts": 20.0,
+      "answer": "Based on the image provided, a person is leaning on the truck.\n\nHere's a breakdown of what's visible:\n\n- There is a white bucket truck (also known as a cherry picker or boom lift) positioned in a forest.\n- The truck's boom is extended upwards, reaching into the canopy of tall trees.\n- At the top of the boom, in the bucket, there is a person wearing what appears to be a safety harness and work attire.\n- The person is leaning forward, with their body angled towards the tree branches, likely performing some kind of work such as trimming, inspecting, or maintaining the tree.\n\nTherefore, the",
+      "subject": "white bucket truck",
+      "pred_box": [
+        320.0,
+        106.92,
+        343.04,
+        135.72
+      ],
+      "instruction": "white bucket truck, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.823,
+      "clip_text_align": 0.2906,
+      "spatial_iou": 0.0,
+      "temporal_hit": false
+    },
+    {
+      "vid": "7223854838",
+      "query": "who is lean on by the baby in red?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/7223854838.mp4",
+      "interval": [
+        14.2,
+        17.2
+      ],
+      "kf_ts": 11.0,
+      "answer": "In the image, the baby in the red shirt is leaning on a woman who is standing next to them. The woman has blonde hair and is wearing a green tank top. She appears to be holding or supporting the baby, and they are both looking at the aquarium. The baby in red is leaning on the woman’s arm or shoulder, suggesting a close, protective relationship, likely that of a parent or caregiver.\n\nSo, the baby in red is leaning on the **woman** (who appears to be their mother or guardian).",
+      "subject": "aquarium",
+      "pred_box": [
+        418.56,
+        0.0,
+        640.0,
+        358.92
+      ],
+      "instruction": "aquarium, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.5592,
+      "clip_text_align": 0.2821,
+      "spatial_iou": 0.603,
+      "temporal_hit": false
+    },
+    {
+      "vid": "3708066257",
+      "query": "who holds hand of the other adult in black clothes?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/3708066257.mp4",
+      "interval": [
+        0.0,
+        6.3
+      ],
+      "kf_ts": 0.0,
+      "answer": "Based on the image provided, the adult in black clothes is holding the hand of the other adult, who is wearing a green shirt.\n\nHere's a breakdown of the scene:\n- There are two adults in the center of the image, seemingly dancing or moving together.\n- The adult in the green shirt is on the right side of the image, facing the camera.\n- The adult in black clothes (a black t-shirt and light blue jeans) is on the left, with their back to the camera, and their right arm is around the other person's waist or back.\n- The adult in the green shirt has their left hand on the",
+      "subject": "man (green)",
+      "pred_box": [
+        254.72,
+        108.96,
+        453.12,
+        479.04
+      ],
+      "instruction": "man (green), re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.4881,
+      "clip_text_align": 0.3019,
+      "spatial_iou": 0.652,
+      "temporal_hit": true
+    },
+    {
+      "vid": "6339322105",
+      "query": "what is behind the other duck in the water?",
+      "object": "duck",
+      "video": "/root/autodl-tmp/vstar/videos/videos/6339322105.mp4",
+      "interval": [
+        16.0,
+        21.0
+      ],
+      "kf_ts": 9.009,
+      "answer": "Behind the other duck in the water (the one with the dark head and body, likely a male mallard), there is a **brown duck** swimming slightly to the right and behind it.\n\nIn the image, there are three ducks visible:\n\n1. **Front-center**: A dark-colored duck (possibly a male mallard) swimming directly toward the viewer.\n2. **Behind and to the right**: A brown duck, likely a female mallard or a different species, swimming slightly behind and to the right of the dark duck.\n3. **Further back and to the left**: A third duck, also dark with some white markings,",
+      "subject": "duck",
+      "pred_box": [
+        157.44,
+        126.72,
+        195.2,
+        185.28
+      ],
+      "instruction": "duck, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.5951,
+      "clip_text_align": 0.2528,
+      "spatial_iou": 0.017,
+      "temporal_hit": false
+    },
+    {
+      "vid": "2824317018",
+      "query": "who is next to the other child on the long bench?",
+      "object": "child",
+      "video": "/root/autodl-tmp/vstar/videos/videos/2824317018.mp4",
+      "interval": [
+        0.0,
+        5.6
+      ],
+      "kf_ts": 16.016,
+      "answer": "Looking at the image, there is no one sitting or standing *next to the child on the long bench* in the way the question implies.\n\nThe child is sitting on a log or wooden bench, surrounded by greenery. To the right of the child, there are two adults standing on the gravel path — one in brown pants and a dark jacket, and another in jeans and a light-colored top. They are not seated on the bench with the child.\n\nSo, to answer your question directly: **There is no one sitting next to the child on the long bench.** The child is alone on the bench, with adults standing nearby",
+      "subject": "child (blond)",
+      "pred_box": [
+        127.0,
+        110.25,
+        222.0,
+        317.25
+      ],
+      "instruction": "child (blond), re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6823,
+      "clip_text_align": 0.2996,
+      "spatial_iou": 0.0,
+      "temporal_hit": false
+    },
+    {
+      "vid": "9917882506",
+      "query": "what does the child ride on the ground?",
+      "object": "bicycle",
+      "video": "/root/autodl-tmp/vstar/videos/videos/9917882506.mp4",
+      "interval": [
+        22.1,
+        32.0
+      ],
+      "kf_ts": 23.023023023023022,
+      "answer": "The child in the image is riding a **bicycle** on the ground.\n\nSpecifically, the child in the foreground is riding a small, likely children’s bicycle with a white frame, pink handlebars, and a basket on the front. The child is wearing a purple top and a pink skirt, and is riding on what appears to be a paved surface, possibly a driveway or an open paved area.\n\nIn the background, another child is also riding a bicycle, further confirming that the activity is cycling.\n\nSo, the child rides a **bicycle** on the ground.",
+      "subject": "girl on bike",
+      "pred_box": [
+        186.88,
+        171.936,
+        310.784,
+        264.096
+      ],
+      "instruction": "girl on bike, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.7055,
+      "clip_text_align": 0.3078,
+      "spatial_iou": 0.797,
+      "temporal_hit": true
+    },
+    {
+      "vid": "6592821115",
+      "query": "who is in front of the adult with long hair?",
+      "object": "baby",
+      "video": "/root/autodl-tmp/vstar/videos/videos/6592821115.mp4",
+      "interval": [
+        44.0,
+        70.4
+      ],
+      "kf_ts": 13.0,
+      "answer": "Based on the image provided, the person in front of the adult with long hair is a **small child**, likely a toddler.\n\nHere's the reasoning:\n- The adult with long hair is sitting on the floor, smiling and reaching out towards the child.\n- The child is standing in front of the adult, wearing a light pink long-sleeved shirt and a diaper.\n- The child's back is mostly to the camera, and they appear to be interacting with the adult, possibly playing or reaching out to them.\n- The child's size and clothing (diaper) strongly suggest they are a toddler.\n\nSo, the person in front",
+      "subject": "diaper (light blue)",
+      "pred_box": [
+        352.0,
+        0.0,
+        592.0,
+        423.152
+      ],
+      "instruction": "diaper (light blue), re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6225,
+      "clip_text_align": 0.3008,
+      "spatial_iou": 0.078,
+      "temporal_hit": false
+    },
+    {
+      "vid": "2782307049",
+      "query": "who watches the other adult man in black?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/2782307049.mp4",
+      "interval": [
+        13.3,
+        15.4
+      ],
+      "kf_ts": 2.002,
+      "answer": "In the image you provided, there is **one adult man** visible — he is rappelling down a rocky cliff face. There is **no other adult man in black** visible in the image, nor is there anyone clearly watching him from a distance or from above.\n\nThe man is wearing dark clothing (possibly black or dark blue), but he is alone in the scene. There are no other people visible in the frame — only the cliff, some vegetation, and the rappelling rope.\n\nSo, to answer your question directly:  \n> **No one is watching him** — at least, not visibly in the image. He appears to",
+      "subject": "man",
+      "pred_box": [
+        307.2,
+        117.12,
+        380.8,
+        304.32
+      ],
+      "instruction": "man, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.4886,
+      "clip_text_align": 0.3134,
+      "spatial_iou": 0.013,
+      "temporal_hit": false
+    },
+    {
+      "vid": "2793260225",
+      "query": "who does the adult press in the water?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/2793260225.mp4",
+      "interval": [
+        2.0,
+        10.5
+      ],
+      "kf_ts": 0.0,
+      "answer": "In the image, an adult (a man on the left) is pressing or holding down another person who is submerged in the water. The person being pressed is wearing a green cap and appears to be struggling or being held underwater. The man is using his hands to apply pressure, possibly to keep the person submerged or to assist them in some way.\n\nThe other two people in the image — a woman in a bikini standing on the right and another person in a white cap — are also in the water and appear to be involved in the situation, possibly helping or observing.\n\nSo, the adult is pressing or holding down **another person** in",
+      "subject": "people in water",
+      "pred_box": [
+        46.5,
+        77.625,
+        236.0,
+        241.125
+      ],
+      "instruction": "people in water, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6155,
+      "clip_text_align": 0.2715,
+      "spatial_iou": 0.0,
+      "temporal_hit": false
+    },
+    {
+      "vid": "4420239986",
+      "query": "what bites the white cat beside the desk?",
+      "object": "dog",
+      "video": "/root/autodl-tmp/vstar/videos/videos/4420239986.mp4",
+      "interval": [
+        3.7,
+        6.3
+      ],
+      "kf_ts": 6.006,
+      "answer": "In the image, the **dog** is biting the white cat.\n\nThe dog is on the left side of the image, with its mouth open and teeth visible, appearing to bite or interact with the cat’s face. The cat, which is white with brown patches, is standing on its hind legs on the desk, reaching up toward the dog with its front paws. The interaction looks playful or confrontational, but it’s clear the dog is the one initiating the bite or contact.\n\nSo, the answer is: **the dog bites the white cat**.",
+      "subject": "cat",
+      "pred_box": [
+        0.0,
+        94.56,
+        421.12,
+        479.04
+      ],
+      "instruction": "cat, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.7955,
+      "clip_text_align": 0.2913,
+      "spatial_iou": 0.95,
+      "temporal_hit": true
+    },
+    {
+      "vid": "10042935613",
+      "query": "what is above the table inside the room?",
+      "object": "dish",
+      "video": "/root/autodl-tmp/vstar/videos/videos/10042935613.mp4",
+      "interval": [
+        48.0,
+        57.1
+      ],
+      "kf_ts": 12.012012012012011,
+      "answer": "Above the table inside the room, there is a **ceiling fan** with **lights**.\n\nIt has:\n- **Four blades** (typical for a ceiling fan)\n- **Light fixtures** (likely frosted or warm-toned bulbs) mounted in the center, providing illumination for the dining area.\n\nThe fan is positioned to circulate air and provide light over the table where the family is eating. The room appears to be a dining area with large windows overlooking the ocean, and the fan is a common feature in such spaces for comfort and ventilation.",
+      "subject": "green bottle",
+      "pred_box": [
+        115.2,
+        266.4,
+        216.32,
+        290.52
+      ],
+      "instruction": "green bottle, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.639,
+      "clip_text_align": 0.2262,
+      "spatial_iou": 0.726,
+      "temporal_hit": false
+    },
+    {
+      "vid": "5863411262",
+      "query": "who is behind the other adult wearing beige pants?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/5863411262.mp4",
+      "interval": [
+        26.0,
+        32.1
+      ],
+      "kf_ts": 20.02,
+      "answer": "Based on the image provided, there is no one clearly visible behind the adult wearing beige pants.\n\nHere’s what we can observe:\n\n- There is an adult wearing a striped shirt (blue and white) on the left side of the image.\n- To the right, there is another person wearing a light-colored (likely white or beige) shirt.\n- Between them, there is a dark, possibly black, object or animal (perhaps a dog or a large bag) that is partially obscuring the view.\n- The background shows grass and a dirt path.\n\nSince the person in the beige shirt is on the right, and the striped shirt person",
+      "subject": "dog (black)",
+      "pred_box": [
+        0.0,
+        0.0,
+        496.0,
+        358.92
+      ],
+      "instruction": "dog (black), re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6499,
+      "clip_text_align": 0.2493,
+      "spatial_iou": 0.062,
+      "temporal_hit": false
+    },
+    {
+      "vid": "5433090067",
+      "query": "what is the child in orange clothes next to?",
+      "object": "toy",
+      "video": "/root/autodl-tmp/vstar/videos/videos/5433090067.mp4",
+      "interval": [
+        0.0,
+        3.0
+      ],
+      "kf_ts": 5.005,
+      "answer": "The child in the orange jacket is standing next to a **black, glossy, curved object** that appears to be a **plaything or piece of equipment**, possibly a **rocking toy** or **interactive play structure**. It has a smooth, rounded shape and is placed on a blue mat. The object is likely designed for children to interact with, perhaps as part of a play area or educational center.\n\nIn the background, there’s another child near a wooden instrument (possibly a piano or keyboard), and an adult standing nearby. The setting appears to be an indoor play or activity room with green and blue mats, suggesting a child",
+      "subject": "black rocking horse",
+      "pred_box": [
+        191.04,
+        328.96,
+        413.76,
+        501.12
+      ],
+      "instruction": "black rocking horse, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6105,
+      "clip_text_align": 0.2905,
+      "spatial_iou": 0.0,
+      "temporal_hit": false
+    },
+    {
+      "vid": "7308042410",
+      "query": "who touches the other female adult?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/7308042410.mp4",
+      "interval": [
+        25.7,
+        33.9
+      ],
+      "kf_ts": 5.005,
+      "answer": "In the image, there is no other female adult present. The person shown is a single woman, likely a potter, working at a pottery wheel. She is focused on shaping clay with her hands and a sponge. There are no other adults visible in the scene, so no one touches her — or anyone else — in the image.\n\nThe image may appear to show a “touching” action, but it’s simply the potter shaping her own clay. There is no indication of any interaction with another person.\n\n**Answer: No one else is present — so no other female adult touches her.**",
+      "subject": "clay bowl",
+      "pred_box": [
+        24.32,
+        216.22,
+        476.16,
+        793.186
+      ],
+      "instruction": "clay bowl, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.8232,
+      "clip_text_align": 0.2152,
+      "spatial_iou": 0.521,
+      "temporal_hit": false
+    },
+    {
+      "vid": "5349766264",
+      "query": "who plays the guitar in the room?",
+      "object": "adult",
+      "video": "/root/autodl-tmp/vstar/videos/videos/5349766264.mp4",
+      "interval": [
+        18.9,
+        36.7
+      ],
+      "kf_ts": 26.026,
+      "answer": "In the room, the man sitting on the right side, wearing a gray t-shirt and dark pants, is playing the guitar. He is seated on a patterned cushion or bench, holding the guitar and appearing to be in the middle of a performance or practice session. The other man, in the plaid shirt, is seated at a piano or keyboard and appears to be looking at sheet music or notes, not playing the guitar.",
+      "subject": "guitar (brown)",
+      "pred_box": [
+        228.48,
+        0.0,
+        456.96,
+        360.914
+      ],
+      "instruction": "guitar (brown), re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.5806,
+      "clip_text_align": 0.2826,
+      "spatial_iou": 0.914,
+      "temporal_hit": true
+    }
+  ]
+}
