@@ -27,6 +27,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--n", type=int, default=50)
     ap.add_argument("--out", default="/root/autodl-tmp/dev_eval")
+    ap.add_argument("--ground", default="qwen", choices=["qwen", "gdino"],
+                    help="定位用哪个: qwen(自带) / gdino(Grounding-DINO, 型号见 GDINO_ID 环境变量)")
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
     import torch, torch.nn.functional as F
@@ -94,12 +96,38 @@ def main():
         try:
             r["answer"] = qask([r["_kf"]], r["query"])
             r["subject"] = qask([r["_kf"]], "Name the single main object the question is about, short phrase (type+color). Output only the phrase.")
-            graw = qask([r["_kf"]], f'Locate the {r["object"] or r["subject"]} in this image. Output ONLY JSON {{"bbox_2d":[x1,y1,x2,y2]}} integers 0-1000, top-left origin.')
-            r["pred_box"] = parse_qwen_bbox(graw, r["_kf"].width, r["_kf"].height)
+            if a.ground == "qwen":
+                graw = qask([r["_kf"]], f'Locate the {r["object"] or r["subject"]} in this image. Output ONLY JSON {{"bbox_2d":[x1,y1,x2,y2]}} integers 0-1000, top-left origin.')
+                r["pred_box"] = parse_qwen_bbox(graw, r["_kf"].width, r["_kf"].height)
         except Exception as e:
             r["err_B"] = str(e)[:120]
     del qm; gc.collect(); torch.cuda.empty_cache()
-    print("[B] 理解+定位完成")
+    print("[B] 理解完成 (grounding=%s)" % a.ground)
+
+    # ---- B2: Grounding-DINO 定位(可选, 型号 GDINO_ID; 一次加载跑全部) ----
+    if a.ground == "gdino":
+        gid = os.environ.get("GDINO_ID", "IDEA-Research/grounding-dino-base")
+        from transformers import AutoProcessor as GProc, AutoModelForZeroShotObjectDetection
+        gp = GProc.from_pretrained(gid)
+        gmodel = AutoModelForZeroShotObjectDetection.from_pretrained(gid).to("cuda").eval()
+        for r in R:
+            if r.get("_kf") is None:
+                continue
+            try:
+                txt = (r["object"] or r.get("subject") or "object").lower().strip()
+                if not txt.endswith("."):
+                    txt += "."
+                inp = gp(images=r["_kf"], text=txt, return_tensors="pt").to("cuda")
+                with torch.no_grad():
+                    out = gmodel(**inp)
+                res = gp.post_process_grounded_object_detection(out, inp.input_ids, threshold=0.25, text_threshold=0.2, target_sizes=[r["_kf"].size[::-1]])[0]
+                if len(res["scores"]):
+                    j = int(res["scores"].argmax())
+                    r["pred_box"] = [float(v) for v in res["boxes"][j].tolist()]
+            except Exception as e:
+                r["err_B2"] = str(e)[:120]
+        del gmodel; gc.collect(); torch.cuda.empty_cache()
+        print(f"[B2] Grounding-DINO({gid}) 定位完成")
 
     # ---- C: SDXL 生成 ----
     from diffusers import AutoPipelineForImage2Image
@@ -150,6 +178,7 @@ def main():
         return round(sum(vs)/len(vs), 4) if vs else None
     done = [r for r in R if r.get("_gen") is not None]
     summary = {
+        "ground": a.ground + (":" + os.environ.get("GDINO_ID", "grounding-dino-base") if a.ground == "gdino" else ""),
         "n_total": len(R), "n_done": len(done),
         "mean_spatial_iou": avg("spatial_iou"),
         "localization_acc@0.5": round(sum(1 for r in R if r.get("spatial_iou", 0) >= 0.5)/len(R), 4) if R else None,
