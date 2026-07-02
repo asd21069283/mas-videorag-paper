@@ -7,7 +7,7 @@ os.environ.setdefault("HF_HOME", "/root/autodl-tmp/hf")
 os.environ.setdefault("HF_ENDPOINT", "https://hf-mirror.com")
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from vkig_pipeline import read_frames, select_by_score, parse_qwen_bbox, smooth_scores
+from vkig_pipeline import read_frames, select_by_score, parse_qwen_bbox, smooth_scores, combine_scores
 
 VID_DIR = "/root/autodl-tmp/vstar/videos/videos"
 ANN = "/root/autodl-tmp/vstar/V_STaR_test.json"
@@ -60,13 +60,15 @@ def main():
         try:
             frames = read_frames(r["video"], fps=1.0)
             imgs = [f[1] for f in frames]
-            inp = cp(text=[r["query"]], images=imgs, return_tensors="pt", padding=True, truncation=True).to("cuda")
+            texts = [r["query"], r["object"]] if r.get("object") else [r["query"]]
+            inp = cp(text=texts, images=imgs, return_tensors="pt", padding=True, truncation=True).to("cuda")
             with torch.no_grad():
                 o = cm(**inp)
-            sc = F.normalize(o.image_embeds, dim=-1) @ F.normalize(o.text_embeds, dim=-1).T
-            sc = sc.squeeze(-1).tolist()
-            sm = smooth_scores(sc, win=3)                      # 平滑抑尖峰
-            idx = max(range(len(sm)), key=lambda i: sm[i])     # 主关键帧=平滑相关性峰值
+            sims = F.normalize(o.image_embeds, dim=-1) @ F.normalize(o.text_embeds, dim=-1).T  # [N,T]
+            per = sims.T.tolist()
+            comb = combine_scores(per[0], per[1], w_obj=0.6) if len(per) > 1 else per[0]  # 问题+物体联合
+            sm = smooth_scores(comb, win=3)                    # 平滑抑尖峰
+            idx = max(range(len(sm)), key=lambda i: sm[i])     # 主关键帧=联合分峰值
             r["kf_ts"] = frames[idx][0]; r["_kf"] = frames[idx][1]
         except Exception as e:
             r["err_A"] = str(e)[:120]; r["_kf"] = None

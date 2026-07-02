@@ -65,20 +65,24 @@ def select_by_score(scores, timestamps, k=4, n_bins=4):
     return sorted(chosen, key=lambda i: timestamps[i])
 
 
-def clip_image_text_scores(frames, text):
-    """每帧与 text 的 CLIP 相似度(相关性打分)。frames=[(ts,PIL)]。"""
+def clip_image_text_scores(frames, texts):
+    """每帧与 texts 的 CLIP 相似度。texts=str -> 返回 list[float](每帧一个);
+    texts=[str,...] -> 返回 list[list[float]](每个text一行, 每行每帧一个)。一次加载模型。"""
     import torch, torch.nn.functional as F
     from transformers import CLIPModel, CLIPProcessor
+    single = isinstance(texts, str)
+    tl = [texts] if single else list(texts)
     m = CLIPModel.from_pretrained(CLIP, use_safetensors=True).to("cuda").eval()
     p = CLIPProcessor.from_pretrained(CLIP)
     imgs = [f[1] for f in frames]
-    inp = p(text=[text], images=imgs, return_tensors="pt", padding=True, truncation=True).to("cuda")
+    inp = p(text=tl, images=imgs, return_tensors="pt", padding=True, truncation=True).to("cuda")
     with torch.no_grad():
         o = m(**inp)
     ie = F.normalize(o.image_embeds, dim=-1); te = F.normalize(o.text_embeds, dim=-1)
-    scores = (ie @ te.T).squeeze(-1).tolist()
+    sims = ie @ te.T                      # [N_frames, T_texts]
+    per_text = sims.T.tolist()            # [T][N]
     del m; _free()
-    return scores
+    return per_text[0] if single else per_text
 
 
 def smooth_scores(scores, win=3):
@@ -91,13 +95,26 @@ def smooth_scores(scores, win=3):
     return [sum(scores[max(0, i-h):min(n, i+h+1)]) / (min(n, i+h+1) - max(0, i-h)) for i in range(n)]
 
 
-def select_keyframes(frames, query, k=4):
-    """返回 [(ts,PIL,score)], **第0个=主关键帧(平滑相关性峰值, 用于定位/生成)**, 其余为覆盖备选。"""
-    scores = clip_image_text_scores(frames, query)
+def combine_scores(q_scores, o_scores, w_obj=0.6):
+    """【纯逻辑·可自测】问题相关性 + 目标物体相关性 的加权组合。
+    物体"在不在画面"是判断"什么时候"最强的信号, 故默认给物体更高权重(w_obj=0.6)。"""
+    if not o_scores:
+        return list(q_scores)
+    return [(1 - w_obj) * q + w_obj * o for q, o in zip(q_scores, o_scores)]
+
+
+def select_keyframes(frames, query, object_phrase=None, k=4, w_obj=0.6):
+    """返回 [(ts,PIL,score)], **第0个=主关键帧**, 其余为覆盖备选。
+    有 object_phrase 时用"问题+物体"联合打分(改善时间命中: 选到"目标真出现"的时刻)。"""
     ts = [f[0] for f in frames]
+    if object_phrase:
+        qs, os_ = clip_image_text_scores(frames, [query, object_phrase])   # 一次算两个
+        scores = combine_scores(qs, os_, w_obj=w_obj)
+    else:
+        scores = clip_image_text_scores(frames, query)
     sm = smooth_scores(scores, win=3)
-    primary = max(range(len(sm)), key=lambda i: sm[i])      # 主关键帧=持续相关段的峰值(不取孤立尖峰/最早帧)
-    cover = select_by_score(sm, ts, k=k)                    # 备选: 用平滑分做覆盖选帧
+    primary = max(range(len(sm)), key=lambda i: sm[i])      # 主关键帧=持续相关段峰值(问题+物体联合)
+    cover = select_by_score(sm, ts, k=k)
     order = [primary] + [i for i in sorted(set(cover) - {primary}, key=lambda i: ts[i])]
     return [(frames[i][0], frames[i][1], scores[i]) for i in order]
 
@@ -241,7 +258,7 @@ def run_one(video, query, object_phrase, out_dir, gold=None):
     os.makedirs(out_dir, exist_ok=True)
     frames = read_frames(video, fps=1.0)
     print(f"[1] 抽帧 {len(frames)} 张")
-    kfs = select_keyframes(frames, query, k=4)
+    kfs = select_keyframes(frames, query, object_phrase=object_phrase, k=4)
     ts, kf_img, score = kfs[0]                        # 取相关性最高的关键帧做生成底图
     kf_img.save(os.path.join(out_dir, "keyframe.png"))
     print(f"[1] 选中关键帧 ts={ts:.1f}s score={score:.3f} (+{len(kfs)-1}张备选)")
@@ -301,7 +318,11 @@ def selftest():
     # smooth_scores: 孤立尖峰(i=0) vs 持续相关段(i=4,5,6) -> 平滑后峰值应落在持续段
     sm = smooth_scores([1.0, 0, 0, 0, 1.0, 1.0, 1.0], win=3)
     assert max(range(len(sm)), key=lambda i: sm[i]) >= 4, f"平滑应选持续相关段, got {sm}"
-    print("✅ vkig_pipeline selftest 通过: 选帧覆盖 + Qwen bbox 解析 + 平滑选帧(抑尖峰)")
+    # combine_scores: 物体信号(权重0.6)把峰值拉向"物体出现"的帧
+    c = combine_scores([0.9, 0.1, 0.1], [0.1, 0.1, 0.9], w_obj=0.6)
+    assert max(range(len(c)), key=lambda i: c[i]) == 2, f"物体条件应把峰值移到物体出现帧, got {c}"
+    assert combine_scores([0.5, 0.5], None) == [0.5, 0.5]      # 无物体退回问题分
+    print("✅ vkig_pipeline selftest 通过: 选帧覆盖 + bbox解析 + 平滑 + 物体条件联合打分")
 
 
 if __name__ == "__main__":
