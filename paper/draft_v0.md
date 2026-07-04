@@ -15,18 +15,18 @@
 
 ### Abstract (<150 words)
 
-Existing video-language systems either *describe* video in text (video RAG) or *generate* media from text/image prompts, but none take a **video plus a textual instruction** and return an **interleaved image-text** answer in which each image is **newly generated from, and faithful to, a grounded keyframe**. We propose a cooperative two-agent framework — an *Understand Agent* that localizes question-relevant evidence and a *Generation Agent* that produces grounded images — coupled by a **shared multimodal RAG** memory. Our core method is a **question-driven, object-level localization-to-generation pipeline**: subject-verb-object cues from the instruction drive keyframe selection, open-vocabulary grounding, and a generate-or-crop decision, with cross-modal consistency checks for hallucination control. We formalize the task and introduce **VKIG-Bench**, the first benchmark scoring *keyframe consistency* and *spatio-temporal localization* alongside text and image quality. A real-video end-to-end prototype runs on a single 24GB GPU; understanding and generation succeed, while localization remains the current bottleneck. TODO: full quantitative results.
+Existing video-language systems either *describe* video in text (video RAG) or *generate* media from text/image prompts, but none take a **video plus a textual instruction** and return an **interleaved image-text** answer in which each image is **newly generated from, and faithful to, a grounded keyframe**. We propose a cooperative two-agent framework — an *Understand Agent* that localizes question-relevant evidence and a *Generation Agent* that produces grounded images — coupled by a **shared multimodal RAG** memory. Our core method is a **question-driven, object-level localization-to-generation pipeline**: subject-verb-object cues from the instruction drive keyframe selection, open-vocabulary grounding, and a generate-or-crop decision, with cross-modal consistency checks for hallucination control. We formalize the task and introduce **VKIG-Bench**, to our knowledge the first benchmark scoring *keyframe consistency* and *spatio-temporal localization* alongside text and image quality. A real-video end-to-end prototype runs on a single 24GB GPU; understanding and generation succeed, while localization remains the current bottleneck. TODO: full quantitative results.
 
 ---
 
 ## 2. Introduction
 
-**Motivation.** When people ask a question about a video — *"what walked in front of the man in white, and what did it look like?"* — a useful answer is often not a paragraph but a **picture plus a few words**: show the object, point to where and when it appeared, and render it clearly. Current systems cannot do this end to end. Retrieval-augmented video question answering [VideoRAG, arXiv:2502.01549; Video-RAG, arXiv:2411.13093] reads long videos and answers **in text only** — it *tells* but does not *show*. Conversely, retrieval-augmented image generation [ImageRAG, arXiv:2502.09411; ORIG, arXiv:2510.22521; Gen-Searcher, arXiv:2603.28767] and interleaved image-text generators [M2RAG, arXiv:2411.16365; M2IO-R1, arXiv:2508.06328] *show*, but take **text (or image) input, never video**, and the displayed images are usually **retrieved/selected** rather than newly generated and grounded in a specific source frame.
+**Motivation.** When people ask a question about a video — *"what walked in front of the man in white, and what did it look like?"* — a useful answer is often not a paragraph but a **picture plus a few words**: show the object, point to where and when it appeared, and render it clearly. To our knowledge, few current systems do this end to end. Retrieval-augmented video question answering [VideoRAG, arXiv:2502.01549; Video-RAG, arXiv:2411.13093] reads long videos and answers **in text only** — it *tells* but does not *show*. Conversely, retrieval-augmented image generation [ImageRAG, arXiv:2502.09411; ORIG, arXiv:2510.22521; Gen-Searcher, arXiv:2603.28767] and interleaved image-text generators [M2RAG, arXiv:2411.16365; M2IO-R1, arXiv:2508.06328] *show*, but take **text (or image) input, never video**, and the displayed images are usually **retrieved/selected** rather than newly generated and grounded in a specific source frame.
 
-**Gap.** We characterize the target task by four jointly-required properties: (a) **video input**, (b) output images that are **newly generated**, (c) **interleaved image-text** output, and (d) orchestration by a **multi-agent system (MAS) with shared multimodal RAG**. No prior work satisfies all four simultaneously: video-side multimodal RAG [VimRAG, arXiv:2602.12735; VideoRAG, arXiv:2502.01549] lacks (b); interleaved generation/benchmarks [MRAMG-Bench, arXiv:2502.04176; M2IO-R1, arXiv:2508.06328] lack (a). The intersection — **video-driven, keyframe-grounded new-image generation under multi-agent multimodal RAG** — is an open slot. The most credible threat is a *single unified* image-text model [BAGEL, arXiv:2505.14683; Show-o2, arXiv:2506.15564] bolted onto an off-the-shelf video RAG; we argue (and aim to show empirically) that a MAS+RAG design is **not replaceable** by such a monolith because it provides **controllability, source traceability, and keyframe consistency** that a black-box end-to-end model does not guarantee.
+**Gap.** We characterize the target task by four jointly-required properties: (a) **video input**, (b) output images that are **newly generated**, (c) **interleaved image-text** output, and (d) orchestration by a **multi-agent system (MAS) with shared multimodal RAG**. No prior work satisfies all four simultaneously: video-side multimodal RAG [VimRAG, arXiv:2602.12735; VideoRAG, arXiv:2502.01549] lacks (b); interleaved generation/benchmarks [MRAMG-Bench, arXiv:2502.04176; M2IO-R1, arXiv:2508.06328] lack (a). The intersection — **video-driven, keyframe-grounded new-image generation under multi-agent multimodal RAG** — is an open slot. The most credible threat is a *single unified* image-text model [BAGEL, arXiv:2505.14683; Show-o2, arXiv:2506.15564] bolted onto an off-the-shelf video RAG; we hypothesize that a MAS+RAG design is **not easily replaceable** by such a monolith because it provides **controllability, source traceability, and keyframe consistency** that a black-box end-to-end model does not guarantee — a claim we aim to test empirically once baselines are run (§6.5).
 
 **Contributions.**
-- **A new task and benchmark.** We formalize *video-grounded interleaved image-text generation* and introduce **VKIG-Bench**, the first benchmark that scores **keyframe-consistency** (generated image vs. its source-keyframe object) and **spatio-temporal localization** (when/where the answer lives in the video), in addition to text correctness, image-text alignment, and image quality.
+- **A new task and benchmark.** We formalize *video-grounded interleaved image-text generation* and introduce **VKIG-Bench**, to our knowledge the first benchmark that scores **keyframe-consistency** (generated image vs. its source-keyframe object) and **spatio-temporal localization** (when/where the answer lives in the video), in addition to text correctness, image-text alignment, and image quality.
 - **A cooperative MAS + shared-RAG framework.** An Understand Agent and a Generation Agent communicate through a *shared* multimodal RAG memory with two feedback loops (grounding→reselection, generation→memory write-back), unifying the understanding and generation ends that prior video MAS keep separate [MAGNET, arXiv:2506.07016; LVAS-Agent, arXiv:2503.10719; MovieAgent, arXiv:2503.07314; Mora, arXiv:2403.13248].
 - **A question-driven, object-level localization-to-generation method.** We push question-driven keyframe selection [AKS, arXiv:2502.21271] down to the SVO **object level** [GROVE, arXiv:2503.10781], drive open-vocabulary grounding [Video-RAG, arXiv:2411.13093], and feed the result into a generate-or-crop decision — going beyond "select-only" interleaving [M2RAG, arXiv:2411.16365] — with cross-modal consistency checks for hallucination control [ScaleCap, arXiv:2506.19848]. **[VERIFIED]** end-to-end on real video; TODO: large-scale results.
 
@@ -142,7 +142,7 @@ with `L_ret = InfoNCE(ψ(o), ψ(correct evidence))` and `L_gnd = L_box(GIoU)+L_c
 
 ### 5.1 Why a new benchmark
 
-MRAMG-Bench [arXiv:2502.04176] and similar interleaved-generation benchmarks evaluate factual image generation but have **no video and no keyframe-provenance consistency**; V-STaR [Author, arXiv:2503.11495] has video + bounding boxes but scores QA, not *generated* images. **VKIG-Bench unifies video provenance + generated image + keyframe consistency** — the slot none of them fill. This is the moat against unified models [BAGEL, arXiv:2505.14683; Show-o2, arXiv:2506.15564]: it directly measures whether displayed images are *traceable to and consistent with* a source frame.
+MRAMG-Bench [arXiv:2502.04176] and similar interleaved-generation benchmarks evaluate factual image generation but have **no video and no keyframe-provenance consistency**; V-STaR [Author, arXiv:2503.11495] has video + bounding boxes but scores QA, not *generated* images. **VKIG-Bench unifies video provenance + generated image + keyframe consistency** — a slot that, to our knowledge, existing benchmarks do not fill. This is the moat against unified models [BAGEL, arXiv:2505.14683; Show-o2, arXiv:2506.15564]: it directly measures whether displayed images are *traceable to and consistent with* a source frame.
 
 ### 5.2 Sample schema
 
@@ -216,7 +216,7 @@ We ran the full five-stage pipeline on a real V-STaR street-scene clip (`7771650
 
 ### 6.3 Dev-set results — V-STaR, our system **[VERIFIED]**
 
-We ran the full pipeline (object-conditioned keyframe selection → Qwen3-VL grounding → SDXL-Turbo generation) over the first **150 V-STaR test videos** on a single RTX 4090D 24GB (**1 primary keyframe/clip**; 0–1000 grounding). All 150 completed.
+We ran the full pipeline (object-conditioned keyframe selection → Qwen3-VL grounding → SDXL-Turbo generation) over the **first 150 videos from the V-STaR test split, used here as a development subset**, on a single RTX 4090D 24GB (**1 primary keyframe/clip**; 0–1000 grounding). All 150 completed.
 
 **Localization is reported *jointly* (temporal ∧ spatial) — the honest metric.** A keyframe counts as correct only if its timestamp falls in the gold temporal window **and** its box matches the gold box (IoU ≥ τ). We also report a *diagnostic* spatial-only number (box vs. the nearest-in-time gold box), which is **optimistic** because it ignores whether the moment is right.
 
@@ -240,11 +240,28 @@ We ran the full pipeline (object-conditioned keyframe selection → Qwen3-VL gro
 | + temporal smoothing | 0.22 | 0.56 |
 | **+ object-conditioned (ours)** | **0.28** | **0.79** |
 
-**Grounding head-to-head (50 videos, identical keyframes).** Qwen3-VL native grounding ≥ Grounding-DINO-base (diagnostic mean spatial IoU 0.323 vs. 0.292; joint acc@0.3 0.28 vs. 0.24) — the detector choice is settled by data. Stronger G-DINO-large / DINO-X are API/less-available (future work).
+**Grounding head-to-head (50 videos, identical keyframes).** Qwen3-VL native grounding ≥ Grounding-DINO-base (diagnostic mean spatial IoU 0.323 vs. 0.292; joint acc@0.3 0.28 vs. 0.24) — *in this dev setting* Qwen3-VL outperforms G-DINO-base; stronger G-DINO-large / DINO-X (API/less-available) remain future work.
 
-*150-sample dev split, fast SDXL generator; FLUX-Kontext + baselines are §6.4 TODO.*
+*Implementation note (MVP).* The runs above use CLIP 1 fps frame scoring with z-normalized object conditioning and temporal smoothing for selection, Qwen3-VL for grounding, and SDXL-Turbo (V-STaR) for generation; the design components BGE-M3 pruning, recursive AKS coverage, and shared-RAG feedback (§4) are **not fully enabled** in this run. Numbers are dev subsets (V-STaR 150 / HC-STVG 200); FLUX-Kontext + baselines are §6.5 TODO.
 
-### 6.4 Main results — baseline comparison **[PLANNED]**
+### 6.4 Cross-dataset main results — HC-STVG v2 (test) **[VERIFIED, n = 200]**
+
+To test whether the "*when*, not *where*" finding is V-STaR-specific or general, we run the same localization pipeline on **HC-STVG v2** — an independent, human-annotated spatio-temporal grounding benchmark of 20 s clips with per-frame person tubes and a natural-language description. We evaluate on 200 video-ready samples from the community HF mirror (`ShijianW01/hc-stvg2`, test split with gold tubes; 1 sample skipped for a missing video). Grounding target = the noun phrase before the caption's first verb (HC-STVG `sub` field as fallback). Same joint metric; **temporal hit is strict (pad = 0 s), consistent with the V-STaR `batch_eval.py` numbers above** (the generic `eval/spatiotemporal_iou.py` must be run with `--t_pad 0` to match this strict setting; its default is 0.5 s); spatial gold = the tube box nearest in time to the predicted keyframe (appropriate for moving-person tubes).
+
+| Metric (HC-STVG v2 test, n = 200) | Value | (V-STaR, n = 150) |
+|---|---|---|
+| **Localization acc (temporal-hit ∧ IoU ≥ 0.3)** | **0.430** | 0.233 |
+| **Localization acc (temporal-hit ∧ IoU ≥ 0.5)** | **0.400** | 0.213 |
+| Temporal recall (keyframe ts ∈ gold window) | **0.540** | 0.26 |
+| **Spatial IoU when temporally correct** | **0.657** | 0.72 |
+| *diag:* temporal recall (±0.5 s pad) | 0.575 | — |
+| *diag:* mean spatial IoU (nearest-frame) | 0.548 | 0.39 |
+
+**Cross-dataset reading — the finding generalizes, and the temporal gap shrinks on well-scoped clips.** On HC-STVG's 20 s single-action clips, temporal recall roughly **doubles** (0.54 vs. V-STaR's 0.26) and end-to-end localization nearly doubles (**0.43 vs. 0.23**), while box accuracy when temporally correct stays high (**0.66**). The bottleneck ordering is identical across both datasets — *temporal keyframe selection*, not grounding — which supports the claim as a property of the pipeline rather than of one benchmark. **Conservative note:** on HC-STVG our heuristic noun-phrase extractor still yields an over-long grounding phrase in ~28% of samples (verb not matched), which *depresses* these numbers; a proper parser/LLM extractor is expected to raise them.
+
+*(Produced by `pipeline/hcstvg_eval.py`; audited by an independent agent for metric-parity with `eval/spatiotemporal_iou.py`. n = video-ready samples from the mirror subset; scaling to the full 1901-clip test split is straightforward once all videos are fetched.)*
+
+### 6.5 Baseline comparison **[PLANNED]**
 
 TODO — fill VKIG-Bench test results once dev (50 → 300+) is built:
 
@@ -256,7 +273,7 @@ TODO — fill VKIG-Bench test results once dev (50 → 300+) is built:
 | Unified (BAGEL [arXiv:2505.14683] + video-RAG) | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
 | **Ours** | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
 
-### 6.4 Ablations **[PLANNED]**
+### 6.6 Ablations **[PLANNED]**
 
 TODO — table to be filled. Planned ablations: A1 remove SVO conditioning (`s(o,F)→s(Q,F)`); A2 remove object-level grounding (whole-frame conditioning); A3 remove generation (crop-only = M2RAG); A4 remove BGE-M3 pruning; A5 remove shared RAG; A6 sweep `τ_g/τ_r` (crop↔generate ratio curve); A7 remove feedback ①; A8 object-weight `w_o` strategies; A9 generator choice (OminiControl vs. Kontext vs. Qwen-Edit); A10 condition ablation (no keyframe / no structure map / no subject preservation).
 
@@ -267,10 +284,10 @@ TODO — table to be filled. Planned ablations: A1 remove SVO conditioning (`s(o
 **Conclusion.** We formalize *video-grounded interleaved image-text generation*, position it in an open four-property slot, and propose a cooperative two-agent framework over a shared multimodal RAG with a question-driven, object-level localization-to-generation method and a keyframe-consistency-aware benchmark (VKIG-Bench). A real-video prototype runs end to end on a single 24GB GPU, with understanding and generation verified.
 
 **Limitations (honest).**
-- **Temporal keyframe selection is the dominant bottleneck.** Only **~26%** of selected keyframes fall in the gold window, capping end-to-end localization at **~0.23** (temporal-hit ∧ IoU≥0.3) — even though the box is accurate (**IoU 0.72**) once the moment is right. Object-conditioned scoring improves the chosen frame's quality (IoU-when-correct 0.69→0.79) but not temporal recall. Future work: question-conditioned temporal scoring, object-size weighting, audio/subtitle cues, a learned selector. **[VERIFIED, n=150]**
-- **Grounding & generation.** Qwen3-VL native grounding ≥ Grounding-DINO-base on our data (joint acc@0.3 0.28 vs. 0.24); stronger detectors (G-DINO-large / DINO-X, API-gated) and the full FLUX-Kontext generator (vs. the current SDXL-Turbo) are future work.
-- **Scale & generator.** Results are a 150-sample V-STaR dev split with a fast SDXL-Turbo generator; scaling VKIG-Bench (→300+→1–2k), the full FLUX-Kontext generator, the proper metrics (VQAScore/DreamSim), and baseline comparisons are TODO.
-- **Cross-domain generalization.** Validated only on street-scene V-STaR; film/short-drama and other domains are unverified.
+- **Temporal keyframe selection is the dominant bottleneck.** Temporal recall is **0.26 (V-STaR) / 0.54 (HC-STVG)**, capping end-to-end localization at **0.23 / 0.43** (temporal-hit ∧ IoU≥0.3) — even though the box is accurate (**IoU 0.72 / 0.66**) once the moment is right. The bottleneck ordering (selection ≪ grounding) is identical on both datasets. Object-conditioned scoring improves the chosen frame's quality (V-STaR IoU-when-correct 0.69→0.79) but not temporal recall. Future work: question-conditioned temporal scoring, object-size weighting, audio/subtitle cues, a learned selector. **[VERIFIED, V-STaR n=150 / HC-STVG n=200]**
+- **Grounding & generation.** Qwen3-VL native grounding ≥ Grounding-DINO-base on our data (V-STaR joint acc@0.3 0.28 vs. 0.24); stronger detectors (G-DINO-large / DINO-X, API-gated) and the full FLUX-Kontext generator (vs. the current SDXL-Turbo) are future work.
+- **Scale, data provenance & generator.** Numbers are on dev subsets (V-STaR 150 / HC-STVG 200) with a fast SDXL-Turbo generator, **not the full splits and not baseline-compared yet**. HC-STVG videos are from a *community HF mirror* (`ShijianW01/hc-stvg2`), not the official package — we verified its annotation schema and gold tubes match the official format, but a re-run on the official release is on the list. The grounding-target noun phrase is a *heuristic* extractor (verb-boundary + `sub` fallback), over-long in ~28% of HC-STVG samples, which conservatively lowers the reported numbers. Scaling to full splits (HC-STVG 1901 / VKIG-Bench 300+→1–2k), the full FLUX-Kontext generator, proper metrics (VQAScore/DreamSim), and baselines are TODO.
+- **Cross-domain generalization.** Validated on street-scene V-STaR and film-clip HC-STVG; short-drama (the target domain) and other domains remain a qualitative-demo plan, not yet quantified.
 - **Unverified design choices.** Coverage `c(I)` is our instantiation of AKS, not its published form; SVO extraction is a transfer of GROVE; several 2026 preprint references and the M2RAG metric set must be re-checked against source repos before camera-ready.
 
 ---
