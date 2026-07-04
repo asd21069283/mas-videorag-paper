@@ -269,7 +269,7 @@ TODO — table to be filled. Planned ablations: A1 remove SVO conditioning (`s(o
 **Limitations (honest).**
 - **Temporal keyframe selection is the dominant bottleneck.** Only **~26%** of selected keyframes fall in the gold window, capping end-to-end localization at **~0.23** (temporal-hit ∧ IoU≥0.3) — even though the box is accurate (**IoU 0.72**) once the moment is right. Object-conditioned scoring improves the chosen frame's quality (IoU-when-correct 0.69→0.79) but not temporal recall. Future work: question-conditioned temporal scoring, object-size weighting, audio/subtitle cues, a learned selector. **[VERIFIED, n=150]**
 - **Grounding & generation.** Qwen3-VL native grounding ≥ Grounding-DINO-base on our data (joint acc@0.3 0.28 vs. 0.24); stronger detectors (G-DINO-large / DINO-X, API-gated) and the full FLUX-Kontext generator (vs. the current SDXL-Turbo) are future work.
-- **Scale & generator.** Results are a 50-sample dev split with a fast SDXL-Turbo generator; VKIG-Bench (→300+→1–2k), the full FLUX-Kontext generator, the proper metrics (VQAScore/DreamSim), and baseline comparisons are TODO.
+- **Scale & generator.** Results are a 150-sample V-STaR dev split with a fast SDXL-Turbo generator; scaling VKIG-Bench (→300+→1–2k), the full FLUX-Kontext generator, the proper metrics (VQAScore/DreamSim), and baseline comparisons are TODO.
 - **Cross-domain generalization.** Validated only on street-scene V-STaR; film/short-drama and other domains are unverified.
 - **Unverified design choices.** Coverage `c(I)` is our instantiation of AKS, not its published form; SVO extraction is a transfer of GROVE; several 2026 preprint references and the M2RAG metric set must be re-checked against source repos before camera-ready.
 
@@ -292,7 +292,7 @@ TODO — table to be filled. Planned ablations: A1 remove SVO conditioning (`s(o
 ## 【给作者的下一步清单】（中文）
 
 1. **补定位（最高优先级）**：把第②步换成 Qwen3-VL 自带 grounding，让"理解"与"定位"同源；同时试 Grounding-DINO-large / DINO-X + 提高输入分辨率；把"目标在画面里的大小"纳入选帧打分 `s(o,F)`。先把那条 IoU=0 的样本修到 IoU>0 再批量跑。
-2. **跑出 dev 集**：按 §5.2 schema 把 V-STaR 转 50 条 → 跑通评测闭环（VQAScore / DreamSim / 时空 IoU / FID 四个脚本）→ 扩到 300+，填 §6.3、§6.4 的 TODO 表。
+2. **跑出 dev 集**：V-STaR dev 已跑到 150 条（§6.3 已填诚实指标）；下一步接 HC-STVG v2 主实验 + 跑通完整评测闭环（VQAScore / DreamSim / 时空 IoU / FID 四个脚本）→ 扩到 300+，填 §6.4 的 TODO 表。
 3. **落实 baseline**：实际跑 VideoRAG、Open-o3-Video、M2IO-R1，以及"BAGEL/Show-o2 + 现成 video-RAG"的统一模型对照，用数据支撑"MAS+RAG 不可替代"的论点（可控/可溯源/关键帧一致）。
 4. **核实引用**：所有 `arXiv:xxxx` 占位号在投稿前逐条核对（尤其 2026 预印本 VimRAG/Gen-Searcher/ATP-Bench、M2RAG 会场、VideoRAG 是否 KDD'26、Open-o3-Video 数据/代码 release、VQAScore 正式引用）；把 M2RAG 那 8 个图文指标的确切名称按其开源仓写死。
 5. **定稿待办**：确认 VKIG-Bench 自建数据的场景锚定（影视/短剧 Q1）；明确 gold image 口径（裁块参考 vs 模型生成参考）；把"`c(I)` 是我们对 AKS 的具体化""SVO 抽取迁移自 GROVE"在正文显式标注，避免审稿人质疑。

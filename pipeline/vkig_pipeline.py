@@ -167,9 +167,11 @@ def ground_object(image, object_phrase):
 import re as _re
 
 
-def parse_qwen_bbox(text, W, H):
-    """【纯逻辑·可自测】从 Qwen 输出里抽 bbox_2d, 按 0-1000 归一化转像素 [x1,y1,x2,y2]。
-    Qwen3-VL grounding 坐标是相对 0-1000 (官方); 找不到返回 None。"""
+def parse_qwen_bbox(text, W, H, assume="norm1000"):
+    """【纯逻辑·可自测】从 Qwen 输出里抽 bbox_2d, 转像素 [x1,y1,x2,y2]。找不到返回 None。
+    assume = 该调用方 prompt 约定的坐标制, 消解 <=图像尺寸的中段值的二义性:
+      "norm1000"(默认, 我们的 prompt 明确要 0-1000) / "pixel" / "auto"(纯启发, 无 prompt 约定时用)。
+    通用规则(任何 assume 都先跑): <=1.5 视作 0-1; 超过图像边界的值只可能是 0-1000 归一化。"""
     nums = None
     m = _re.search(r'"bbox_2d"\s*:\s*\[([^\]]+)\]', text)
     if m:
@@ -182,12 +184,21 @@ def parse_qwen_bbox(text, W, H):
         return None
     x1, y1, x2, y2 = nums[:4]
     mx = max(abs(x1), abs(y1), abs(x2), abs(y2))
-    if mx <= 1.5:                                         # 0-1 归一化
+    bound = float(max(W, H))
+    if mx <= 1.5:                                         # 0-1 归一化(无歧义)
+        mode = "norm1"
+    elif mx > 1000.0:                                     # 超过 1000: 只可能是像素(Qwen 极少这样)
+        mode = "pixel"
+    elif mx > bound:                                      # 超过图像边界但 <=1000: 只可能是 0-1000 归一化
+        mode = "norm1000"
+    else:                                                 # 中段(<=图像边界): 纯凭数值分不清, 用调用方约定
+        mode = {"pixel": "pixel", "auto": "pixel"}.get(assume, "norm1000")
+    if mode == "norm1":
         x1, x2 = x1 * W, x2 * W; y1, y2 = y1 * H, y2 * H
-    elif mx <= 1000:                                      # 0-1000 归一化(Qwen3-VL 默认)
+    elif mode == "norm1000":
         x1, x2 = x1 * W / 1000.0, x2 * W / 1000.0
         y1, y2 = y1 * H / 1000.0, y2 * H / 1000.0
-    # else: 已是像素坐标, 原样用
+    # mode == "pixel": 原样用
     cx = lambda v: min(max(v, 0.0), float(W)); cy = lambda v: min(max(v, 0.0), float(H))  # 裁到图像边界
     x1, x2, y1, y2 = cx(x1), cx(x2), cy(y1), cy(y2)
     return [min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2)]
@@ -282,7 +293,20 @@ def run_one(video, query, object_phrase, out_dir, gold=None):
     os.makedirs(out_dir, exist_ok=True)
     frames = read_frames(video, fps=1.0)
     print(f"[1] 抽帧 {len(frames)} 张")
+    if not frames:                                    # 空视频/打不开/无视频流: 干净退出, 不崩
+        msg = f"读不到任何帧(视频损坏或路径错): {video}"
+        print("[skip]", msg)
+        result = {"video": video, "query": query, "object": object_phrase, "error": "no_frames"}
+        json.dump(result, open(os.path.join(out_dir, "result.json"), "w", encoding="utf-8"),
+                  ensure_ascii=False, indent=2)
+        return result
     kfs = select_keyframes(frames, query, object_phrase=object_phrase, k=4)
+    if not kfs:                                        # 帧非空但选帧仍拿不到(极端兜底)
+        print("[skip] 选帧为空:", video)
+        result = {"video": video, "query": query, "object": object_phrase, "error": "no_keyframe"}
+        json.dump(result, open(os.path.join(out_dir, "result.json"), "w", encoding="utf-8"),
+                  ensure_ascii=False, indent=2)
+        return result
     ts, kf_img, score = kfs[0]                        # 取相关性最高的关键帧做生成底图
     kf_img.save(os.path.join(out_dir, "keyframe.png"))
     print(f"[1] 选中关键帧 ts={ts:.1f}s score={score:.3f} (+{len(kfs)-1}张备选)")
@@ -342,6 +366,9 @@ def selftest():
     # 0-1 归一化 / 像素坐标+越界裁剪 / z-norm
     assert parse_qwen_bbox('{"bbox_2d":[0.1,0.2,0.5,0.9]}', 640, 360) == [64.0, 72.0, 320.0, 324.0]
     assert parse_qwen_bbox('{"bbox_2d":[100,50,1200,400]}', 640, 360) == [100.0, 50.0, 640.0, 360.0]  # 像素+clamp
+    # 中段像素框([100,50,500,300] 全<=640): 默认按 prompt 约定当 0-1000; 显式 assume="pixel" 才原样保留
+    assert parse_qwen_bbox('{"bbox_2d":[100,50,500,300]}', 640, 360, assume="pixel") == [100.0, 50.0, 500.0, 300.0]
+    assert parse_qwen_bbox('{"bbox_2d":[100,50,500,300]}', 640, 360) == [64.0, 18.0, 320.0, 108.0]  # 默认 norm1000
     assert _znorm([1, 1, 1]) == [1, 1, 1]
     _z = _znorm([0.0, 10.0]); assert abs(_z[0] + 1) < 1e-9 and abs(_z[1] - 1) < 1e-9
     # smooth_scores: 孤立尖峰(i=0) vs 持续相关段(i=4,5,6) -> 平滑后峰值应落在持续段
