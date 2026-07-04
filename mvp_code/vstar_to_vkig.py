@@ -78,6 +78,7 @@ def convert_one(s, video_dir=""):
     return {
         "video": video,
         "query": str(s.get("question", "")),
+        "object": str(s.get("object", "")),                # 顶层 object 与 HC-STVG schema 统一
         "gold": {"text": text, "evidence": evidence},
         "meta": {
             "source": "vstar",

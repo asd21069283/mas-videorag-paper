@@ -18,9 +18,26 @@ def xywh_to_xyxy(b):
     return [x, y, x + w, y + h]
 
 
+import re as _re
+_VERB = _re.compile(
+    r"\b(is|are|was|were|turns?|walks?|runs?|sits?|stands?|holds?|moves?|looks?|wears?|raises?|"
+    r"puts?|takes?|picks?|points?|waves?|bends?|jumps?|lies?|talks?|opens?|closes?|"
+    r"lying|sitting|standing|walking|holding|wearing|turning|moving|looking)\b", _re.I)
+
+
+def caption_to_np(cap):
+    """从 HC-STVG 描述句里取"到第一个动作动词前的名词短语"当定位目标(人物中心)。
+    粗启发, 够 CLIP选帧/Grounding-DINO 用; 后续可换 parser/LLM。抽不出则退回 person。"""
+    cap = str(cap).strip().rstrip(".")
+    m = _VERB.search(cap)
+    np_ = cap[:m.start()].strip() if m else cap
+    return np_ or "person"
+
+
 def convert_one(vid, s, video_dir=""):
     """vid=视频标识; s=该条标注dict。返回 VKIG 样本。"""
     caption = str(s.get("caption", "")).strip()
+    target_np = caption_to_np(caption)                     # 定位/选帧用名词短语, 非整句
     boxes = s.get("bbox") or []
     img_num = float(s.get("img_num") or (len(boxes) or 1))
     fps = img_num / 20.0 if img_num else 25.0            # HC-STVG 视频固定 20 秒
@@ -45,7 +62,7 @@ def convert_one(vid, s, video_dir=""):
     evidence = []
     if keyframe_bbox is not None:
         evidence.append({
-            "object": caption,                             # HC-STVG目标是人物, 用描述句做定位文本
+            "object": target_np,                           # 名词短语(如 the woman in red clothes)
             "interval": [st_time, ed_time],
             "keyframe_ts": keyframe_ts,
             "bbox": keyframe_bbox,
@@ -54,8 +71,8 @@ def convert_one(vid, s, video_dir=""):
         })
     return {
         "video": video,
-        "query": caption,
-        "object": caption,                                 # 定位/选帧都用这句描述(人物中心)
+        "query": caption,                                  # 整句 -> 文本理解
+        "object": target_np,                               # 名词短语 -> 定位/选帧
         "gold": {"text": [caption], "evidence": evidence},
         "meta": {"source": "hcstvg", "fps": round(fps, 3), "wh": [s.get("width"), s.get("height")]},
     }
@@ -95,9 +112,12 @@ def selftest():
          "bbox": [[100, 50, 40, 120], [110, 55, 40, 120], [120, 60, 42, 122], [130, 62, 42, 122], [140, 64, 44, 124]],
          "st_time": 2.0, "ed_time": 4.0, "st_frame": 61, "img_num": 500, "width": 640, "height": 360}
     # fps=500/20=25; st_frame=61 -> 首框时间=(61-1)/25=2.4s; 逐帧+1/25=0.04s
+    assert caption_to_np("The woman in red clothes turns in a circle.") == "The woman in red clothes"
+    assert caption_to_np("A man walks fast.") == "A man"
     out = convert_one("v001.mp4", s, video_dir="/data")
     assert out["video"] == "/data/v001.mp4"
     assert out["query"].startswith("The woman")
+    assert out["object"] == "The woman in red clothes", out["object"]   # 名词短语, 非整句
     ev = out["gold"]["evidence"][0]
     assert ev["interval"] == [2.0, 4.0]
     assert len(ev["track"]) == 5

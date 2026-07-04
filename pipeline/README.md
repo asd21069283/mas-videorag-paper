@@ -53,3 +53,5 @@ python pipeline/vkig_pipeline.py --selftest     # 选帧覆盖逻辑
 2. 跑一个 baseline(Open-o3-Video / VideoRAG) → 出对比数(论文命根子)。
 3. 上 VQAScore + 解决 DreamSim → 正式指标。
 4. 接入老师定的 Q1 场景的自建数据。
+
+> 注：V-STaR→VKIG 转换脚本在 `mvp_code/vstar_to_vkig.py`（不在 pipeline/）；HC-STVG 用 `pipeline/hcstvg_to_vkig.py`。

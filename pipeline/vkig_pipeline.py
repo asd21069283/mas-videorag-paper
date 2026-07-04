@@ -24,7 +24,12 @@ def read_frames(video_path, fps=1.0, max_frames=64):
     """用 PyAV 按 fps 抽帧, 返回 [(ts, PIL.Image), ...]。
     ⚠️ 不用 decord——decord 会破坏 PyTorch CUDA 初始化(random_device / segfault)。"""
     import av
-    container = av.open(video_path)
+    try:
+        container = av.open(video_path)
+    except Exception:
+        return []                                         # 打不开(缺失/损坏) -> 空
+    if not container.streams.video:
+        container.close(); return []                       # 无视频流
     stream = container.streams.video[0]
     step_t = 1.0 / fps
     out, next_t = [], 0.0
@@ -95,12 +100,25 @@ def smooth_scores(scores, win=3):
     return [sum(scores[max(0, i-h):min(n, i+h+1)]) / (min(n, i+h+1) - max(0, i-h)) for i in range(n)]
 
 
-def combine_scores(q_scores, o_scores, w_obj=0.6):
+def _znorm(xs):
+    """z-score 归一化(帧维度); 长度<2 或零方差时原样返回。"""
+    if len(xs) < 2:
+        return list(xs)
+    m = sum(xs) / len(xs)
+    sd = (sum((x - m) ** 2 for x in xs) / len(xs)) ** 0.5
+    return list(xs) if sd == 0 else [(x - m) / sd for x in xs]
+
+
+def combine_scores(q_scores, o_scores, w_obj=0.6, normalize=True):
     """【纯逻辑·可自测】问题相关性 + 目标物体相关性 的加权组合。
-    物体"在不在画面"是判断"什么时候"最强的信号, 故默认给物体更高权重(w_obj=0.6)。"""
+    物体"在不在画面"是判断"什么时候"最强的信号, 故默认给物体更高权重(w_obj=0.6)。
+    normalize=True: 先对两路分各自 z-score, 再混合(消除两个CLIP文本余弦的尺度差)。
+    ⚠️ w_obj 是可调超参(论文里作消融, 非普适常数)。"""
     if not o_scores:
         return list(q_scores)
-    return [(1 - w_obj) * q + w_obj * o for q, o in zip(q_scores, o_scores)]
+    q = _znorm(q_scores) if normalize else q_scores
+    o = _znorm(o_scores) if normalize else o_scores
+    return [(1 - w_obj) * qi + w_obj * oi for qi, oi in zip(q, o)]
 
 
 def select_keyframes(frames, query, object_phrase=None, k=4, w_obj=0.6):
@@ -163,9 +181,15 @@ def parse_qwen_bbox(text, W, H):
     if not nums or len(nums) < 4:
         return None
     x1, y1, x2, y2 = nums[:4]
-    if max(abs(x1), abs(y1), abs(x2), abs(y2)) <= 1000:   # 0-1000 归一化 -> 像素
+    mx = max(abs(x1), abs(y1), abs(x2), abs(y2))
+    if mx <= 1.5:                                         # 0-1 归一化
+        x1, x2 = x1 * W, x2 * W; y1, y2 = y1 * H, y2 * H
+    elif mx <= 1000:                                      # 0-1000 归一化(Qwen3-VL 默认)
         x1, x2 = x1 * W / 1000.0, x2 * W / 1000.0
         y1, y2 = y1 * H / 1000.0, y2 * H / 1000.0
+    # else: 已是像素坐标, 原样用
+    cx = lambda v: min(max(v, 0.0), float(W)); cy = lambda v: min(max(v, 0.0), float(H))  # 裁到图像边界
+    x1, x2, y1, y2 = cx(x1), cx(x2), cy(y1), cy(y2)
     return [min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2)]
 
 
@@ -315,6 +339,11 @@ def selftest():
     b2 = parse_qwen_bbox('the box is [500,500,1000,1000]', 640, 360)
     assert b2 == [320.0, 180.0, 640.0, 360.0], b2
     assert parse_qwen_bbox("no box here", 640, 360) is None
+    # 0-1 归一化 / 像素坐标+越界裁剪 / z-norm
+    assert parse_qwen_bbox('{"bbox_2d":[0.1,0.2,0.5,0.9]}', 640, 360) == [64.0, 72.0, 320.0, 324.0]
+    assert parse_qwen_bbox('{"bbox_2d":[100,50,1200,400]}', 640, 360) == [100.0, 50.0, 640.0, 360.0]  # 像素+clamp
+    assert _znorm([1, 1, 1]) == [1, 1, 1]
+    _z = _znorm([0.0, 10.0]); assert abs(_z[0] + 1) < 1e-9 and abs(_z[1] - 1) < 1e-9
     # smooth_scores: 孤立尖峰(i=0) vs 持续相关段(i=4,5,6) -> 平滑后峰值应落在持续段
     sm = smooth_scores([1.0, 0, 0, 0, 1.0, 1.0, 1.0], win=3)
     assert max(range(len(sm)), key=lambda i: sm[i]) >= 4, f"平滑应选持续相关段, got {sm}"

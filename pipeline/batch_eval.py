@@ -187,6 +187,7 @@ def main():
     summary = {
         "ground": a.ground + (":" + os.environ.get("GDINO_ID", "grounding-dino-base") if a.ground == "gdino" else ""),
         "n_total": len(R), "n_done": len(done),
+        "n_no_keyframe": sum(1 for r in R if r.get("_kf") is None),   # 抽帧/选帧失败(仍计入分母)
         "temporal_recall": round(sum(1 for r in R if r.get("temporal_hit"))/N, 4),
         # === 主指标(诚实: 时间+空间都对) ===
         "localization_acc@0.3_JOINT": jointacc(0.3),
