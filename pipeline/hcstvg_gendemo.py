@@ -97,7 +97,11 @@ def main():
         try:
             from diffusers import FluxKontextPipeline
             pipe = FluxKontextPipeline.from_pretrained(FLUX_DIR, torch_dtype=torch.bfloat16)
-            pipe.enable_model_cpu_offload()
+            pipe.enable_sequential_cpu_offload()      # 24G卡必须逐层offload(model级不够, 会OOM); 慢但能跑
+            try:
+                pipe.vae.enable_slicing(); pipe.vae.enable_tiling()
+            except Exception:
+                pass
             gen_model = "flux-kontext"
             print("[C] 用 FLUX-Kontext(本地)")
         except Exception as e:
