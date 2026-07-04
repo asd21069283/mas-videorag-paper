@@ -1,0 +1,73 @@
+{
+  "summary": {
+    "dataset": "HC-STVG-v2-test",
+    "gen_model": "flux-kontext",
+    "n": 4,
+    "n_generated": 4,
+    "mean_clip_subject_sim": 0.6432,
+    "mean_clip_text_align": 0.3395,
+    "edit_prompt": "re-render in a new cinematic scene at night, rain reflections"
+  },
+  "per_sample": [
+    {
+      "vid": "50_TM5MPJIq1Is",
+      "query": "The man standing by the stairs goes to the car.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/50_TM5MPJIq1Is.mkv",
+      "interval": [
+        0.33277870216306155,
+        8.153078202995008
+      ],
+      "kf_ts": 2.005,
+      "subject": "man in black suit",
+      "instruction": "man in black suit, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6878,
+      "clip_text_align": 0.3145
+    },
+    {
+      "vid": "88_xH1WLtZ8csM",
+      "query": "The woman in the skirt of the flower walks to the door, then turns.",
+      "object": "The woman in the skirt of the flower",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/88_xH1WLtZ8csM.mp4",
+      "interval": [
+        0.68,
+        9.68
+      ],
+      "kf_ts": 2.0,
+      "subject": "woman in patterned dress",
+      "instruction": "woman in patterned dress, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.6211,
+      "clip_text_align": 0.3581
+    },
+    {
+      "vid": "26_l8_Mk3-sZsQ",
+      "query": "The sitting woman raises her hands, then straightens her body.",
+      "object": "the woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/26_l8_Mk3-sZsQ.mkv",
+      "interval": [
+        14.885654885654887,
+        19.916839916839916
+      ],
+      "kf_ts": 6.009,
+      "subject": "Dark figure",
+      "instruction": "Dark figure, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.7284,
+      "clip_text_align": 0.3265
+    },
+    {
+      "vid": "23_EO1gLAoEZRA",
+      "query": "The undressed man is held by the woman in red, takes out a knife, and runs away from the woman's hand.",
+      "object": "The undressed man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/23_EO1gLAoEZRA.mp4",
+      "interval": [
+        10.881863560732112,
+        19.966722129783694
+      ],
+      "kf_ts": 16.016,
+      "subject": "Red-robed figure",
+      "instruction": "Red-robed figure, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.5356,
+      "clip_text_align": 0.3587
+    }
+  ]
+}

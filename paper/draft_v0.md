@@ -259,7 +259,9 @@ To test whether the "*when*, not *where*" finding is V-STaR-specific or general,
 
 **Cross-dataset reading — the finding generalizes, and the temporal gap shrinks on well-scoped clips.** On HC-STVG's 20 s single-action clips, temporal recall roughly **doubles** (0.52 vs. V-STaR's 0.26) and end-to-end localization nearly doubles (**0.42 vs. 0.23**), while box accuracy when temporally correct stays high (**0.66**). The bottleneck ordering is identical across both datasets — *temporal keyframe selection*, not grounding — which supports the claim as a property of the pipeline rather than of one benchmark. **Conservative note:** on HC-STVG our heuristic noun-phrase extractor still yields an over-long grounding phrase in ~28% of samples (verb not matched), which *depresses* these numbers; a proper parser/LLM extractor is expected to raise them.
 
-*(Produced by `pipeline/hcstvg_eval.py`; audited by an independent agent for metric-parity with `eval/spatiotemporal_iou.py`. n = video-ready samples from the mirror subset; the full 1901-clip test split is fetched and a full-split run is straightforward.)*
+**Metric convention (disclosed).** The joint accuracies use `n = 1000` as denominator; a sample whose grounding returns *no box* has no IoU and is counted as **incorrect** (it does not inflate acc). The diagnostic "*spatial IoU when temporally correct*" is averaged only over temporal hits that **did** produce a box — grounding returns a box on **96.6 %** of temporal hits, so this excludes 3.4 % (18/524); if the no-box cases were scored as IoU = 0 the value would be 0.641 instead of 0.664. The headline localization accuracies are unaffected by this choice.
+
+*(Produced by `pipeline/hcstvg_eval.py`; **numbers independently recomputed from raw per-sample data in three verification passes** (Codex + two Claude passes) and cross-checked for metric-parity with `eval/spatiotemporal_iou.py`. n = video-ready samples from the mirror subset; the full 1901-clip test split is fetched and a full-split run is straightforward.)*
 
 ### 6.5 Selection-strategy baselines — isolating the temporal bottleneck **[VERIFIED, n = 300]**
 
