@@ -179,13 +179,23 @@ def main():
         vs = [r[key] for r in R if key in r and cond(r)]
         return round(sum(vs)/len(vs), 4) if vs else None
     done = [r for r in R if r.get("_gen") is not None]
+    N = len(R) or 1
+    # 主定位指标 = 时间命中 AND 空间IoU达标(与 eval/spatiotemporal_iou.py 口径一致); 只看空间的记为 diag(会偏乐观)
+    def jointacc(thr): return round(sum(1 for r in R if r.get("temporal_hit") and r.get("spatial_iou", 0) >= thr)/N, 4)
+    def lenient(thr): return round(sum(1 for r in R if r.get("spatial_iou", 0) >= thr)/N, 4)
+    hit = [r["spatial_iou"] for r in R if r.get("temporal_hit") and "spatial_iou" in r]
     summary = {
         "ground": a.ground + (":" + os.environ.get("GDINO_ID", "grounding-dino-base") if a.ground == "gdino" else ""),
         "n_total": len(R), "n_done": len(done),
-        "mean_spatial_iou": avg("spatial_iou"),
-        "localization_acc@0.5": round(sum(1 for r in R if r.get("spatial_iou", 0) >= 0.5)/len(R), 4) if R else None,
-        "localization_acc@0.3": round(sum(1 for r in R if r.get("spatial_iou", 0) >= 0.3)/len(R), 4) if R else None,
-        "temporal_recall": round(sum(1 for r in R if r.get("temporal_hit"))/len(R), 4) if R else None,
+        "temporal_recall": round(sum(1 for r in R if r.get("temporal_hit"))/N, 4),
+        # === 主指标(诚实: 时间+空间都对) ===
+        "localization_acc@0.3_JOINT": jointacc(0.3),
+        "localization_acc@0.5_JOINT": jointacc(0.5),
+        "spatial_iou_when_temporal_hit": round(sum(hit)/len(hit), 4) if hit else None,
+        # === 诊断(只看空间, 拿最近时刻gold框, 偏乐观, 勿当主指标) ===
+        "diag_mean_spatial_iou_nearest": avg("spatial_iou"),
+        "diag_spatial_acc@0.3_lenient": lenient(0.3),
+        "diag_spatial_acc@0.5_lenient": lenient(0.5),
         "mean_clip_subject_sim": avg("clip_subject_sim"),
         "mean_clip_text_align": avg("clip_text_align"),
     }

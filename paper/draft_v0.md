@@ -214,28 +214,35 @@ We ran the full five-stage pipeline on a real V-STaR street-scene clip (`7771650
 
 **Honest reading.** The full chain **runs end to end on real video**, with understanding and generation both succeeding — a step up from earlier synthetic single-image proofs. Localization with Grounding-DINO-base initially failed (the small, distant dog was boxed on adjacent empty ground, IoU = 0) — a failure only real data exposes. **Fix [VERIFIED]:** replacing the detector with **Qwen3-VL's native grounding** (same model used for understanding) corrected this on the same sample to a confident box on the dog, raising **spatial IoU from 0.0 → 0.363**. *Aggregate numbers follow in §6.3.*
 
-### 6.3 Dev-set results — 50 samples, our system **[VERIFIED]**
+### 6.3 Dev-set results — V-STaR, our system **[VERIFIED]**
 
-We ran the full pipeline (Qwen3-VL grounding) over the first **50 V-STaR test videos** on a single RTX 4090D 24GB (4 keyframes/clip; SDXL-Turbo generator; CLIP/0–1000-grounding). All 50 completed.
+We ran the full pipeline (object-conditioned keyframe selection → Qwen3-VL grounding → SDXL-Turbo generation) over the first **150 V-STaR test videos** on a single RTX 4090D 24GB (**1 primary keyframe/clip**; 0–1000 grounding). All 150 completed.
 
-**System metrics (Qwen3-VL grounding, object-conditioned selection, n = 150 V-STaR test videos).** Mean spatial IoU **0.426**, localization acc@IoU≥0.3 **0.52**, acc@IoU≥0.5 **0.41**, temporal recall **~0.26**, CLIP subject sim **0.66**, CLIP text align **0.29**. (Result holds from the 50- to 150-sample split.)
+**Localization is reported *jointly* (temporal ∧ spatial) — the honest metric.** A keyframe counts as correct only if its timestamp falls in the gold temporal window **and** its box matches the gold box (IoU ≥ τ). We also report a *diagnostic* spatial-only number (box vs. the nearest-in-time gold box), which is **optimistic** because it ignores whether the moment is right.
 
-**Keyframe-selection ablation (Qwen grounding, same 50 videos).**
+| Metric (n = 150) | Value |
+|---|---|
+| **Localization acc (temporal-hit ∧ IoU ≥ 0.3)** | **0.233** |
+| **Localization acc (temporal-hit ∧ IoU ≥ 0.5)** | **0.213** |
+| Temporal recall (keyframe ts ∈ gold window) | **0.26** |
+| **Spatial IoU when temporally correct** | **0.72** |
+| CLIP subject sim (gen vs. keyframe) | 0.66 |
+| CLIP text align (gen vs. instruction) | 0.29 |
+| *diag:* mean spatial IoU (nearest-frame) | 0.39 |
 
-| Selection | mean IoU | acc@0.3 |
+**Honest reading — the bottleneck is *when*, not *where*.** When the pipeline picks a keyframe at the right moment, grounding is accurate (**IoU 0.72**); but only **26%** of keyframes land in the gold window, so end-to-end localization is **0.23**. The open problem is *temporal keyframe selection*, not the detector or box regression.
+
+**Keyframe-selection ablation (50 videos, Qwen grounding).** Object-conditioned scoring (frames scored by target-*object* presence, not whole-question relevance) mainly improves the *quality* of the chosen frame:
+
+| Selection | loc. acc@0.3 (joint) | IoU when temporally correct |
 |---|---|---|
-| Query-relevance (earliest-of-k) | 0.358 | 0.48 |
-| + temporal smoothing | 0.323 | 0.40 |
-| **+ object-conditioned scoring (ours)** | **0.415** | **0.50** |
+| Query-relevance | 0.24 | 0.69 |
+| + temporal smoothing | 0.22 | 0.56 |
+| **+ object-conditioned (ours)** | **0.28** | **0.79** |
 
-**Grounding head-to-head (50 videos, identical keyframes).**
+**Grounding head-to-head (50 videos, identical keyframes).** Qwen3-VL native grounding ≥ Grounding-DINO-base (diagnostic mean spatial IoU 0.323 vs. 0.292; joint acc@0.3 0.28 vs. 0.24) — the detector choice is settled by data. Stronger G-DINO-large / DINO-X are API/less-available (future work).
 
-| Detector | mean spatial IoU | acc@IoU≥0.3 |
-|---|---|---|
-| **Qwen3-VL native** | **0.323** | **0.40** |
-| Grounding-DINO-base | 0.292 | 0.36 |
-
-**Honest reading.** (1) **Qwen3-VL native grounding beats Grounding-DINO-base head-to-head** (IoU 0.323 vs. 0.292; single-sample finding holds at scale). (2) Both plateau near ~0.3 because the **real bottleneck is keyframe selection**: temporal recall is only 28–32%, so the selected frame often lies *outside* the gold interval and is scored against a mistimed gold box — capping IoU regardless of detector. (3) **Selection is the biggest lever.** An **object-conditioned selector** — scoring frames by target-*object* presence (weight 0.6) rather than whole-question relevance — lifts mean IoU **0.32→0.42** and acc@0.3 **40%→50%** [VERIFIED, 50 samples]: the object's on-screen presence is a stronger localization cue than full-query similarity. (A plain smoothing tweak alone was not a win; the object signal is what helps.) The stricter *temporal recall* (keyframe ts ∈ gold window) stays ~30%, but task-relevant grounding IoU improves substantially. Stronger detectors (Grounding-DINO-large, DINO-X) are API/less-available (future work). Generation preserves the subject reasonably (CLIP 0.66). *50-sample dev split, fast SDXL generator; FLUX-Kontext + baselines are §6.4 TODO.*
+*150-sample dev split, fast SDXL generator; FLUX-Kontext + baselines are §6.4 TODO.*
 
 ### 6.4 Main results — baseline comparison **[PLANNED]**
 
@@ -260,8 +267,8 @@ TODO — table to be filled. Planned ablations: A1 remove SVO conditioning (`s(o
 **Conclusion.** We formalize *video-grounded interleaved image-text generation*, position it in an open four-property slot, and propose a cooperative two-agent framework over a shared multimodal RAG with a question-driven, object-level localization-to-generation method and a keyframe-consistency-aware benchmark (VKIG-Bench). A real-video prototype runs end to end on a single 24GB GPU, with understanding and generation verified.
 
 **Limitations (honest).**
-- **Keyframe selection — improved, not solved.** Object-conditioned scoring lifted localization IoU 0.32→0.42 (acc@0.3 40%→50%) **[VERIFIED, 50 samples]**, but strict temporal recall (keyframe ts ∈ gold window) is still only ~30%. Further work: AKS-style coverage with object-size weighting, audio/subtitle cues, and a learned temporal selector.
-- **Localization improved but not solved.** Switching from Grounding-DINO to Qwen3-VL native grounding raised spatial IoU from 0 → 0.358 mean (acc@0.3 = 48%) **[VERIFIED, 50 samples]**, but precise small-object boxes remain hard; stronger detectors / higher resolution are future work.
+- **Temporal keyframe selection is the dominant bottleneck.** Only **~26%** of selected keyframes fall in the gold window, capping end-to-end localization at **~0.23** (temporal-hit ∧ IoU≥0.3) — even though the box is accurate (**IoU 0.72**) once the moment is right. Object-conditioned scoring improves the chosen frame's quality (IoU-when-correct 0.69→0.79) but not temporal recall. Future work: question-conditioned temporal scoring, object-size weighting, audio/subtitle cues, a learned selector. **[VERIFIED, n=150]**
+- **Grounding & generation.** Qwen3-VL native grounding ≥ Grounding-DINO-base on our data (joint acc@0.3 0.28 vs. 0.24); stronger detectors (G-DINO-large / DINO-X, API-gated) and the full FLUX-Kontext generator (vs. the current SDXL-Turbo) are future work.
 - **Scale & generator.** Results are a 50-sample dev split with a fast SDXL-Turbo generator; VKIG-Bench (→300+→1–2k), the full FLUX-Kontext generator, the proper metrics (VQAScore/DreamSim), and baseline comparisons are TODO.
 - **Cross-domain generalization.** Validated only on street-scene V-STaR; film/short-drama and other domains are unverified.
 - **Unverified design choices.** Coverage `c(I)` is our instantiation of AKS, not its published form; SVO extraction is a transfer of GROVE; several 2026 preprint references and the M2RAG metric set must be re-checked against source repos before camera-ready.
