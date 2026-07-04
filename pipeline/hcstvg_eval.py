@@ -34,7 +34,9 @@ def resolve_video(video_field, video_dir):
 
 
 def load_vkig(path, video_dir, n):
-    R = []
+    """返回 (R, n_missing_video)。n_missing_video = 有gold但视频没下(被跳过)的样本数,
+    用于诚实汇报"分母是可用视频样本,不是数据集前N条"(Codex审计第7条)。"""
+    R = []; n_missing = 0
     for line in open(path, encoding="utf-8"):
         line = line.strip()
         if not line:
@@ -45,7 +47,8 @@ def load_vkig(path, video_dir, n):
             continue
         e = ev[0]
         vp = resolve_video(s.get("video", ""), video_dir)
-        if not vp:                                   # 该样本视频没下, 跳过
+        if not vp:                                   # 该样本视频没下 -> 计数并跳过(不进分母)
+            n_missing += 1
             continue
         track = e.get("track") or []
         gold = [{"timestamp": t["ts"], "xmin": t["bbox"][0], "ymin": t["bbox"][1],
@@ -55,7 +58,7 @@ def load_vkig(path, video_dir, n):
                   "video": vp, "interval": e.get("interval"), "gold_boxes": gold})
         if len(R) >= n:
             break
-    return R
+    return R, n_missing
 
 
 def main():
@@ -65,14 +68,21 @@ def main():
     ap.add_argument("--n", type=int, default=150)
     ap.add_argument("--out", default="/root/autodl-tmp/hcstvg_eval")
     ap.add_argument("--w_obj", type=float, default=0.6, help="物体信号在联合选帧里的权重")
+    ap.add_argument("--t_pad", type=float, default=0.0,
+                    help="时间命中容差(秒): 0=严格(与V-STaR batch_eval一致,保守); "
+                         "eval/spatiotemporal_iou.py默认0.5。诊断值另按0.5额外算一份。")
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
     import torch, torch.nn.functional as F
     if torch.cuda.is_available():
         torch.zeros(1, device="cuda")                # 先占CUDA上下文(防PyAV后抽风)
 
-    R = load_vkig(a.vkig, a.video_dir, a.n)
-    print(f"[hcstvg] {len(R)} 个样本(视频已就绪)")
+    R, n_missing_video = load_vkig(a.vkig, a.video_dir, a.n)
+    print(f"[hcstvg] {len(R)} 个可用样本(视频已就绪); 因缺视频跳过 {n_missing_video} 条")
+    # 抽查 object 抽取质量(Codex审计第4条: caption_to_np是启发式)
+    _obj_ex = [r["object"] for r in R[:5]]
+    _obj_degenerate = sum(1 for r in R if r.get("object") and len(r["object"].split()) > 8)
+    print(f"[obj] 示例={_obj_ex} | 疑似退化为长句(>8词)={_obj_degenerate}/{len(R)}")
     if not R:
         print("[abort] 没有可用样本: 检查 --video_dir 下是否有对应视频")
         return
@@ -135,29 +145,42 @@ def main():
     print("[B] 定位完成")
 
     # ---- 联合 IoU ----
+    # 空间gold口径: 从gold逐帧tube取"预测关键帧时刻最近的框"(Codex审计第2条: 对HC-STVG轨迹比固定中点框更合理;
+    #   JOINT下要求temporal_hit=kf_ts落在区间内, 此时最近gold框≈预测时刻真值, 公平)。
+    def temporal_ok(r, pad):
+        return bool(r["interval"][0] - pad <= r["kf_ts"] <= r["interval"][1] + pad)
     for r in R:
         if r.get("pred_box") and r.get("gold_boxes"):
             near = min(r["gold_boxes"], key=lambda b: abs(float(b["timestamp"]) - r.get("kf_ts", 0)))
             gold = [near["xmin"], near["ymin"], near["xmax"], near["ymax"]]
             r["spatial_iou"] = round(iou2d(r["pred_box"], gold), 3)
         if r.get("interval") and r.get("kf_ts") is not None:
-            r["temporal_hit"] = bool(r["interval"][0] <= r["kf_ts"] <= r["interval"][1])
+            r["temporal_hit"] = temporal_ok(r, a.t_pad)             # 主口径(默认严格t_pad=0)
+            r["temporal_hit_pad05"] = temporal_ok(r, 0.5)           # 诊断: ±0.5s容差(与score_sample默认一致)
 
-    # ---- 汇总(与 batch_eval 同口径) ----
+    # ---- 汇总(与 batch_eval 同口径; 缺视频/pad 已诚实标注) ----
     N = len(R) or 1
-    def jointacc(thr): return round(sum(1 for r in R if r.get("temporal_hit") and r.get("spatial_iou", 0) >= thr)/N, 4)
+    def jointacc(thr, pad_key="temporal_hit"):
+        return round(sum(1 for r in R if r.get(pad_key) and r.get("spatial_iou", 0) >= thr)/N, 4)
     def lenient(thr): return round(sum(1 for r in R if r.get("spatial_iou", 0) >= thr)/N, 4)
     hit = [r["spatial_iou"] for r in R if r.get("temporal_hit") and "spatial_iou" in r]
     def avg(key):
         vs = [r[key] for r in R if key in r]
         return round(sum(vs)/len(vs), 4) if vs else None
     summary = {
-        "dataset": "HC-STVG-v2", "ground": "qwen", "w_obj": a.w_obj,
-        "n_total": len(R), "n_no_keyframe": sum(1 for r in R if r.get("_kf") is None),
+        "dataset": "HC-STVG-v2-test", "ground": "qwen", "w_obj": a.w_obj,
+        "temporal_pad_sec": a.t_pad,                                # 主口径容差(诚实标注)
+        "spatial_gold": "tube-box-nearest-to-predicted-keyframe",  # 空间gold口径(非score_sample固定中点)
+        "n_video_ready": len(R), "n_missing_video": n_missing_video,  # 分母=可用视频样本, 非数据集前N条
+        "n_no_keyframe": sum(1 for r in R if r.get("_kf") is None),
         "temporal_recall": round(sum(1 for r in R if r.get("temporal_hit"))/N, 4),
         "localization_acc@0.3_JOINT": jointacc(0.3),
         "localization_acc@0.5_JOINT": jointacc(0.5),
         "spatial_iou_when_temporal_hit": round(sum(hit)/len(hit), 4) if hit else None,
+        # 诊断: ±0.5s容差下的联合指标(看时间口径敏感度)
+        "diag_temporal_recall_pad05": round(sum(1 for r in R if r.get("temporal_hit_pad05"))/N, 4),
+        "diag_localization_acc@0.3_JOINT_pad05": jointacc(0.3, "temporal_hit_pad05"),
+        # 诊断: 只看空间(偏乐观, 勿当主指标)
         "diag_mean_spatial_iou_nearest": avg("spatial_iou"),
         "diag_spatial_acc@0.3_lenient": lenient(0.3),
         "diag_spatial_acc@0.5_lenient": lenient(0.5),
