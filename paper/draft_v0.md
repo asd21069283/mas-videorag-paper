@@ -244,22 +244,22 @@ We ran the full pipeline (object-conditioned keyframe selection → Qwen3-VL gro
 
 *Implementation note (MVP).* The runs above use CLIP 1 fps frame scoring with z-normalized object conditioning and temporal smoothing for selection, Qwen3-VL for grounding, and SDXL-Turbo (V-STaR) for generation; the design components BGE-M3 pruning, recursive AKS coverage, and shared-RAG feedback (§4) are **not fully enabled** in this run. Numbers are dev subsets (V-STaR 150 / HC-STVG 200); FLUX-Kontext + baselines are §6.5 TODO.
 
-### 6.4 Cross-dataset main results — HC-STVG v2 (test) **[VERIFIED, n = 200]**
+### 6.4 Cross-dataset main results — HC-STVG v2 (test) **[VERIFIED, n = 1000]**
 
-To test whether the "*when*, not *where*" finding is V-STaR-specific or general, we run the same localization pipeline on **HC-STVG v2** — an independent, human-annotated spatio-temporal grounding benchmark of 20 s clips with per-frame person tubes and a natural-language description. We evaluate on 200 video-ready samples from the community HF mirror (`ShijianW01/hc-stvg2`, test split with gold tubes; 1 sample skipped for a missing video). Grounding target = the noun phrase before the caption's first verb (HC-STVG `sub` field as fallback). Same joint metric; **temporal hit is strict (pad = 0 s), consistent with the V-STaR `batch_eval.py` numbers above** (the generic `eval/spatiotemporal_iou.py` must be run with `--t_pad 0` to match this strict setting; its default is 0.5 s); spatial gold = the tube box nearest in time to the predicted keyframe (appropriate for moving-person tubes).
+To test whether the "*when*, not *where*" finding is V-STaR-specific or general, we run the same localization pipeline on **HC-STVG v2** — an independent, human-annotated spatio-temporal grounding benchmark of 20 s clips with per-frame person tubes and a natural-language description. We evaluate on **1000 video-ready samples** from the community HF mirror (`ShijianW01/hc-stvg2`, test split with gold tubes; 6 samples skipped for missing videos). Grounding target = the noun phrase before the caption's first verb (HC-STVG `sub` field as fallback). Same joint metric; **temporal hit is strict (pad = 0 s), consistent with the V-STaR `batch_eval.py` numbers above** (the generic `eval/spatiotemporal_iou.py` must be run with `--t_pad 0` to match this strict setting; its default is 0.5 s); spatial gold = the tube box nearest in time to the predicted keyframe (appropriate for moving-person tubes). Results are stable across scale (n = 200 → 1000 move acc@0.3 0.430 → 0.419).
 
-| Metric (HC-STVG v2 test, n = 200) | Value | (V-STaR, n = 150) |
+| Metric (HC-STVG v2 test, **n = 1000**) | Value | (V-STaR, n = 150) |
 |---|---|---|
-| **Localization acc (temporal-hit ∧ IoU ≥ 0.3)** | **0.430** | 0.233 |
-| **Localization acc (temporal-hit ∧ IoU ≥ 0.5)** | **0.400** | 0.213 |
-| Temporal recall (keyframe ts ∈ gold window) | **0.540** | 0.26 |
-| **Spatial IoU when temporally correct** | **0.657** | 0.72 |
-| *diag:* temporal recall (±0.5 s pad) | 0.575 | — |
-| *diag:* mean spatial IoU (nearest-frame) | 0.548 | 0.39 |
+| **Localization acc (temporal-hit ∧ IoU ≥ 0.3)** | **0.419** | 0.233 |
+| **Localization acc (temporal-hit ∧ IoU ≥ 0.5)** | **0.396** | 0.213 |
+| Temporal recall (keyframe ts ∈ gold window) | **0.524** | 0.26 |
+| **Spatial IoU when temporally correct** | **0.664** | 0.72 |
+| *diag:* temporal recall (±0.5 s pad) | 0.587 | — |
+| *diag:* mean spatial IoU (nearest-frame) | 0.564 | 0.39 |
 
-**Cross-dataset reading — the finding generalizes, and the temporal gap shrinks on well-scoped clips.** On HC-STVG's 20 s single-action clips, temporal recall roughly **doubles** (0.54 vs. V-STaR's 0.26) and end-to-end localization nearly doubles (**0.43 vs. 0.23**), while box accuracy when temporally correct stays high (**0.66**). The bottleneck ordering is identical across both datasets — *temporal keyframe selection*, not grounding — which supports the claim as a property of the pipeline rather than of one benchmark. **Conservative note:** on HC-STVG our heuristic noun-phrase extractor still yields an over-long grounding phrase in ~28% of samples (verb not matched), which *depresses* these numbers; a proper parser/LLM extractor is expected to raise them.
+**Cross-dataset reading — the finding generalizes, and the temporal gap shrinks on well-scoped clips.** On HC-STVG's 20 s single-action clips, temporal recall roughly **doubles** (0.52 vs. V-STaR's 0.26) and end-to-end localization nearly doubles (**0.42 vs. 0.23**), while box accuracy when temporally correct stays high (**0.66**). The bottleneck ordering is identical across both datasets — *temporal keyframe selection*, not grounding — which supports the claim as a property of the pipeline rather than of one benchmark. **Conservative note:** on HC-STVG our heuristic noun-phrase extractor still yields an over-long grounding phrase in ~28% of samples (verb not matched), which *depresses* these numbers; a proper parser/LLM extractor is expected to raise them.
 
-*(Produced by `pipeline/hcstvg_eval.py`; audited by an independent agent for metric-parity with `eval/spatiotemporal_iou.py`. n = video-ready samples from the mirror subset; scaling to the full 1901-clip test split is straightforward once all videos are fetched.)*
+*(Produced by `pipeline/hcstvg_eval.py`; audited by an independent agent for metric-parity with `eval/spatiotemporal_iou.py`. n = video-ready samples from the mirror subset; the full 1901-clip test split is fetched and a full-split run is straightforward.)*
 
 ### 6.5 Baseline comparison **[PLANNED]**
 
