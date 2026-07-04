@@ -261,17 +261,20 @@ To test whether the "*when*, not *where*" finding is V-STaR-specific or general,
 
 *(Produced by `pipeline/hcstvg_eval.py`; audited by an independent agent for metric-parity with `eval/spatiotemporal_iou.py`. n = video-ready samples from the mirror subset; the full 1901-clip test split is fetched and a full-split run is straightforward.)*
 
-### 6.5 Baseline comparison **[PLANNED]**
+### 6.5 Selection-strategy baselines — isolating the temporal bottleneck **[VERIFIED, n = 300]**
 
-TODO — fill VKIG-Bench test results once dev (50 → 300+) is built:
+To quantify *how much* of the localization score is due to content-based keyframe selection versus a positional prior, we hold grounding fixed (Qwen3-VL) and swap only the selection step, on the same 300 HC-STVG test clips. `random` = a seeded random frame (floor); `uniform` = the video-midpoint frame (a strong positional prior, since HC-STVG action windows are temporally centred); `middle_gt` = the frame nearest the *gold interval's* midpoint — a **temporal oracle** that upper-bounds what perfect selection would give.
 
-| Method | Text (judge) | VQAScore | DreamSim↑ | t-IoU | s-IoU/AP | FID↓ | Win% |
-|---|---|---|---|---|---|---|---|
-| VideoRAG [arXiv:2502.01549] | TODO | n/a | n/a | TODO | n/a | n/a | TODO |
-| Open-o3-Video [arXiv:2510.20579] | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| M2IO-R1 [arXiv:2508.06328] | TODO | TODO | TODO | n/a | n/a | TODO | TODO |
-| Unified (BAGEL [arXiv:2505.14683] + video-RAG) | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| **Ours** | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
+| Selection (n = 300, grounding fixed) | Temporal recall | **Loc. acc@0.3 (joint)** | acc@0.5 | IoU when correct |
+|---|---|---|---|---|
+| `random` (floor) | 0.350 | 0.257 | — | 0.643 |
+| **Ours (object-conditioned CLIP)** | 0.563 | **0.443** | 0.423 | 0.655 |
+| `uniform` (video midpoint, positional prior) | 0.557 | 0.440 | — | 0.667 |
+| `middle_gt` (**temporal oracle**, upper bound) | 1.000 | **0.787** | — | 0.664 |
+
+**Honest reading.** (1) Content selection clearly beats chance — **ours 0.443 vs. random 0.257** (+73%). (2) On HC-STVG, ours **ties** the trivial midpoint prior (0.443 vs. 0.440): because this dataset's action windows are centred, a positional prior is already strong, and our current content scoring does not yet beat it here (on street-scene V-STaR, object-conditioning *did* help — §6.3). (3) The decisive number is the **oracle: 0.787**. With grounding and box regression unchanged, *perfect temporal selection alone* would lift end-to-end localization from 0.44 to **0.79** — quantifying the open problem at **≈ +0.35 absolute**. This is the paper's central, load-bearing evidence that **temporal keyframe selection — not the detector — is the bottleneck**, and it is measured, not asserted.
+
+*External system baselines (VideoRAG, Open-o3-Video, unified BAGEL+video-RAG) and the generation-quality metrics (VQAScore/DreamSim/FID) remain future work; the comparison above isolates the selection component, which is where our diagnosis localizes the problem.*
 
 ### 6.6 Ablations **[PLANNED]**
 
