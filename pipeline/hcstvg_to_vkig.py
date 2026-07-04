@@ -25,19 +25,34 @@ _VERB = _re.compile(
     r"lying|sitting|standing|walking|holding|wearing|turning|moving|looking)\b", _re.I)
 
 
-def caption_to_np(cap):
+_ARTICLES = {"the", "a", "an", "this", "that", "these", "those", "his", "her", "their", "one"}
+
+
+def _degenerate(np_):
+    """名词短语是否退化(空 / 只剩冠词代词 / 少于2个实词)——这种当定位目标没用。"""
+    toks = [t for t in _re.findall(r"[A-Za-z]+", np_.lower()) if t not in _ARTICLES]
+    return len(toks) == 0
+
+
+def caption_to_np(cap, sub=None):
     """从 HC-STVG 描述句里取"到第一个动作动词前的名词短语"当定位目标(人物中心)。
-    粗启发, 够 CLIP选帧/Grounding-DINO 用; 后续可换 parser/LLM。抽不出则退回 person。"""
+    粗启发; 若退化(只剩冠词, 如"The")则用标注自带 sub 字段(如 'man')兜底, 再不行退 person。"""
     cap = str(cap).strip().rstrip(".")
     m = _VERB.search(cap)
-    np_ = cap[:m.start()].strip() if m else cap
+    np_ = (cap[:m.start()].strip() if m else cap)
+    if _degenerate(np_):                                   # "The" 这种 -> 用 sub 兜底
+        if sub and str(sub).strip():
+            s = str(sub).strip()
+            np_ = s if s.lower().startswith(("the ", "a ", "an ")) else f"the {s}"
+        else:
+            np_ = "person"
     return np_ or "person"
 
 
 def convert_one(vid, s, video_dir=""):
     """vid=视频标识; s=该条标注dict。返回 VKIG 样本。"""
     caption = str(s.get("caption", "")).strip()
-    target_np = caption_to_np(caption)                     # 定位/选帧用名词短语, 非整句
+    target_np = caption_to_np(caption, sub=s.get("sub"))   # 定位/选帧用名词短语, 非整句(退化时用sub兜底)
     boxes = s.get("bbox") or []
     img_num = float(s.get("img_num") or (len(boxes) or 1))
     fps = img_num / 20.0 if img_num else 25.0            # HC-STVG 视频固定 20 秒
@@ -114,6 +129,9 @@ def selftest():
     # fps=500/20=25; st_frame=61 -> 首框时间=(61-1)/25=2.4s; 逐帧+1/25=0.04s
     assert caption_to_np("The woman in red clothes turns in a circle.") == "The woman in red clothes"
     assert caption_to_np("A man walks fast.") == "A man"
+    # 退化 -> sub 兜底: "The runs..." 抽出只剩 "The", 用 sub='man' 兜成 "the man"
+    assert caption_to_np("The runs quickly.", sub="man") == "the man", caption_to_np("The runs quickly.", sub="man")
+    assert caption_to_np("The walks.", sub=None) == "person"
     out = convert_one("v001.mp4", s, video_dir="/data")
     assert out["video"] == "/data/v001.mp4"
     assert out["query"].startswith("The woman")
