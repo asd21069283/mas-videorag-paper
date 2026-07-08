@@ -1,0 +1,163 @@
+{
+  "summary": {
+    "dataset": "HC-STVG-v2-test",
+    "gen_model": "flux-kontext",
+    "n": 10,
+    "n_generated": 10,
+    "mean_clip_subject_sim": 0.5158,
+    "mean_clip_text_align": 0.3464,
+    "edit_prompt": "re-render in a new cinematic scene at night, rain reflections"
+  },
+  "per_sample": [
+    {
+      "vid": "50_TM5MPJIq1Is",
+      "query": "The man standing by the stairs goes to the car.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/50_TM5MPJIq1Is.mkv",
+      "interval": [
+        0.33277870216306155,
+        8.153078202995008
+      ],
+      "kf_ts": 2.005,
+      "subject": "man in black suit",
+      "instruction": "man in black suit, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.5145,
+      "clip_text_align": 0.3359
+    },
+    {
+      "vid": "88_xH1WLtZ8csM",
+      "query": "The woman in the skirt of the flower walks to the door, then turns.",
+      "object": "The woman in the skirt of the flower",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/88_xH1WLtZ8csM.mp4",
+      "interval": [
+        0.68,
+        9.68
+      ],
+      "kf_ts": 2.0,
+      "subject": "woman in patterned dress",
+      "instruction": "woman in patterned dress, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.5626,
+      "clip_text_align": 0.3557
+    },
+    {
+      "vid": "26_l8_Mk3-sZsQ",
+      "query": "The sitting woman raises her hands, then straightens her body.",
+      "object": "the woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/26_l8_Mk3-sZsQ.mkv",
+      "interval": [
+        14.885654885654887,
+        19.916839916839916
+      ],
+      "kf_ts": 6.009,
+      "subject": "Dark figure",
+      "instruction": "Dark figure, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.7307,
+      "clip_text_align": 0.3442
+    },
+    {
+      "vid": "23_EO1gLAoEZRA",
+      "query": "The undressed man is held by the woman in red, takes out a knife, and runs away from the woman's hand.",
+      "object": "The undressed man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/23_EO1gLAoEZRA.mp4",
+      "interval": [
+        10.881863560732112,
+        19.966722129783694
+      ],
+      "kf_ts": 16.016,
+      "subject": "Red-robed figure",
+      "instruction": "Red-robed figure, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.4902,
+      "clip_text_align": 0.3789
+    },
+    {
+      "vid": "103_kW5WyJ1QNpM",
+      "query": "The person standing next to the horse releases his hand and holds the rider, then takes the horse and walks away.",
+      "object": "The person",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/103_kW5WyJ1QNpM.mkv",
+      "interval": [
+        8.452579034941763,
+        12.412645590682196
+      ],
+      "kf_ts": 12.003,
+      "subject": "Woman in brown hood",
+      "instruction": "Woman in brown hood, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.4889,
+      "clip_text_align": 0.3467
+    },
+    {
+      "vid": "1_gEI9qBdVt5I",
+      "query": "The red-haired woman stops at the door and looks at the front.",
+      "object": "The red-haired woman stops at the door and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/1_gEI9qBdVt5I.mp4",
+      "interval": [
+        10.149750415973378,
+        14.675540765391016
+      ],
+      "kf_ts": 13.0,
+      "subject": "woman with red hat",
+      "instruction": "woman with red hat, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.387,
+      "clip_text_align": 0.3624
+    },
+    {
+      "vid": "27_E-fqjlYMFhE",
+      "query": "The man in the white suit follows the two men walking in front and stops by the wall.",
+      "object": "The man in the white suit follows the two men",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/27_E-fqjlYMFhE.mp4",
+      "interval": [
+        4.99001996007984,
+        13.812375249500999
+      ],
+      "kf_ts": 17.0,
+      "subject": "man in dark suit",
+      "instruction": "man in dark suit, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.5563,
+      "clip_text_align": 0.3545
+    },
+    {
+      "vid": "55_pGP_oIdKmRY",
+      "query": "The blindfolded man smells the handkerchief in the opposite woman's hand.",
+      "object": "The blindfolded man smells the handkerchief in the opposite woman's hand",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/55_pGP_oIdKmRY.mkv",
+      "interval": [
+        4.12,
+        10.96
+      ],
+      "kf_ts": 10.003,
+      "subject": "Blindfolded person",
+      "instruction": "Blindfolded person, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.4967,
+      "clip_text_align": 0.3212
+    },
+    {
+      "vid": "146_uNT6HrrnqPU",
+      "query": "The white-haired man walks behind the man holding the handrail.",
+      "object": "The white-haired man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/146_uNT6HrrnqPU.mp4",
+      "interval": [
+        8.68,
+        14.6
+      ],
+      "kf_ts": 13.0,
+      "subject": "man in black suit",
+      "instruction": "man in black suit, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.414,
+      "clip_text_align": 0.3152
+    },
+    {
+      "vid": "58_bzGQK5lH-RA",
+      "query": "The daughter on the bed puts on her top, then picks up a black dress and lifts the cup away.",
+      "object": "The daughter on the bed",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/58_bzGQK5lH-RA.mkv",
+      "interval": [
+        2.48,
+        10.2
+      ],
+      "kf_ts": 19.003,
+      "subject": "man in plaid shirt",
+      "instruction": "man in plaid shirt, re-render in a new cinematic scene at night, rain reflections",
+      "clip_subject_sim": 0.5171,
+      "clip_text_align": 0.3491
+    }
+  ]
+}
