@@ -1,0 +1,33 @@
+{
+  "n_common": 282,
+  "baseline_bridged_floor": {
+    "n": 282,
+    "temporal_recall": 0.6418,
+    "acc@0.3_JOINT": 0.4468,
+    "acc@0.5_JOINT": 0.3936,
+    "iou_when_hit": 0.5322
+  },
+  "baseline_bridged_ceil": {
+    "n": 282,
+    "temporal_recall": 0.6667,
+    "acc@0.3_JOINT": 0.4433,
+    "acc@0.5_JOINT": 0.3901,
+    "iou_when_hit": 0.5179
+  },
+  "ours": {
+    "n": 282,
+    "temporal_recall": 0.5567,
+    "acc@0.3_JOINT": 0.4326,
+    "acc@0.5_JOINT": 0.4113,
+    "iou_when_hit": 0.6126
+  },
+  "baseline_native": {
+    "gt_viou": 0.4532,
+    "tiou": 0.4221,
+    "viou": 0.2211,
+    "viou@0.3": 0.3612,
+    "gt_viou@0.3": 0.6054,
+    "viou@0.5": 0.1338,
+    "gt_viou@0.5": 0.4983
+  }
+}
