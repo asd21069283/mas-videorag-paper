@@ -1,0 +1,6805 @@
+{
+  "summary": {
+    "exp": "e2",
+    "params": {
+      "w_obj": 0.4,
+      "w_act": 0.3,
+      "grid_n": 10
+    },
+    "n": 300,
+    "temporal_recall": 0.7167,
+    "localization_acc@0.3_JOINT": 0.57,
+    "localization_acc@0.5_JOINT": 0.5433,
+    "spatial_iou_when_temporal_hit": 0.6334,
+    "n_no_keyframe": 0,
+    "n_stage1_window": 300
+  },
+  "per_sample": [
+    {
+      "vid": "50_TM5MPJIq1Is",
+      "query": "The man standing by the stairs goes to the car.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/50_TM5MPJIq1Is.mkv",
+      "interval": [
+        0.33277870216306155,
+        8.153078202995008
+      ],
+      "_win": [
+        5,
+        7
+      ],
+      "kf_ts": 7.01,
+      "pred_box": [
+        485.12,
+        87.84,
+        584.32,
+        458.4
+      ],
+      "spatial_iou": 0.929,
+      "temporal_hit": true
+    },
+    {
+      "vid": "88_xH1WLtZ8csM",
+      "query": "The woman in the skirt of the flower walks to the door, then turns.",
+      "object": "The woman in the skirt of the flower",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/88_xH1WLtZ8csM.mp4",
+      "interval": [
+        0.68,
+        9.68
+      ],
+      "_win": [
+        7,
+        14
+      ],
+      "kf_ts": 7.0,
+      "pred_box": [
+        691.2,
+        184.32,
+        1136.64,
+        676.08
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "26_l8_Mk3-sZsQ",
+      "query": "The sitting woman raises her hands, then straightens her body.",
+      "object": "the woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/26_l8_Mk3-sZsQ.mkv",
+      "interval": [
+        14.885654885654887,
+        19.916839916839916
+      ],
+      "_win": [
+        12,
+        19
+      ],
+      "kf_ts": 15.018,
+      "pred_box": [
+        678.4,
+        155.52,
+        1265.92,
+        695.52
+      ],
+      "spatial_iou": 0.873,
+      "temporal_hit": true
+    },
+    {
+      "vid": "23_EO1gLAoEZRA",
+      "query": "The undressed man is held by the woman in red, takes out a knife, and runs away from the woman's hand.",
+      "object": "The undressed man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/23_EO1gLAoEZRA.mp4",
+      "interval": [
+        10.881863560732112,
+        19.966722129783694
+      ],
+      "_win": [
+        10,
+        18
+      ],
+      "kf_ts": 16.016,
+      "pred_box": [
+        104.64,
+        124.8,
+        353.16,
+        479.04
+      ],
+      "spatial_iou": 0.65,
+      "temporal_hit": true
+    },
+    {
+      "vid": "103_kW5WyJ1QNpM",
+      "query": "The person standing next to the horse releases his hand and holds the rider, then takes the horse and walks away.",
+      "object": "The person",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/103_kW5WyJ1QNpM.mkv",
+      "interval": [
+        8.452579034941763,
+        12.412645590682196
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 12.003,
+      "pred_box": [
+        159.698,
+        212.64,
+        390.278,
+        420.0
+      ],
+      "spatial_iou": 0.523,
+      "temporal_hit": true
+    },
+    {
+      "vid": "1_gEI9qBdVt5I",
+      "query": "The red-haired woman stops at the door and looks at the front.",
+      "object": "The red-haired woman stops at the door and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/1_gEI9qBdVt5I.mp4",
+      "interval": [
+        10.149750415973378,
+        14.675540765391016
+      ],
+      "_win": [
+        10,
+        16
+      ],
+      "kf_ts": 13.0,
+      "pred_box": [
+        284.16,
+        135.84,
+        472.32,
+        426.72
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "27_E-fqjlYMFhE",
+      "query": "The man in the white suit follows the two men walking in front and stops by the wall.",
+      "object": "The man in the white suit follows the two men",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/27_E-fqjlYMFhE.mp4",
+      "interval": [
+        4.99001996007984,
+        13.812375249500999
+      ],
+      "_win": [
+        3,
+        14
+      ],
+      "kf_ts": 5.0,
+      "pred_box": [
+        0.0,
+        70.56,
+        63.0,
+        480.0
+      ],
+      "spatial_iou": 0.456,
+      "temporal_hit": true
+    },
+    {
+      "vid": "55_pGP_oIdKmRY",
+      "query": "The blindfolded man smells the handkerchief in the opposite woman's hand.",
+      "object": "The blindfolded man smells the handkerchief in the opposite woman's hand",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/55_pGP_oIdKmRY.mkv",
+      "interval": [
+        4.12,
+        10.96
+      ],
+      "_win": [
+        5,
+        9
+      ],
+      "kf_ts": 9.003,
+      "pred_box": [
+        170.4,
+        48.48,
+        594.0,
+        479.04
+      ],
+      "spatial_iou": 0.845,
+      "temporal_hit": true
+    },
+    {
+      "vid": "146_uNT6HrrnqPU",
+      "query": "The white-haired man walks behind the man holding the handrail.",
+      "object": "The white-haired man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/146_uNT6HrrnqPU.mp4",
+      "interval": [
+        8.68,
+        14.6
+      ],
+      "_win": [
+        5,
+        14
+      ],
+      "kf_ts": 14.0,
+      "pred_box": [
+        226.156,
+        77.04,
+        315.7,
+        260.64
+      ],
+      "spatial_iou": 0.09,
+      "temporal_hit": true
+    },
+    {
+      "vid": "58_bzGQK5lH-RA",
+      "query": "The daughter on the bed puts on her top, then picks up a black dress and lifts the cup away.",
+      "object": "The daughter on the bed",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/58_bzGQK5lH-RA.mkv",
+      "interval": [
+        2.48,
+        10.2
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 3.003,
+      "pred_box": [
+        358.8,
+        128.16,
+        502.32,
+        276.48
+      ],
+      "spatial_iou": 0.509,
+      "temporal_hit": true
+    },
+    {
+      "vid": "55_8JSxLhDMGtE",
+      "query": "The man in the gray suit grabs the man in the suit and presses him on the car to hold his neck, then is beaten by the man and falls on the wall, then is beaten on the belly and is knocked down.",
+      "object": "The man in the gray suit grabs the man in the suit and presses him on the car to",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/55_8JSxLhDMGtE.mkv",
+      "interval": [
+        9.766666666666667,
+        17.533333333333335
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 19.022,
+      "pred_box": [
+        450.912,
+        34.08,
+        840.336,
+        450.24
+      ],
+      "spatial_iou": 0.241,
+      "temporal_hit": false
+    },
+    {
+      "vid": "71_1R7n8B8KkZE",
+      "query": "The man in the suit goes to the man in white and looks at him.",
+      "object": "The man in the suit goes to the man in white and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/71_1R7n8B8KkZE.mkv",
+      "interval": [
+        5.269461077844312,
+        10.738522954091817
+      ],
+      "_win": [
+        5,
+        14
+      ],
+      "kf_ts": 10.003,
+      "pred_box": [
+        332.16,
+        84.48,
+        600.32,
+        473.76
+      ],
+      "spatial_iou": 0.646,
+      "temporal_hit": true
+    },
+    {
+      "vid": "48_ViY7CR2TSO8",
+      "query": "The man in gray clothes jumps from behind the sofa and sits on the couch.",
+      "object": "The man in gray clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/48_ViY7CR2TSO8.mkv",
+      "interval": [
+        11.217564870259482,
+        14.011976047904191
+      ],
+      "_win": [
+        10,
+        16
+      ],
+      "kf_ts": 14.003,
+      "pred_box": [
+        460.8,
+        108.72,
+        1130.24,
+        719.28
+      ],
+      "spatial_iou": 0.953,
+      "temporal_hit": true
+    },
+    {
+      "vid": "10_Gvp-cj3bmIY",
+      "query": "The woman in green clothes sits up and lies beside the bed.",
+      "object": "The woman in green clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/10_Gvp-cj3bmIY.mp4",
+      "interval": [
+        12.135728542914173,
+        17.24550898203593
+      ],
+      "_win": [
+        12,
+        18
+      ],
+      "kf_ts": 12.0,
+      "pred_box": [
+        188.16,
+        83.74,
+        704.0,
+        529.47
+      ],
+      "spatial_iou": 0.939,
+      "temporal_hit": false
+    },
+    {
+      "vid": "37_l2XO3tQk8lI",
+      "query": "But the man in glasses walks to the yellow-haired woman and stops, then turns her around.",
+      "object": "But the man in glasses",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/37_l2XO3tQk8lI.mp4",
+      "interval": [
+        3.5999999999999996,
+        11.16
+      ],
+      "_win": [
+        5,
+        14
+      ],
+      "kf_ts": 8.0,
+      "pred_box": [
+        288.0,
+        0.0,
+        519.68,
+        350.944
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "23_UrsCy6qIGoo",
+      "query": "The standing woman goes to the sofa and turns to sit down.",
+      "object": "the woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/23_UrsCy6qIGoo.mp4",
+      "interval": [
+        5.8,
+        16.919999999999998
+      ],
+      "_win": [
+        5,
+        9
+      ],
+      "kf_ts": 7.0,
+      "pred_box": [
+        94.424,
+        136.08,
+        392.37,
+        345.6
+      ],
+      "spatial_iou": 0.18,
+      "temporal_hit": true
+    },
+    {
+      "vid": "143_phrYEKv0rmw",
+      "query": "The man in green clothes stands up and puts down the cup, then takes something out of his pocket, walks to the table, puts it down, and opens it.",
+      "object": "The man in green clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/143_phrYEKv0rmw.mp4",
+      "interval": [
+        5.5,
+        14.125
+      ],
+      "_win": [
+        3,
+        19
+      ],
+      "kf_ts": 10.01,
+      "pred_box": [
+        210.24,
+        30.96,
+        354.24,
+        308.52
+      ],
+      "spatial_iou": 0.648,
+      "temporal_hit": true
+    },
+    {
+      "vid": "64_gjdgj04FzR0",
+      "query": "The man in brown undressed and turns and walks up the steps.",
+      "object": "The man in brown undressed and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/64_gjdgj04FzR0.mp4",
+      "interval": [
+        4.949698189134809,
+        15.492957746478872
+      ],
+      "_win": [
+        10,
+        16
+      ],
+      "kf_ts": 10.03870343492985,
+      "pred_box": [
+        113.088,
+        41.76,
+        248.0,
+        356.04
+      ],
+      "spatial_iou": 0.877,
+      "temporal_hit": true
+    },
+    {
+      "vid": "27_kvFlbTK812w",
+      "query": "The man in black clothes walks from the door to the table and puts his contents on the table.",
+      "object": "The man in black clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/27_kvFlbTK812w.mkv",
+      "interval": [
+        1.8635607321131449,
+        10.582362728785357
+      ],
+      "_win": [
+        5,
+        9
+      ],
+      "kf_ts": 8.011,
+      "pred_box": [
+        266.4,
+        42.24,
+        531.36,
+        474.72
+      ],
+      "spatial_iou": 0.909,
+      "temporal_hit": true
+    },
+    {
+      "vid": "8_6d5u6FHvz7Q",
+      "query": "The woman in the yellow clothes kneels on the ground and supports the man who is lying to sit up.",
+      "object": "The woman in the yellow clothes kneels on the ground and supports the man who",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/8_6d5u6FHvz7Q.mp4",
+      "interval": [
+        5.04,
+        20.0
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 16.0,
+      "pred_box": [
+        274.044,
+        108.0,
+        369.0,
+        244.44
+      ],
+      "spatial_iou": 0.882,
+      "temporal_hit": true
+    },
+    {
+      "vid": "53_pSdPmmJ3-ng",
+      "query": "The woman in a turban turns around.",
+      "object": "The woman in a turban",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/53_pSdPmmJ3-ng.mp4",
+      "interval": [
+        4.311377245508982,
+        10.818363273453093
+      ],
+      "_win": [
+        5,
+        7
+      ],
+      "kf_ts": 7.0,
+      "pred_box": [
+        6.4,
+        0.0,
+        350.72,
+        479.04
+      ],
+      "spatial_iou": 0.948,
+      "temporal_hit": true
+    },
+    {
+      "vid": "61_oWhvucAskhk",
+      "query": "The man in the striped long sleeve kicks twice and then kicks the man in the white vest.",
+      "object": "The man in the striped long sleeve kicks twice and then kicks the man in the white vest",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/61_oWhvucAskhk.mkv",
+      "interval": [
+        5.12,
+        10.48
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 7.003,
+      "pred_box": [
+        115.44,
+        163.68,
+        367.536,
+        480.0
+      ],
+      "spatial_iou": 0.958,
+      "temporal_hit": true
+    },
+    {
+      "vid": "42_wfEOx36N4jA",
+      "query": "The boy with the accordion goes to the sitting boy and sits down.",
+      "object": "The boy with the accordion goes to the",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/42_wfEOx36N4jA.mp4",
+      "interval": [
+        2.6746506986027945,
+        7.504990019960079
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 5.0,
+      "pred_box": [
+        122.672,
+        51.36,
+        322.752,
+        434.4
+      ],
+      "spatial_iou": 0.878,
+      "temporal_hit": true
+    },
+    {
+      "vid": "23_bzGQK5lH-RA",
+      "query": "The lady in the red dress pushes the plate off the table, then takes the plate in the man's hand, then turns and walks away.",
+      "object": "The lady in the red dress pushes the plate off the table, then",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/23_bzGQK5lH-RA.mkv",
+      "interval": [
+        1.88,
+        6.800000000000001
+      ],
+      "_win": [
+        1,
+        7
+      ],
+      "kf_ts": 1.003,
+      "pred_box": null,
+      "temporal_hit": false
+    },
+    {
+      "vid": "189_Ksd1JQFHYWA",
+      "query": "The man carries the little boy turns and walks to the sits woman , stops , and bends down .",
+      "object": "The man carries the little boy",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/189_Ksd1JQFHYWA.mp4",
+      "interval": [
+        6.666666666666666,
+        15.968063872255488
+      ],
+      "_win": [
+        7,
+        16
+      ],
+      "kf_ts": 7.0,
+      "pred_box": [
+        665.6,
+        55.04,
+        1049.6,
+        687.312
+      ],
+      "spatial_iou": 0.901,
+      "temporal_hit": true
+    },
+    {
+      "vid": "3_t1LXrJOvPDg",
+      "query": "The woman in a turban reaches out, pushes the door and comes in, looks down at the little girl, and closes the door.",
+      "object": "The woman in a turban reaches out, pushes the door and comes in,",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/3_t1LXrJOvPDg.mp4",
+      "interval": [
+        5.868263473053892,
+        11.936127744510978
+      ],
+      "_win": [
+        3,
+        19
+      ],
+      "kf_ts": 10.0,
+      "pred_box": [
+        712.96,
+        16.56,
+        1026.56,
+        708.48
+      ],
+      "spatial_iou": 0.752,
+      "temporal_hit": true
+    },
+    {
+      "vid": "152_o4xQ-BEa3Ss",
+      "query": "The woman in black clothes turns around the man in a suit.",
+      "object": "The woman in black clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/152_o4xQ-BEa3Ss.mp4",
+      "interval": [
+        2.72,
+        17.52
+      ],
+      "_win": [
+        7,
+        19
+      ],
+      "kf_ts": 15.0,
+      "pred_box": [
+        132.48,
+        89.5,
+        440.32,
+        356.926
+      ],
+      "spatial_iou": 0.688,
+      "temporal_hit": true
+    },
+    {
+      "vid": "72_OQxN4ksema0",
+      "query": "The man in the left of the man in the orange shirt sits down, then turns his head to look at the left.",
+      "object": "The man in the left of the man in the orange shirt",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/72_OQxN4ksema0.mkv",
+      "interval": [
+        7.387687188019967,
+        15.873544093178037
+      ],
+      "_win": [
+        7,
+        19
+      ],
+      "kf_ts": 7.01,
+      "pred_box": [
+        252.784,
+        23.04,
+        450.912,
+        381.6
+      ],
+      "spatial_iou": 0.709,
+      "temporal_hit": false
+    },
+    {
+      "vid": "206_Kb1fduj-jdY",
+      "query": "The man opposite the shirtless man reaches out to the shirtless man, raises his foot and steps on something.",
+      "object": "The man opposite the shirtless man reaches out to the shirtless man,",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/206_Kb1fduj-jdY.mp4",
+      "interval": [
+        15.129740518962077,
+        18.64271457085828
+      ],
+      "_win": [
+        16,
+        19
+      ],
+      "kf_ts": 19.0,
+      "pred_box": [
+        463.36,
+        40.108,
+        975.36,
+        540.916
+      ],
+      "spatial_iou": 0.878,
+      "temporal_hit": false
+    },
+    {
+      "vid": "95_OQxN4ksema0",
+      "query": "The man in black clothes bent over and leans over to look at the person opposite.",
+      "object": "The man in black clothes bent over and leans over to",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/95_OQxN4ksema0.mkv",
+      "interval": [
+        2.966666666666667,
+        10.466666666666667
+      ],
+      "_win": [
+        3,
+        12
+      ],
+      "kf_ts": 3.006,
+      "pred_box": [
+        339.892,
+        73.44,
+        556.808,
+        392.16
+      ],
+      "spatial_iou": 0.912,
+      "temporal_hit": true
+    },
+    {
+      "vid": "23_30Qkf0pq-PY",
+      "query": "The man in the hat twisted his head as he walked.",
+      "object": "The man in the hat twisted his head as he walked",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/23_30Qkf0pq-PY.mkv",
+      "interval": [
+        8.063872255489022,
+        11.89620758483034
+      ],
+      "_win": [
+        16,
+        19
+      ],
+      "kf_ts": 16.003,
+      "pred_box": [
+        336.476,
+        0.0,
+        668.682,
+        467.064
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": false
+    },
+    {
+      "vid": "87_KkAf75yOKqs",
+      "query": "The woman in blue clothes walks to the sitting man and puts her hand on his shoulder .",
+      "object": "The woman in blue clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/87_KkAf75yOKqs.mkv",
+      "interval": [
+        12.774451097804391,
+        17.84431137724551
+      ],
+      "_win": [
+        14,
+        18
+      ],
+      "kf_ts": 14.003,
+      "pred_box": [
+        20.79,
+        45.6,
+        309.96,
+        480.0
+      ],
+      "spatial_iou": 0.886,
+      "temporal_hit": true
+    },
+    {
+      "vid": "18_wEAeql4z1O0",
+      "query": "The pigtailed woman glances back and passes the thing to the person opposite.",
+      "object": "The pigtailed woman glances back and passes the thing to the person opposite",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/18_wEAeql4z1O0.mp4",
+      "interval": [
+        7.833333333333333,
+        13.083333333333334
+      ],
+      "_win": [
+        10,
+        14
+      ],
+      "kf_ts": 10.010666666666667,
+      "pred_box": [
+        374.052,
+        138.24,
+        564.494,
+        426.24
+      ],
+      "spatial_iou": 0.565,
+      "temporal_hit": true
+    },
+    {
+      "vid": "24_WMFTBgYWJS8",
+      "query": "The man in white clothes gets up from the bed and walks to the wall.",
+      "object": "The man in white clothes gets up from the bed and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/24_WMFTBgYWJS8.mkv",
+      "interval": [
+        8.533333333333333,
+        15.4
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 10.013,
+      "pred_box": [
+        298.24,
+        62.88,
+        506.88,
+        409.44
+      ],
+      "spatial_iou": 0.976,
+      "temporal_hit": true
+    },
+    {
+      "vid": "152_5LrOQEt_XVM",
+      "query": "The woman in pink clothes turns back and looks at the woman in blue, then watches the man in white speak, and then walks away.",
+      "object": "The woman in pink clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/152_5LrOQEt_XVM.mp4",
+      "interval": [
+        7.52,
+        18.96
+      ],
+      "_win": [
+        7,
+        19
+      ],
+      "kf_ts": 11.0,
+      "pred_box": [
+        199.68,
+        79.92,
+        307.84,
+        358.92
+      ],
+      "spatial_iou": 0.124,
+      "temporal_hit": true
+    },
+    {
+      "vid": "8_wogRuPNBUi8",
+      "query": "The standing man waves his hands to the person in front of him.",
+      "object": "the man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/8_wogRuPNBUi8.mp4",
+      "interval": [
+        9.033333333333333,
+        14.266666666666667
+      ],
+      "_win": [
+        10,
+        16
+      ],
+      "kf_ts": 16.016,
+      "pred_box": [
+        258.0,
+        30.72,
+        597.0,
+        479.04
+      ],
+      "spatial_iou": 0.61,
+      "temporal_hit": false
+    },
+    {
+      "vid": "43_qx2vAO5ofmo",
+      "query": "The man in yellow clothes opens the door and sits in.",
+      "object": "The man in yellow clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/43_qx2vAO5ofmo.mp4",
+      "interval": [
+        3.24,
+        7.6
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 3.0,
+      "pred_box": [
+        313.684,
+        99.72,
+        418.88,
+        315.72
+      ],
+      "spatial_iou": 0.767,
+      "temporal_hit": false
+    },
+    {
+      "vid": "2_4ZpjKfu6Cl8",
+      "query": "The yellow-haired woman turns her head and looks back to the right then turns head back, then lowers her hand holding the fork.",
+      "object": "The yellow-haired woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/2_4ZpjKfu6Cl8.mp4",
+      "interval": [
+        7.753743760399335,
+        12.745424292845257
+      ],
+      "_win": [
+        14,
+        19
+      ],
+      "kf_ts": 17.017,
+      "pred_box": [
+        355.84,
+        24.8,
+        1031.68,
+        619.38
+      ],
+      "spatial_iou": 0.396,
+      "temporal_hit": false
+    },
+    {
+      "vid": "56_E-6ruyZFfZs",
+      "query": "The man in the brown suit raises his arm and turns his head to speak, then points to the side, turns around, and sits down.",
+      "object": "The man in the brown suit",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/56_E-6ruyZFfZs.mkv",
+      "interval": [
+        8.502994011976048,
+        16.487025948103792
+      ],
+      "_win": [
+        3,
+        14
+      ],
+      "kf_ts": 8.003,
+      "pred_box": [
+        78.8,
+        51.36,
+        225.368,
+        345.6
+      ],
+      "spatial_iou": 0.214,
+      "temporal_hit": false
+    },
+    {
+      "vid": "251_ViY7CR2TSO8",
+      "query": "The man in the gray suit stands up and turns around, then speaks a few words to the man in the brown suit, and then takes a few steps.",
+      "object": "The man in the gray suit",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/251_ViY7CR2TSO8.mkv",
+      "interval": [
+        4.830339321357285,
+        10.219560878243513
+      ],
+      "_win": [
+        3,
+        19
+      ],
+      "kf_ts": 7.003,
+      "pred_box": [
+        588.8,
+        134.64,
+        953.6,
+        718.56
+      ],
+      "spatial_iou": 0.765,
+      "temporal_hit": true
+    },
+    {
+      "vid": "102_FONjBIXaM-0",
+      "query": "The man in blue clothes takes something from his bag and places it on a stool in front of him.",
+      "object": "The man in blue clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/102_FONjBIXaM-0.mp4",
+      "interval": [
+        7.880000000000001,
+        12.96
+      ],
+      "_win": [
+        7,
+        14
+      ],
+      "kf_ts": 11.0,
+      "pred_box": [
+        206.72,
+        242.4,
+        316.16,
+        473.76
+      ],
+      "spatial_iou": 0.844,
+      "temporal_hit": true
+    },
+    {
+      "vid": "128_o4xQ-BEa3Ss",
+      "query": "The woman in black clothes turns around and walks on.",
+      "object": "The woman in black clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/128_o4xQ-BEa3Ss.mp4",
+      "interval": [
+        11.6,
+        16.8
+      ],
+      "_win": [
+        5,
+        9
+      ],
+      "kf_ts": 9.0,
+      "pred_box": [
+        145.28,
+        79.476,
+        320.0,
+        356.926
+      ],
+      "spatial_iou": 0.887,
+      "temporal_hit": false
+    },
+    {
+      "vid": "5_tjqCzVjojCo",
+      "query": "The woman in the black turban walks to the stool and stops.",
+      "object": "The woman in the black turban",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/5_tjqCzVjojCo.mp4",
+      "interval": [
+        7.704590818363274,
+        17.564870259481037
+      ],
+      "_win": [
+        10,
+        12
+      ],
+      "kf_ts": 10.0,
+      "pred_box": [
+        448.0,
+        25.56,
+        522.88,
+        187.2
+      ],
+      "spatial_iou": 0.66,
+      "temporal_hit": true
+    },
+    {
+      "vid": "227_kW5WyJ1QNpM",
+      "query": "The woman in red is pulled down by the man in red.",
+      "object": "The woman in red",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/227_kW5WyJ1QNpM.mkv",
+      "interval": [
+        13.433333333333334,
+        17.233333333333334
+      ],
+      "_win": [
+        12,
+        16
+      ],
+      "kf_ts": 13.003,
+      "pred_box": [
+        491.05,
+        135.84,
+        697.718,
+        420.48
+      ],
+      "spatial_iou": 0.919,
+      "temporal_hit": false
+    },
+    {
+      "vid": "2_VNZ8JDb8sks",
+      "query": "The woman in the skirt puts the man's feet on the bed, covers the quilt for him, and then picks up the hat.",
+      "object": "The woman in the skirt",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/2_VNZ8JDb8sks.mkv",
+      "interval": [
+        5.62874251497006,
+        15.728542914171657
+      ],
+      "_win": [
+        5,
+        16
+      ],
+      "kf_ts": 7.003,
+      "pred_box": [
+        416.752,
+        186.59,
+        655.018,
+        378.35
+      ],
+      "spatial_iou": 0.102,
+      "temporal_hit": true
+    },
+    {
+      "vid": "52_9eAOr_ttXp0",
+      "query": "The man in white clothes talks to another man, then gets up and walks past him.",
+      "object": "The man in white clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/52_9eAOr_ttXp0.mkv",
+      "interval": [
+        3.3666666666666667,
+        12.766666666666666
+      ],
+      "_win": [
+        3,
+        12
+      ],
+      "kf_ts": 12.015,
+      "pred_box": [
+        350.72,
+        105.6,
+        531.2,
+        479.04
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "60_BV1VreCWZ64",
+      "query": "The man helps the woman to remove the gag and hugs the woman.",
+      "object": "The man helps the woman to remove the gag and hugs the woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/60_BV1VreCWZ64.mkv",
+      "interval": [
+        8.383233532934131,
+        17.005988023952096
+      ],
+      "_win": [
+        7,
+        18
+      ],
+      "kf_ts": 14.003,
+      "pred_box": [
+        189.0,
+        23.04,
+        572.67,
+        479.04
+      ],
+      "spatial_iou": 0.623,
+      "temporal_hit": true
+    },
+    {
+      "vid": "167_VsYPP2I0aUQ",
+      "query": "The woman in the headdress is pushed to the door by a man in white clothes.",
+      "object": "The woman in the headdress",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/167_VsYPP2I0aUQ.mp4",
+      "interval": [
+        6.821963394342761,
+        15.440931780366057
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 13.013,
+      "pred_box": [
+        332.16,
+        116.64,
+        432.0,
+        324.36
+      ],
+      "spatial_iou": 0.198,
+      "temporal_hit": true
+    },
+    {
+      "vid": "2_WSPvfxtqisg",
+      "query": "The long-haired woman stretches out her hand and walks away.",
+      "object": "The long-haired woman stretches out her hand and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/2_WSPvfxtqisg.mkv",
+      "interval": [
+        7.733333333333333,
+        12.8
+      ],
+      "_win": [
+        12,
+        19
+      ],
+      "kf_ts": 12.015,
+      "pred_box": [
+        196.144,
+        75.84,
+        553.008,
+        457.44
+      ],
+      "spatial_iou": 0.924,
+      "temporal_hit": true
+    },
+    {
+      "vid": "16_hgmK4Epb02E",
+      "query": "Straight hair man turns his head and then reaches for the boy",
+      "object": "Straight hair man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/16_hgmK4Epb02E.mkv",
+      "interval": [
+        9.70059880239521,
+        14.491017964071858
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 3.003,
+      "pred_box": [
+        216.38,
+        123.84,
+        579.7,
+        479.04
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": false
+    },
+    {
+      "vid": "6_QTmwhrVal1g",
+      "query": "The man walks to the wall and then crouches",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/6_QTmwhrVal1g.mkv",
+      "interval": [
+        9.18918918918919,
+        18.17047817047817
+      ],
+      "_win": [
+        7,
+        18
+      ],
+      "kf_ts": 18.021,
+      "pred_box": [
+        399.36,
+        116.416,
+        663.04,
+        542.912
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "141_G5Yr20A5z_Q",
+      "query": "The woman in the yellow dress picks up the contents of the chair and walks into the door.",
+      "object": "The woman in the yellow dress",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/141_G5Yr20A5z_Q.mp4",
+      "interval": [
+        2.4,
+        6.36
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 3.0,
+      "pred_box": [
+        64.438,
+        68.4,
+        159.5,
+        326.52
+      ],
+      "spatial_iou": 0.923,
+      "temporal_hit": true
+    },
+    {
+      "vid": "5_aRbLw-dU2XY",
+      "query": "The black-haired man stoops out of the shed and turns to look at the people next to him.",
+      "object": "The black-haired man stoops out of the shed and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/5_aRbLw-dU2XY.mp4",
+      "interval": [
+        4.1930116472545755,
+        8.81863560732113
+      ],
+      "_win": [
+        14,
+        19
+      ],
+      "kf_ts": 19.019,
+      "pred_box": [
+        165.0,
+        7.68,
+        598.8,
+        479.04
+      ],
+      "spatial_iou": 0.47,
+      "temporal_hit": false
+    },
+    {
+      "vid": "238_Kb1fduj-jdY",
+      "query": "The man in red clothes walks to the man in the red turban, stops and speaks to him, then steps back a few steps and stops.",
+      "object": "The man in red clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/238_Kb1fduj-jdY.mp4",
+      "interval": [
+        3.992015968063872,
+        18.602794411177644
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 6.0,
+      "pred_box": [
+        330.24,
+        0.0,
+        576.0,
+        540.374
+      ],
+      "spatial_iou": 0.81,
+      "temporal_hit": true
+    },
+    {
+      "vid": "5_ri4P2enZT9o",
+      "query": "The man on the right shakes hands with the man on the left, then sits down",
+      "object": "The man on the right shakes hands with the man on the left, then",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/5_ri4P2enZT9o.mkv",
+      "interval": [
+        6.26746506986028,
+        19.920159680638722
+      ],
+      "_win": [
+        5,
+        12
+      ],
+      "kf_ts": 8.003,
+      "pred_box": [
+        379.176,
+        39.84,
+        621.712,
+        475.2
+      ],
+      "spatial_iou": 0.687,
+      "temporal_hit": true
+    },
+    {
+      "vid": "309_phrYEKv0rmw",
+      "query": "The man in the gray suit turns his head and walks to the fire.",
+      "object": "The man in the gray suit",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/309_phrYEKv0rmw.mp4",
+      "interval": [
+        9.791666666666666,
+        16.791666666666668
+      ],
+      "_win": [
+        10,
+        12
+      ],
+      "kf_ts": 12.012,
+      "pred_box": [
+        93.12,
+        12.96,
+        290.4,
+        356.04
+      ],
+      "spatial_iou": 0.83,
+      "temporal_hit": true
+    },
+    {
+      "vid": "60_Hi8QeP_VPu0",
+      "query": "The standing man folds his arms, then touches his arm and turns his head.",
+      "object": "the man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/60_Hi8QeP_VPu0.mp4",
+      "interval": [
+        1.0379241516966067,
+        8.982035928143713
+      ],
+      "_win": [
+        1,
+        5
+      ],
+      "kf_ts": 1.0,
+      "pred_box": [
+        571.02,
+        106.56,
+        1049.94,
+        719.28
+      ],
+      "spatial_iou": 0.987,
+      "temporal_hit": false
+    },
+    {
+      "vid": "151_ViY7CR2TSO8",
+      "query": "The black-haired man stretches out his hand, is pulled by the white-clothed man's arm, and then the black-haired man jumps to the side of the white-clothed man.",
+      "object": "The black-haired man stretches out his hand,",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/151_ViY7CR2TSO8.mkv",
+      "interval": [
+        5.6000000000000005,
+        9.92
+      ],
+      "_win": [
+        5,
+        14
+      ],
+      "kf_ts": 9.003,
+      "pred_box": [
+        258.56,
+        171.36,
+        719.36,
+        719.28
+      ],
+      "spatial_iou": 0.898,
+      "temporal_hit": true
+    },
+    {
+      "vid": "169_1ReZIMmD_8E",
+      "query": "The white woman walks beside the woman in gray and hugs her.",
+      "object": "The white woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/169_1ReZIMmD_8E.mp4",
+      "interval": [
+        3.273453093812375,
+        7.385229540918163
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 4.0,
+      "pred_box": [
+        156.16,
+        75.84,
+        323.2,
+        479.04
+      ],
+      "spatial_iou": 0.955,
+      "temporal_hit": true
+    },
+    {
+      "vid": "46_rFgb2ECMcrY",
+      "query": "The man with sunglasses walks to the door and gets in the car",
+      "object": "The man with sunglasses",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/46_rFgb2ECMcrY.mp4",
+      "interval": [
+        4.48,
+        13.84
+      ],
+      "_win": [
+        5,
+        16
+      ],
+      "kf_ts": 16.0,
+      "pred_box": null,
+      "temporal_hit": false
+    },
+    {
+      "vid": "16_8VZEwOCQ8bc",
+      "query": "Woman in black dress walks to the stall next to her and turns",
+      "object": "Woman in black dress",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/16_8VZEwOCQ8bc.mp4",
+      "interval": [
+        5.12,
+        14.28
+      ],
+      "_win": [
+        5,
+        9
+      ],
+      "kf_ts": 5.0,
+      "pred_box": [
+        286.56,
+        147.6,
+        420.0,
+        358.92
+      ],
+      "spatial_iou": 0.74,
+      "temporal_hit": false
+    },
+    {
+      "vid": "130_Vmef_8MY46w",
+      "query": "The man holding the wine glass takes a sip of wine.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/130_Vmef_8MY46w.mp4",
+      "interval": [
+        2.16,
+        7.4399999999999995
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 7.0,
+      "pred_box": [
+        21.12,
+        100.08,
+        194.4,
+        359.28
+      ],
+      "spatial_iou": 0.761,
+      "temporal_hit": true
+    },
+    {
+      "vid": "120_UOyyTUX5Vo4",
+      "query": "The man in white lay down and takes a sip of wine.",
+      "object": "The man in white lay down and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/120_UOyyTUX5Vo4.mp4",
+      "interval": [
+        6.44,
+        19.96
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 19.0,
+      "pred_box": [
+        0.0,
+        224.64,
+        188.232,
+        360.0
+      ],
+      "spatial_iou": 0.714,
+      "temporal_hit": true
+    },
+    {
+      "vid": "1_l8_Mk3-sZsQ",
+      "query": "The man in black clothes takes out the smoke from his mouth and turns his head.",
+      "object": "The man in black clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/1_l8_Mk3-sZsQ.mkv",
+      "interval": [
+        7.858627858627859,
+        13.92931392931393
+      ],
+      "_win": [
+        7,
+        16
+      ],
+      "kf_ts": 9.012,
+      "pred_box": [
+        840.96,
+        66.96,
+        1280.0,
+        717.84
+      ],
+      "spatial_iou": 0.888,
+      "temporal_hit": true
+    },
+    {
+      "vid": "55_1R7n8B8KkZE",
+      "query": "The man carrying his hands walks forward.",
+      "object": "The man carrying his hands",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/55_1R7n8B8KkZE.mkv",
+      "interval": [
+        10.32,
+        15.760000000000002
+      ],
+      "_win": [
+        7,
+        19
+      ],
+      "kf_ts": 13.003,
+      "pred_box": [
+        454.4,
+        120.0,
+        579.2,
+        479.04
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "116_TM5MPJIq1Is",
+      "query": "The man in the shirt is photographed by the man in the green clothes and then walks to the wooden fence.",
+      "object": "The man in the shirt",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/116_TM5MPJIq1Is.mkv",
+      "interval": [
+        4.359400998336106,
+        11.08153078202995
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 10.013,
+      "pred_box": [
+        43.52,
+        115.2,
+        293.12,
+        479.04
+      ],
+      "spatial_iou": 0.845,
+      "temporal_hit": true
+    },
+    {
+      "vid": "10_rRL0Ce8e-RY",
+      "query": "Man hugs with woman and then points at her.",
+      "object": "Man hugs with woman and then",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/10_rRL0Ce8e-RY.mkv",
+      "interval": [
+        0.8637873754152824,
+        7.043189368770763
+      ],
+      "_win": [
+        1,
+        7
+      ],
+      "kf_ts": 4.003,
+      "pred_box": [
+        0.0,
+        131.76,
+        1048.32,
+        947.16
+      ],
+      "spatial_iou": 0.567,
+      "temporal_hit": true
+    },
+    {
+      "vid": "121_TM5MPJIq1Is",
+      "query": "The man in the green vest grabs the rope in the man's hand.",
+      "object": "The man in the green vest grabs the rope in the man's hand",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/121_TM5MPJIq1Is.mkv",
+      "interval": [
+        6.2,
+        13.933333333333334
+      ],
+      "_win": [
+        7,
+        14
+      ],
+      "kf_ts": 9.012,
+      "pred_box": [
+        112.0,
+        93.6,
+        309.12,
+        469.44
+      ],
+      "spatial_iou": 0.682,
+      "temporal_hit": true
+    },
+    {
+      "vid": "21_oITFHwzfw_k",
+      "query": "The man bends over turns around and covers his mouth.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/21_oITFHwzfw_k.mkv",
+      "interval": [
+        2.6746506986027945,
+        8.263473053892215
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 3.003,
+      "pred_box": [
+        476.16,
+        44.64,
+        880.64,
+        717.84
+      ],
+      "spatial_iou": 0.955,
+      "temporal_hit": true
+    },
+    {
+      "vid": "105_Hi8QeP_VPu0",
+      "query": "The long-haired woman follows the man on the left to get up from the stool and helps the man on the left to sits on the sofa.",
+      "object": "The long-haired woman follows the man on the left to get up from the stool and helps the man on the left to",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/105_Hi8QeP_VPu0.mp4",
+      "interval": [
+        7.984031936127744,
+        13.053892215568863
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 12.0,
+      "pred_box": [
+        310.684,
+        115.2,
+        601.72,
+        717.84
+      ],
+      "spatial_iou": 0.617,
+      "temporal_hit": true
+    },
+    {
+      "vid": "36_HymKCzQJbB8",
+      "query": "The woman in the vest is pushed into the car by the man in the vest.",
+      "object": "The woman in the vest",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/36_HymKCzQJbB8.mp4",
+      "interval": [
+        11.92,
+        19.4
+      ],
+      "_win": [
+        12,
+        19
+      ],
+      "kf_ts": 15.0,
+      "pred_box": [
+        414.08,
+        99.36,
+        560.0,
+        358.92
+      ],
+      "spatial_iou": 0.383,
+      "temporal_hit": true
+    },
+    {
+      "vid": "22_TCmNvNLRWrc",
+      "query": "The man raises his finger and points at the side, then points at the top and walks up behind the woman in the blue skirt.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/22_TCmNvNLRWrc.mkv",
+      "interval": [
+        8.502994011976048,
+        17.80439121756487
+      ],
+      "_win": [
+        12,
+        19
+      ],
+      "kf_ts": 19.003,
+      "pred_box": [
+        391.68,
+        148.8,
+        528.0,
+        479.04
+      ],
+      "spatial_iou": 0.659,
+      "temporal_hit": false
+    },
+    {
+      "vid": "5_-FLn0aeA6EU",
+      "query": "The bald man puts things on his left hand, shakes hands with the man on his right, and then pats the man in the hat and walks away.",
+      "object": "The bald man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/5_-FLn0aeA6EU.mkv",
+      "interval": [
+        6.833333333333334,
+        13.966666666666667
+      ],
+      "_win": [
+        7,
+        19
+      ],
+      "kf_ts": 11.014,
+      "pred_box": [
+        454.4,
+        29.256,
+        875.52,
+        550.344
+      ],
+      "spatial_iou": 0.857,
+      "temporal_hit": true
+    },
+    {
+      "vid": "110_o4xQ-BEa3Ss",
+      "query": "The little girl lying on the bed rubs her eyes and comes down from the bed to the man sitting on the bed.",
+      "object": "The little girl",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/110_o4xQ-BEa3Ss.mp4",
+      "interval": [
+        9.64,
+        14.76
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 19.0,
+      "pred_box": [
+        388.48,
+        61.576,
+        481.28,
+        316.114
+      ],
+      "spatial_iou": 0.873,
+      "temporal_hit": false
+    },
+    {
+      "vid": "70_-ZFgsrolSxo",
+      "query": "The woman wearing a red headscarf lifts her skirt while talking to the woman next to her, then turns her head and looks aside.",
+      "object": "The woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/70_-ZFgsrolSxo.mkv",
+      "interval": [
+        8.76,
+        15.4
+      ],
+      "_win": [
+        10,
+        16
+      ],
+      "kf_ts": 14.003,
+      "pred_box": [
+        394.548,
+        96.0,
+        529.48,
+        473.76
+      ],
+      "spatial_iou": 0.917,
+      "temporal_hit": true
+    },
+    {
+      "vid": "112_r2llOyS-BmE",
+      "query": "Woman puts down knife and fork and touches man's hand",
+      "object": "Woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/112_r2llOyS-BmE.mp4",
+      "interval": [
+        9.08,
+        19.16
+      ],
+      "_win": [
+        16,
+        19
+      ],
+      "kf_ts": 18.0,
+      "pred_box": [
+        55.0,
+        68.4,
+        242.0,
+        280.08
+      ],
+      "spatial_iou": 0.632,
+      "temporal_hit": true
+    },
+    {
+      "vid": "27_o-ZcbjLBtls",
+      "query": "The hugged short man releases the man who was holds him, then bends over, picks up the ground, and walks away.",
+      "object": "The hugged short man releases the man who",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/27_o-ZcbjLBtls.mkv",
+      "interval": [
+        5.2,
+        18.0
+      ],
+      "_win": [
+        7,
+        19
+      ],
+      "kf_ts": 13.016,
+      "pred_box": null,
+      "temporal_hit": true
+    },
+    {
+      "vid": "81_FONjBIXaM-0",
+      "query": "The man in the car jumps out of the car, then takes the things off the car and walks away.",
+      "object": "The man in the car",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/81_FONjBIXaM-0.mp4",
+      "interval": [
+        12.8,
+        17.28
+      ],
+      "_win": [
+        0,
+        19
+      ],
+      "kf_ts": 16.0,
+      "pred_box": null,
+      "temporal_hit": true
+    },
+    {
+      "vid": "22_Ie35yEssHko",
+      "query": "The woman walks to the sofa , stoops and touches the book .",
+      "object": "The woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/22_Ie35yEssHko.mkv",
+      "interval": [
+        3.7422037422037424,
+        13.347193347193347
+      ],
+      "_win": [
+        5,
+        12
+      ],
+      "kf_ts": 8.011,
+      "pred_box": [
+        58.24,
+        96.0,
+        437.12,
+        479.04
+      ],
+      "spatial_iou": 0.792,
+      "temporal_hit": true
+    },
+    {
+      "vid": "1_WlgxRNCHQzw",
+      "query": "The woman in black clothes turns and walks to the little girl to stop.",
+      "object": "The woman in black clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/1_WlgxRNCHQzw.mp4",
+      "interval": [
+        11.200000000000001,
+        15.04
+      ],
+      "_win": [
+        0,
+        3
+      ],
+      "kf_ts": 3.0,
+      "pred_box": [
+        133.44,
+        10.8,
+        330.24,
+        358.92
+      ],
+      "spatial_iou": 0.312,
+      "temporal_hit": false
+    },
+    {
+      "vid": "41_HV0H6oc4Kvs",
+      "query": "The man in black clothes runs a few steps and stops , then bends down .",
+      "object": "The man in black clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/41_HV0H6oc4Kvs.mp4",
+      "interval": [
+        7.68,
+        16.4
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 10.0,
+      "pred_box": [
+        204.16,
+        71.276,
+        280.32,
+        206.562
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "52_Ecivp8t3MdY",
+      "query": "The woman near the window bends over to the man holding the child, then squats down and wipes the child's face.",
+      "object": "The woman near the window",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/52_Ecivp8t3MdY.mp4",
+      "interval": [
+        7.920133111480865,
+        17.670549084858568
+      ],
+      "_win": [
+        10,
+        18
+      ],
+      "kf_ts": 10.01,
+      "pred_box": [
+        75.02,
+        39.6,
+        196.02,
+        337.68
+      ],
+      "spatial_iou": 0.975,
+      "temporal_hit": true
+    },
+    {
+      "vid": "283_phrYEKv0rmw",
+      "query": "The man in the gray suit raises his hand against the wall, places his hand on the woman's shoulder, then hugs and kisses her.",
+      "object": "The man in the gray suit",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/283_phrYEKv0rmw.mp4",
+      "interval": [
+        0.9583333333333334,
+        15.5
+      ],
+      "_win": [
+        1,
+        16
+      ],
+      "kf_ts": 5.005,
+      "pred_box": [
+        60.0,
+        29.88,
+        405.6,
+        356.04
+      ],
+      "spatial_iou": 0.749,
+      "temporal_hit": true
+    },
+    {
+      "vid": "171_uNT6HrrnqPU",
+      "query": "The man in the vest puts his cup on the table and turns his head.",
+      "object": "The man in the vest",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/171_uNT6HrrnqPU.mp4",
+      "interval": [
+        6.959999999999999,
+        11.719999999999999
+      ],
+      "_win": [
+        7,
+        9
+      ],
+      "kf_ts": 9.0,
+      "pred_box": [
+        143.5,
+        17.28,
+        359.898,
+        326.52
+      ],
+      "spatial_iou": 0.815,
+      "temporal_hit": true
+    },
+    {
+      "vid": "116_5LrOQEt_XVM",
+      "query": "The man in the gray military uniform goes to the woman and pulls up her hand, bows his head, kisses the woman and hugs, then goes to the man and hugs.",
+      "object": "The man in the gray military uniform goes to the woman and pulls up her hand, bows his head, kisses the woman and hugs, then goes to the man and hugs",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/116_5LrOQEt_XVM.mp4",
+      "interval": [
+        1.92,
+        12.12
+      ],
+      "_win": [
+        3,
+        12
+      ],
+      "kf_ts": 7.0,
+      "pred_box": [
+        91.52,
+        37.44,
+        341.76,
+        356.04
+      ],
+      "spatial_iou": 0.595,
+      "temporal_hit": true
+    },
+    {
+      "vid": "113_w-jIrlwuv2Y",
+      "query": "The woman in red clothes walks to the wooden frame.",
+      "object": "The woman in red clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/113_w-jIrlwuv2Y.mkv",
+      "interval": [
+        0.16,
+        20.0
+      ],
+      "_win": [
+        7,
+        19
+      ],
+      "kf_ts": 19.003,
+      "pred_box": [
+        155.428,
+        38.4,
+        381.738,
+        479.04
+      ],
+      "spatial_iou": 0.762,
+      "temporal_hit": true
+    },
+    {
+      "vid": "95_iSlDMboCSao",
+      "query": "The balding man turns and walks to the globe.",
+      "object": "The balding man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/95_iSlDMboCSao.mp4",
+      "interval": [
+        6.5600000000000005,
+        20.0
+      ],
+      "_win": [
+        7,
+        19
+      ],
+      "kf_ts": 10.0,
+      "pred_box": [
+        610.56,
+        42.744,
+        1241.6,
+        547.452
+      ],
+      "spatial_iou": 0.869,
+      "temporal_hit": true
+    },
+    {
+      "vid": "19_2KpThOF_QmE",
+      "query": "The man on the grass stands up and walks to the pool and receives the woman's water.",
+      "object": "The man on the grass",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/19_2KpThOF_QmE.mkv",
+      "interval": [
+        4.359400998336106,
+        19.23460898502496
+      ],
+      "_win": [
+        7,
+        18
+      ],
+      "kf_ts": 15.018,
+      "pred_box": [
+        814.08,
+        93.6,
+        1000.96,
+        487.44
+      ],
+      "spatial_iou": 0.609,
+      "temporal_hit": true
+    },
+    {
+      "vid": "94_oD_wxyTHJ2I",
+      "query": "The man in white clothes points to the person on the right, then retracts.",
+      "object": "The man in white clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/94_oD_wxyTHJ2I.mp4",
+      "interval": [
+        4.916666666666666,
+        9.291666666666668
+      ],
+      "_win": [
+        5,
+        9
+      ],
+      "kf_ts": 9.009,
+      "pred_box": [
+        9.6,
+        67.68,
+        144.0,
+        355.68
+      ],
+      "spatial_iou": 0.802,
+      "temporal_hit": true
+    },
+    {
+      "vid": "34_HJzgJ9ZjvJk",
+      "query": "The man in blue clothes walks backward and opens the door",
+      "object": "The man in blue clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/34_HJzgJ9ZjvJk.mp4",
+      "interval": [
+        2.16,
+        6.959999999999999
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 6.0,
+      "pred_box": [
+        223.2,
+        69.84,
+        417.136,
+        356.04
+      ],
+      "spatial_iou": 0.883,
+      "temporal_hit": true
+    },
+    {
+      "vid": "8_UOyyTUX5Vo4",
+      "query": "The black-haired man touches the forehead of the woman who is sitting and then holds her up.",
+      "object": "The black-haired man touches the forehead of the woman who",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/8_UOyyTUX5Vo4.mp4",
+      "interval": [
+        3.4799999999999995,
+        9.92
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 6.0,
+      "pred_box": [
+        0.0,
+        0.0,
+        322.92,
+        358.92
+      ],
+      "spatial_iou": 0.659,
+      "temporal_hit": true
+    },
+    {
+      "vid": "395_phrYEKv0rmw",
+      "query": "The man in black pants takes over things from the man behind him, then pushes the thing in front of him.",
+      "object": "The man in black pants",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/395_phrYEKv0rmw.mp4",
+      "interval": [
+        2.0,
+        7.958333333333333
+      ],
+      "_win": [
+        10,
+        14
+      ],
+      "kf_ts": 14.014,
+      "pred_box": [
+        239.04,
+        128.52,
+        297.12,
+        304.92
+      ],
+      "spatial_iou": 0.743,
+      "temporal_hit": false
+    },
+    {
+      "vid": "4_QaIMUi-elFo",
+      "query": "The man with the hat walks to the table and sits down.",
+      "object": "The man with the hat",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/4_QaIMUi-elFo.mkv",
+      "interval": [
+        5.114345114345115,
+        9.97920997920998
+      ],
+      "_win": [
+        5,
+        12
+      ],
+      "kf_ts": 12.015,
+      "pred_box": [
+        336.192,
+        145.44,
+        463.5,
+        315.84
+      ],
+      "spatial_iou": 0.01,
+      "temporal_hit": false
+    },
+    {
+      "vid": "61_KVq6If6ozMY",
+      "query": "The short man comes to the tall man and stops.",
+      "object": "The short man comes to the tall man and stops",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/61_KVq6If6ozMY.mp4",
+      "interval": [
+        10.059880239520957,
+        13.692614770459082
+      ],
+      "_win": [
+        3,
+        5
+      ],
+      "kf_ts": 5.0,
+      "pred_box": [
+        368.016,
+        125.64,
+        455.1,
+        324.0
+      ],
+      "spatial_iou": 0.23,
+      "temporal_hit": false
+    },
+    {
+      "vid": "147_uNT6HrrnqPU",
+      "query": "The man holding the handrail goes down a little bit.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/147_uNT6HrrnqPU.mp4",
+      "interval": [
+        0.28,
+        6.2
+      ],
+      "_win": [
+        1,
+        7
+      ],
+      "kf_ts": 5.0,
+      "pred_box": [
+        297.906,
+        68.4,
+        387.45,
+        208.08
+      ],
+      "spatial_iou": 0.618,
+      "temporal_hit": true
+    },
+    {
+      "vid": "16_bePts02nIY8",
+      "query": "The man in black clothes gets up and walks over, then picks up the things on the ground and walks forward.",
+      "object": "The man in black clothes gets up and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/16_bePts02nIY8.mkv",
+      "interval": [
+        12.566666666666666,
+        17.733333333333334
+      ],
+      "_win": [
+        12,
+        18
+      ],
+      "kf_ts": 13.016,
+      "pred_box": [
+        197.274,
+        95.04,
+        281.82,
+        287.04
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "89_9eAOr_ttXp0",
+      "query": "The man in white clothes runs over and drops the newspaper, holds the man in white pants and rings the bell.",
+      "object": "The man in white clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/89_9eAOr_ttXp0.mkv",
+      "interval": [
+        9.233333333333334,
+        16.8
+      ],
+      "_win": [
+        10,
+        16
+      ],
+      "kf_ts": 16.019,
+      "pred_box": [
+        206.72,
+        110.88,
+        309.12,
+        383.04
+      ],
+      "spatial_iou": 0.697,
+      "temporal_hit": true
+    },
+    {
+      "vid": "93_IzvOYVMltkI",
+      "query": "The man walking on the bed lifts the quilt and gets out of bed, then turns.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/93_IzvOYVMltkI.mp4",
+      "interval": [
+        2.2,
+        9.879999999999999
+      ],
+      "_win": [
+        1,
+        9
+      ],
+      "kf_ts": 3.0,
+      "pred_box": [
+        145.92,
+        86.76,
+        216.32,
+        252.0
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "41_cWYJHb25EVs",
+      "query": "The woman in a fur coat turns and pulls the woman next to her for a few steps, then stops in front of the man in the black hat.",
+      "object": "The woman in a fur coat",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/41_cWYJHb25EVs.mp4",
+      "interval": [
+        2.84,
+        15.600000000000001
+      ],
+      "_win": [
+        5,
+        19
+      ],
+      "kf_ts": 19.0,
+      "pred_box": [
+        219.024,
+        36.0,
+        448.032,
+        358.92
+      ],
+      "spatial_iou": 0.923,
+      "temporal_hit": false
+    },
+    {
+      "vid": "2_UrsCy6qIGoo",
+      "query": "The person standing by the car walks from the left to the right of the car, and then gets on the car.",
+      "object": "The person",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/2_UrsCy6qIGoo.mp4",
+      "interval": [
+        7.16,
+        15.16
+      ],
+      "_win": [
+        1,
+        9
+      ],
+      "kf_ts": 1.0,
+      "pred_box": [
+        100.804,
+        150.84,
+        253.924,
+        259.92
+      ],
+      "spatial_iou": 0.135,
+      "temporal_hit": false
+    },
+    {
+      "vid": "9_HKjR70GCRPE",
+      "query": "A curly woman goes up the stairs and turns around, then puts her hands on the cabinet",
+      "object": "A curly woman goes up the stairs and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/9_HKjR70GCRPE.mp4",
+      "interval": [
+        9.08,
+        16.88
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 13.0,
+      "pred_box": [
+        176.16,
+        22.32,
+        279.84,
+        207.36
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "61_WlgxRNCHQzw",
+      "query": "While wearing a vest, the man turns around and looks around, and stops in front of the person opposite.",
+      "object": "While",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/61_WlgxRNCHQzw.mp4",
+      "interval": [
+        2.52,
+        13.600000000000001
+      ],
+      "_win": [
+        3,
+        12
+      ],
+      "kf_ts": 5.0,
+      "pred_box": [
+        336.0,
+        82.08,
+        387.84,
+        236.16
+      ],
+      "spatial_iou": 0.849,
+      "temporal_hit": true
+    },
+    {
+      "vid": "23_qx2vAO5ofmo",
+      "query": "The man in red sat down and put the book on the ground, and then touched his foot with his right hand.",
+      "object": "The man in red sat down and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/23_qx2vAO5ofmo.mp4",
+      "interval": [
+        14.04,
+        17.16
+      ],
+      "_win": [
+        14,
+        16
+      ],
+      "kf_ts": 14.0,
+      "pred_box": [
+        148.512,
+        110.16,
+        257.992,
+        262.44
+      ],
+      "spatial_iou": 0.747,
+      "temporal_hit": false
+    },
+    {
+      "vid": "41_o-ZcbjLBtls",
+      "query": "The man under the tree comes to the man in a turban.",
+      "object": "The man under the tree comes to the man in a turban",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/41_o-ZcbjLBtls.mkv",
+      "interval": [
+        1.4666666666666668,
+        20.0
+      ],
+      "_win": [
+        0,
+        19
+      ],
+      "kf_ts": 12.015,
+      "pred_box": null,
+      "temporal_hit": true
+    },
+    {
+      "vid": "187_G5Yr20A5z_Q",
+      "query": "The seated man raises his hands,then lowering his head and speaking , and hands the documents in front of the man in brown clothes.",
+      "object": "The seated man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/187_G5Yr20A5z_Q.mp4",
+      "interval": [
+        0.43999999999999995,
+        17.56
+      ],
+      "_win": [
+        0,
+        5
+      ],
+      "kf_ts": 5.0,
+      "pred_box": [
+        392.37,
+        146.52,
+        590.15,
+        356.04
+      ],
+      "spatial_iou": 0.882,
+      "temporal_hit": true
+    },
+    {
+      "vid": "79_Vmef_8MY46w",
+      "query": "The woman sitting on the floor hands the contents to the woman in black next to it then stands up and walks away.",
+      "object": "The woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/79_Vmef_8MY46w.mp4",
+      "interval": [
+        5.12,
+        11.799999999999999
+      ],
+      "_win": [
+        7,
+        12
+      ],
+      "kf_ts": 12.0,
+      "pred_box": [
+        159.84,
+        71.28,
+        354.24,
+        280.08
+      ],
+      "spatial_iou": 0.039,
+      "temporal_hit": false
+    },
+    {
+      "vid": "25_oD_wxyTHJ2I",
+      "query": "The woman in striped clothes turns her head and looks to the left.",
+      "object": "The woman in striped clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/25_oD_wxyTHJ2I.mp4",
+      "interval": [
+        8.375,
+        11.958333333333332
+      ],
+      "_win": [
+        5,
+        12
+      ],
+      "kf_ts": 5.005,
+      "pred_box": [
+        26.4,
+        87.84,
+        271.2,
+        359.28
+      ],
+      "spatial_iou": 0.919,
+      "temporal_hit": false
+    },
+    {
+      "vid": "109_KkAf75yOKqs",
+      "query": "The woman in the white apron bends over , puts down the teapot in her hand , and gets up .",
+      "object": "The woman in the white apron",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/109_KkAf75yOKqs.mkv",
+      "interval": [
+        13.680000000000001,
+        18.04
+      ],
+      "_win": [
+        14,
+        19
+      ],
+      "kf_ts": 19.003,
+      "pred_box": [
+        233.1,
+        50.4,
+        403.83,
+        414.24
+      ],
+      "spatial_iou": 0.841,
+      "temporal_hit": false
+    },
+    {
+      "vid": "34_Uw7387tc9PU",
+      "query": "The woman in pink clothes takes a bite to eat, speaks to the person next to her, and then lowers her head.",
+      "object": "The woman in pink clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/34_Uw7387tc9PU.mp4",
+      "interval": [
+        2.59567387687188,
+        7.587354409317804
+      ],
+      "_win": [
+        0,
+        16
+      ],
+      "kf_ts": 6.006,
+      "pred_box": [
+        444.16,
+        95.04,
+        638.72,
+        373.44
+      ],
+      "spatial_iou": 0.847,
+      "temporal_hit": true
+    },
+    {
+      "vid": "43_WMFTBgYWJS8",
+      "query": "The man in the white coat comes to the man in the gray suit and stops.",
+      "object": "The man in the white coat comes to the man in the gray suit and stops",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/43_WMFTBgYWJS8.mkv",
+      "interval": [
+        9.033333333333333,
+        18.46666666666667
+      ],
+      "_win": [
+        10,
+        14
+      ],
+      "kf_ts": 13.016,
+      "pred_box": [
+        233.6,
+        95.04,
+        350.72,
+        402.24
+      ],
+      "spatial_iou": 0.935,
+      "temporal_hit": true
+    },
+    {
+      "vid": "238_o4xQ-BEa3Ss",
+      "query": "The man in black clothes comes in and drops things.",
+      "object": "The man in black clothes comes in and drops things",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/238_o4xQ-BEa3Ss.mp4",
+      "interval": [
+        11.52,
+        16.72
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 13.0,
+      "pred_box": [
+        268.16,
+        12.888,
+        361.6,
+        258.118
+      ],
+      "spatial_iou": 0.579,
+      "temporal_hit": true
+    },
+    {
+      "vid": "3_9Rcxr3IEX4E",
+      "query": "The man stands up and pulls up the man with the stick and pulls him away.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/3_9Rcxr3IEX4E.mkv",
+      "interval": [
+        8.9,
+        19.4
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 14.017,
+      "pred_box": [
+        0.0,
+        120.0,
+        177.92,
+        479.04
+      ],
+      "spatial_iou": 0.92,
+      "temporal_hit": true
+    },
+    {
+      "vid": "160_Kb1fduj-jdY",
+      "query": "The man at the door goes to the man holding the sword.",
+      "object": "The man at the door goes to the man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/160_Kb1fduj-jdY.mp4",
+      "interval": [
+        13.772455089820358,
+        19.96007984031936
+      ],
+      "_win": [
+        12,
+        19
+      ],
+      "kf_ts": 14.0,
+      "pred_box": [
+        705.28,
+        105.148,
+        823.04,
+        372.896
+      ],
+      "spatial_iou": 0.507,
+      "temporal_hit": true
+    },
+    {
+      "vid": "41_cqkChR44vkA",
+      "query": "The woman in white clothes touches her hair with her left hand, then takes a few steps, holds her arm with her right hand.",
+      "object": "The woman in white clothes touches her hair with her left hand, then",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/41_cqkChR44vkA.mkv",
+      "interval": [
+        11.52,
+        19.92
+      ],
+      "_win": [
+        7,
+        19
+      ],
+      "kf_ts": 10.003,
+      "pred_box": [
+        398.72,
+        85.44,
+        583.68,
+        479.04
+      ],
+      "spatial_iou": 0.702,
+      "temporal_hit": false
+    },
+    {
+      "vid": "87_QaIMUi-elFo",
+      "query": "The man in black clothes picks up an umbrella next to him, speaks a few words to the opposite woman, and walks away.",
+      "object": "The man in black clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/87_QaIMUi-elFo.mkv",
+      "interval": [
+        2.869022869022869,
+        8.440748440748441
+      ],
+      "_win": [
+        0,
+        9
+      ],
+      "kf_ts": 6.009,
+      "pred_box": [
+        309.0,
+        32.16,
+        499.962,
+        393.6
+      ],
+      "spatial_iou": 0.762,
+      "temporal_hit": true
+    },
+    {
+      "vid": "16_Hscyg0vLKc8",
+      "query": "The woman in white clothes comes down from the steps and stops among a group of men in white clothes",
+      "object": "The woman in white clothes comes down from the steps and stops among a group of men in white clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/16_Hscyg0vLKc8.mp4",
+      "interval": [
+        2.3200000000000003,
+        6.4
+      ],
+      "_win": [
+        3,
+        5
+      ],
+      "kf_ts": 3.0,
+      "pred_box": [
+        286.09,
+        172.8,
+        410.774,
+        422.4
+      ],
+      "spatial_iou": 0.918,
+      "temporal_hit": true
+    },
+    {
+      "vid": "126_o4xQ-BEa3Ss",
+      "query": "The man in the black suit picks up the things on the counter and puts them in the pockets on the jacket, then leans back on the counter.",
+      "object": "The man in the black suit",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/126_o4xQ-BEa3Ss.mp4",
+      "interval": [
+        0.32,
+        20.0
+      ],
+      "_win": [
+        3,
+        19
+      ],
+      "kf_ts": 19.0,
+      "pred_box": [
+        192.0,
+        21.48,
+        384.0,
+        356.926
+      ],
+      "spatial_iou": 0.958,
+      "temporal_hit": true
+    },
+    {
+      "vid": "18_4gVsDd8PV9U",
+      "query": "The man walks to the woman and says a few words, and carries the woman away.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/18_4gVsDd8PV9U.mp4",
+      "interval": [
+        1.497504159733777,
+        9.916805324459235
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 9.009,
+      "pred_box": [
+        305.92,
+        77.04,
+        430.72,
+        315.72
+      ],
+      "spatial_iou": 0.842,
+      "temporal_hit": true
+    },
+    {
+      "vid": "14_2E_e8JlvTlg",
+      "query": "The man who takes the clothes puts his clothes on the chair next to him and wipes his hands, then bends down, picks up something, and stands up again.",
+      "object": "The man who",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/14_2E_e8JlvTlg.mkv",
+      "interval": [
+        0.8319467554076538,
+        10.249584026622296
+      ],
+      "_win": [
+        1,
+        7
+      ],
+      "kf_ts": 3.006,
+      "pred_box": [
+        220.8,
+        43.68,
+        538.24,
+        479.04
+      ],
+      "spatial_iou": 0.951,
+      "temporal_hit": true
+    },
+    {
+      "vid": "23_hbYvDvJrpNk",
+      "query": "woman puts a hand on man's shoulder and pushes man to a wall",
+      "object": "woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/23_hbYvDvJrpNk.mp4",
+      "interval": [
+        5.029940119760479,
+        13.812375249500999
+      ],
+      "_win": [
+        5,
+        12
+      ],
+      "kf_ts": 12.0,
+      "pred_box": [
+        396.8,
+        85.952,
+        1002.24,
+        543.456
+      ],
+      "spatial_iou": 0.936,
+      "temporal_hit": true
+    },
+    {
+      "vid": "88_IKdBLciu_-A",
+      "query": "The man in white clothes walks to the man in green clothes, follows him and drives forward.",
+      "object": "The man in white clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/88_IKdBLciu_-A.mp4",
+      "interval": [
+        1.52,
+        4.640000000000001
+      ],
+      "_win": [
+        3,
+        19
+      ],
+      "kf_ts": 4.0,
+      "pred_box": [
+        0.0,
+        90.0,
+        147.6,
+        360.0
+      ],
+      "spatial_iou": 0.731,
+      "temporal_hit": true
+    },
+    {
+      "vid": "148_OQxN4ksema0",
+      "query": "The man in gray clothes turns his head, takes a few steps forward and sits down.",
+      "object": "The man in gray clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/148_OQxN4ksema0.mkv",
+      "interval": [
+        3.466666666666667,
+        11.466666666666667
+      ],
+      "_win": [
+        5,
+        12
+      ],
+      "kf_ts": 9.012,
+      "pred_box": [
+        273.28,
+        71.04,
+        520.086,
+        479.04
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "16_UrsCy6qIGoo",
+      "query": "The man on the left of the black woman turns and walks to the woman in the yellow.",
+      "object": "The man on the left of the black woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/16_UrsCy6qIGoo.mp4",
+      "interval": [
+        11.879999999999999,
+        17.04
+      ],
+      "_win": [
+        14,
+        18
+      ],
+      "kf_ts": 14.0,
+      "pred_box": [
+        68.266,
+        67.68,
+        210.54,
+        347.04
+      ],
+      "spatial_iou": 0.141,
+      "temporal_hit": true
+    },
+    {
+      "vid": "37_BLDTynQwGRI",
+      "query": "The white-haired man says something to the long-haired man, turns and points aside twice, and turns back to the long-haired man.",
+      "object": "The white-haired man says something to the long-haired man,",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/37_BLDTynQwGRI.mkv",
+      "interval": [
+        0.08316008316008316,
+        13.513513513513512
+      ],
+      "_win": [
+        0,
+        19
+      ],
+      "kf_ts": 19.003,
+      "pred_box": [
+        416.0,
+        0.0,
+        1049.6,
+        527.472
+      ],
+      "spatial_iou": 0.031,
+      "temporal_hit": false
+    },
+    {
+      "vid": "8_y4lBI_gFnqI",
+      "query": "The man in the suit turns his head to the left and turns to the right.",
+      "object": "The man in the suit",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/8_y4lBI_gFnqI.mkv",
+      "interval": [
+        4.658901830282861,
+        8.718801996672212
+      ],
+      "_win": [
+        0,
+        7
+      ],
+      "kf_ts": 5.008,
+      "pred_box": [
+        234.0,
+        106.56,
+        394.56,
+        380.16
+      ],
+      "spatial_iou": 0.892,
+      "temporal_hit": true
+    },
+    {
+      "vid": "31_s2z5UASlrP8",
+      "query": "The soldier on the right looks at the man on the left as he walks, then turns his head.",
+      "object": "The soldier on the right",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/31_s2z5UASlrP8.mkv",
+      "interval": [
+        6.123128119800333,
+        17.40432612312812
+      ],
+      "_win": [
+        5,
+        19
+      ],
+      "kf_ts": 8.011,
+      "pred_box": [
+        334.464,
+        173.28,
+        622.752,
+        474.72
+      ],
+      "spatial_iou": 0.817,
+      "temporal_hit": true
+    },
+    {
+      "vid": "51_Qes4a8HuyEc",
+      "query": "The man in the coat spread his hand with the newspaper, then lowers it.",
+      "object": "The man in the coat spread his hand with the newspaper, then lowers it",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/51_Qes4a8HuyEc.mkv",
+      "interval": [
+        11.208333333333334,
+        15.5
+      ],
+      "_win": [
+        7,
+        12
+      ],
+      "kf_ts": 12.015,
+      "pred_box": [
+        624.64,
+        60.544,
+        913.92,
+        687.312
+      ],
+      "spatial_iou": 0.086,
+      "temporal_hit": true
+    },
+    {
+      "vid": "119_TM5MPJIq1Is",
+      "query": "The man in the white hat and plaid shirt ties the horse's mouth with a rope.",
+      "object": "The man in the white hat and plaid shirt ties the horse's mouth with a rope",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/119_TM5MPJIq1Is.mkv",
+      "interval": [
+        4.733333333333333,
+        8.9
+      ],
+      "_win": [
+        0,
+        9
+      ],
+      "kf_ts": 3.006,
+      "pred_box": [
+        184.32,
+        126.24,
+        384.64,
+        479.04
+      ],
+      "spatial_iou": 0.568,
+      "temporal_hit": false
+    },
+    {
+      "vid": "25_Ecivp8t3MdY",
+      "query": "The man in black clothes turns his head and looks aside, then releases his hand and walks to the window.",
+      "object": "The man in black clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/25_Ecivp8t3MdY.mp4",
+      "interval": [
+        8.951747088186355,
+        17.337770382695506
+      ],
+      "_win": [
+        10,
+        16
+      ],
+      "kf_ts": 16.016,
+      "pred_box": [
+        251.68,
+        28.08,
+        345.576,
+        356.04
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "18_RW-H3fN_79I",
+      "query": "The man in red clothes goes around the car, raises his right hand and waves to the man in beige pants.",
+      "object": "The man in red clothes goes around the car,",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/18_RW-H3fN_79I.mp4",
+      "interval": [
+        3.760399334442596,
+        7.354409317803661
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 10.01,
+      "pred_box": [
+        325.2,
+        143.04,
+        369.6,
+        213.6
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": false
+    },
+    {
+      "vid": "104_iSlDMboCSao",
+      "query": "The bald man presses his face with the woman in front of him, then walks next to the black-haired man and takes something out of his pocket.",
+      "object": "The bald man presses his face with the woman in front of him, then",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/104_iSlDMboCSao.mp4",
+      "interval": [
+        7.800000000000001,
+        13.919999999999998
+      ],
+      "_win": [
+        5,
+        19
+      ],
+      "kf_ts": 6.0,
+      "pred_box": [
+        399.36,
+        38.908,
+        896.0,
+        547.452
+      ],
+      "spatial_iou": 0.492,
+      "temporal_hit": false
+    },
+    {
+      "vid": "43_pGP_oIdKmRY",
+      "query": "The man in black clothes takes out something and shows them to the woman next to him, then kisses the things in his hand.",
+      "object": "The man in black clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/43_pGP_oIdKmRY.mkv",
+      "interval": [
+        3.912175648702595,
+        17.84431137724551
+      ],
+      "_win": [
+        7,
+        19
+      ],
+      "kf_ts": 7.003,
+      "pred_box": [
+        6.0,
+        4.8,
+        279.6,
+        474.72
+      ],
+      "spatial_iou": 0.811,
+      "temporal_hit": true
+    },
+    {
+      "vid": "161_ViY7CR2TSO8",
+      "query": "The tall man takes the glass and hands it to the opposite man, and then he takes another glass.",
+      "object": "The tall man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/161_ViY7CR2TSO8.mkv",
+      "interval": [
+        6.760000000000001,
+        11.959999999999999
+      ],
+      "_win": [
+        7,
+        12
+      ],
+      "kf_ts": 10.003,
+      "pred_box": [
+        576.0,
+        128.16,
+        1135.36,
+        717.84
+      ],
+      "spatial_iou": 0.487,
+      "temporal_hit": true
+    },
+    {
+      "vid": "1_Hscyg0vLKc8",
+      "query": "The man holds the big fan dances and walks behind the men in white clothes",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/1_Hscyg0vLKc8.mp4",
+      "interval": [
+        13.08,
+        16.919999999999998
+      ],
+      "_win": [
+        0,
+        3
+      ],
+      "kf_ts": 2.0,
+      "pred_box": [
+        0.0,
+        62.88,
+        331.352,
+        426.24
+      ],
+      "spatial_iou": 0.02,
+      "temporal_hit": false
+    },
+    {
+      "vid": "8_P5EhajqkqPw",
+      "query": "The dark-hair woman takes out a bottle from her bag.",
+      "object": "The dark-hair woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/8_P5EhajqkqPw.mkv",
+      "interval": [
+        1.44,
+        6.08
+      ],
+      "_win": [
+        7,
+        9
+      ],
+      "kf_ts": 9.003,
+      "pred_box": [
+        177.92,
+        67.68,
+        601.6,
+        421.44
+      ],
+      "spatial_iou": 0.407,
+      "temporal_hit": false
+    },
+    {
+      "vid": "40_bSZiZ4rOC7c",
+      "query": "The white woman pushes the woman in a turban, then turns away.",
+      "object": "The white woman pushes the woman in a turban, then",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/40_bSZiZ4rOC7c.mkv",
+      "interval": [
+        10.24,
+        14.68
+      ],
+      "_win": [
+        10,
+        14
+      ],
+      "kf_ts": 11.003,
+      "pred_box": [
+        158.72,
+        119.04,
+        320.0,
+        426.24
+      ],
+      "spatial_iou": 0.807,
+      "temporal_hit": true
+    },
+    {
+      "vid": "80_9f8r96-it6c",
+      "query": "The man holding the child walks behind the woman and puts down the child, then goes away .",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/80_9f8r96-it6c.mkv",
+      "interval": [
+        9.70059880239521,
+        15.888223552894212
+      ],
+      "_win": [
+        10,
+        16
+      ],
+      "kf_ts": 16.003,
+      "pred_box": [
+        269.01,
+        154.08,
+        341.6,
+        223.68
+      ],
+      "spatial_iou": 0.024,
+      "temporal_hit": false
+    },
+    {
+      "vid": "22_PcFEhUKhN6g",
+      "query": "The tall man comes to the bearded man.",
+      "object": "The tall man comes to the bearded man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/22_PcFEhUKhN6g.mkv",
+      "interval": [
+        7.666666666666667,
+        11.299999999999999
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 18.021,
+      "pred_box": [
+        55.68,
+        81.6,
+        228.48,
+        408.0
+      ],
+      "spatial_iou": 0.692,
+      "temporal_hit": false
+    },
+    {
+      "vid": "50_WMFTBgYWJS8",
+      "query": "The woman in orange clothes walks to the stool and stops.",
+      "object": "The woman in orange clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/50_WMFTBgYWJS8.mkv",
+      "interval": [
+        6.9217970049916815,
+        16.772046589018302
+      ],
+      "_win": [
+        10,
+        18
+      ],
+      "kf_ts": 12.015,
+      "pred_box": [
+        232.32,
+        135.84,
+        362.88,
+        414.24
+      ],
+      "spatial_iou": 0.799,
+      "temporal_hit": true
+    },
+    {
+      "vid": "66_8VZEwOCQ8bc",
+      "query": "The man in brown clothes raises his hand and takes off his hat, then shakes hands with the person opposite.",
+      "object": "The man in brown clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/66_8VZEwOCQ8bc.mp4",
+      "interval": [
+        11.120000000000001,
+        15.280000000000001
+      ],
+      "_win": [
+        10,
+        14
+      ],
+      "kf_ts": 14.0,
+      "pred_box": [
+        123.84,
+        123.48,
+        219.84,
+        243.72
+      ],
+      "spatial_iou": 0.59,
+      "temporal_hit": true
+    },
+    {
+      "vid": "55_5LrOQEt_XVM",
+      "query": "The man in the hat runs from the back of the car to the door, opens the door, and then closes the door again.",
+      "object": "The man in the hat",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/55_5LrOQEt_XVM.mp4",
+      "interval": [
+        2.16,
+        7.48
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 7.0,
+      "pred_box": [
+        522.88,
+        0.0,
+        638.72,
+        171.72
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "14_VNZ8JDb8sks",
+      "query": "The man in the hat turns his head and drops his right hand from the railing.",
+      "object": "The man in the hat",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/14_VNZ8JDb8sks.mkv",
+      "interval": [
+        8.383233532934131,
+        17.405189620758485
+      ],
+      "_win": [
+        5,
+        7
+      ],
+      "kf_ts": 5.003,
+      "pred_box": [
+        544.852,
+        140.06,
+        700.28,
+        407.49
+      ],
+      "spatial_iou": 0.936,
+      "temporal_hit": false
+    },
+    {
+      "vid": "11_CrlfWnsS7ac",
+      "query": "The man in the gray suit stops in front of the bald man.",
+      "object": "The man in the gray suit stops in front of the bald man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/11_CrlfWnsS7ac.mp4",
+      "interval": [
+        12.958333333333334,
+        20.0
+      ],
+      "_win": [
+        14,
+        19
+      ],
+      "kf_ts": 18.018,
+      "pred_box": [
+        165.12,
+        22.32,
+        396.8,
+        358.92
+      ],
+      "spatial_iou": 0.963,
+      "temporal_hit": true
+    },
+    {
+      "vid": "18_xp67EC-Hvwk",
+      "query": "The man in the sky blue shirt reaches out to open the door, then sits in and takes off his hat, and closes the door.",
+      "object": "The man in the sky blue shirt reaches out to",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/18_xp67EC-Hvwk.mp4",
+      "interval": [
+        13.510815307820298,
+        19.101497504159735
+      ],
+      "_win": [
+        12,
+        19
+      ],
+      "kf_ts": 15.015,
+      "pred_box": [
+        314.4,
+        1.08,
+        458.4,
+        354.96
+      ],
+      "spatial_iou": 0.789,
+      "temporal_hit": true
+    },
+    {
+      "vid": "34_3-ivkPTSTSw",
+      "query": "The man stands up and looks at the woman.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/34_3-ivkPTSTSw.mp4",
+      "interval": [
+        8.433333333333334,
+        13.200000000000001
+      ],
+      "_win": [
+        7,
+        16
+      ],
+      "kf_ts": 10.01,
+      "pred_box": [
+        115.84,
+        35.04,
+        305.92,
+        473.76
+      ],
+      "spatial_iou": 0.803,
+      "temporal_hit": true
+    },
+    {
+      "vid": "102_9eAOr_ttXp0",
+      "query": "The man with the gun turns to look at the men and women, talks to them, and walks away.",
+      "object": "The man with the gun",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/102_9eAOr_ttXp0.mkv",
+      "interval": [
+        3.9933444259567388,
+        18.635607321131445
+      ],
+      "_win": [
+        7,
+        18
+      ],
+      "kf_ts": 16.019,
+      "pred_box": [
+        94.72,
+        39.84,
+        410.24,
+        479.04
+      ],
+      "spatial_iou": 0.86,
+      "temporal_hit": true
+    },
+    {
+      "vid": "64_rk8Xm0EAOWs",
+      "query": "Bald man opens the lid and crawls out",
+      "object": "Bald man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/64_rk8Xm0EAOWs.mp4",
+      "interval": [
+        10.0,
+        13.799999999999999
+      ],
+      "_win": [
+        10,
+        12
+      ],
+      "kf_ts": 10.0,
+      "pred_box": null,
+      "temporal_hit": true
+    },
+    {
+      "vid": "9_hgmK4Epb02E",
+      "query": "The child in red clothes turns and walks to the horse.",
+      "object": "The child in red clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/9_hgmK4Epb02E.mkv",
+      "interval": [
+        6.906187624750499,
+        10.738522954091817
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 12.003,
+      "pred_box": [
+        140.74,
+        237.12,
+        288.92,
+        479.04
+      ],
+      "spatial_iou": 0.797,
+      "temporal_hit": false
+    },
+    {
+      "vid": "122_TM5MPJIq1Is",
+      "query": "The man in the green vest turns his head and takes the horse away.",
+      "object": "The man in the green vest",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/122_TM5MPJIq1Is.mkv",
+      "interval": [
+        13.610648918469217,
+        18.901830282861898
+      ],
+      "_win": [
+        14,
+        19
+      ],
+      "kf_ts": 15.018,
+      "pred_box": [
+        113.28,
+        100.8,
+        332.16,
+        479.04
+      ],
+      "spatial_iou": 0.867,
+      "temporal_hit": true
+    },
+    {
+      "vid": "17_SCh-ZImnyyk",
+      "query": "The man in white clothes walks to the sofa and sits down.",
+      "object": "The man in white clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/17_SCh-ZImnyyk.mp4",
+      "interval": [
+        5.029940119760479,
+        9.860279441117765
+      ],
+      "_win": [
+        5,
+        12
+      ],
+      "kf_ts": 8.0,
+      "pred_box": [
+        416.56,
+        87.84,
+        645.504,
+        473.76
+      ],
+      "spatial_iou": 0.385,
+      "temporal_hit": true
+    },
+    {
+      "vid": "49_XglAvHaEtHY",
+      "query": "The man in dark blue comes to the wall and stops.",
+      "object": "The man in dark blue comes to the wall and stops",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/49_XglAvHaEtHY.mp4",
+      "interval": [
+        7.24,
+        12.8
+      ],
+      "_win": [
+        5,
+        7
+      ],
+      "kf_ts": 7.0,
+      "pred_box": [
+        658.56,
+        427.68,
+        1198.08,
+        899.64
+      ],
+      "spatial_iou": 0.897,
+      "temporal_hit": false
+    },
+    {
+      "vid": "11_Ecivp8t3MdY",
+      "query": "A man with glasses takes off his glasses and holds them in his hand.",
+      "object": "A man with glasses",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/11_Ecivp8t3MdY.mp4",
+      "interval": [
+        2.7,
+        19.933333333333334
+      ],
+      "_win": [
+        3,
+        5
+      ],
+      "kf_ts": 3.003,
+      "pred_box": [
+        0.0,
+        28.8,
+        166.98,
+        356.04
+      ],
+      "spatial_iou": 0.781,
+      "temporal_hit": true
+    },
+    {
+      "vid": "18_UOfuzrwkclM",
+      "query": "The woman in white clothes walks to a woman in yellow and stops, takes off her coat, and lays on the bed.",
+      "object": "The woman in white clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/18_UOfuzrwkclM.mkv",
+      "interval": [
+        4.680000000000001,
+        19.36
+      ],
+      "_win": [
+        5,
+        12
+      ],
+      "kf_ts": 9.003,
+      "pred_box": [
+        324.45,
+        149.76,
+        378.0,
+        282.24
+      ],
+      "spatial_iou": 0.777,
+      "temporal_hit": true
+    },
+    {
+      "vid": "90_UOfuzrwkclM",
+      "query": "The man holding the stick takes off his glasses, then turns and points at the man in the yellow suit, then hit the man in front of him again.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/90_UOfuzrwkclM.mkv",
+      "interval": [
+        1.96,
+        7.16
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 7.003,
+      "pred_box": [
+        216.09,
+        43.68,
+        511.56,
+        479.04
+      ],
+      "spatial_iou": 0.223,
+      "temporal_hit": true
+    },
+    {
+      "vid": "41_-ZFgsrolSxo",
+      "query": "The woman in blue clothes goes to the man in white, bends over, and opens the basin on the ground.",
+      "object": "The woman in blue clothes goes to the man in white,",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/41_-ZFgsrolSxo.mkv",
+      "interval": [
+        1.6367265469061876,
+        12.095808383233532
+      ],
+      "_win": [
+        7,
+        12
+      ],
+      "kf_ts": 7.003,
+      "pred_box": [
+        452.62,
+        18.24,
+        664.412,
+        473.76
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "230_5LrOQEt_XVM",
+      "query": "The woman in black clothes walks up to the woman in blue , kisses her forehead , speaks a few words to her , and walks away .",
+      "object": "The woman in black clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/230_5LrOQEt_XVM.mp4",
+      "interval": [
+        4.8,
+        16.64
+      ],
+      "_win": [
+        5,
+        16
+      ],
+      "kf_ts": 10.0,
+      "pred_box": [
+        158.72,
+        34.56,
+        398.72,
+        358.92
+      ],
+      "spatial_iou": 0.888,
+      "temporal_hit": true
+    },
+    {
+      "vid": "9_aDEYi1OG0vU",
+      "query": "The woman jumps off the horse, takes a few steps, then turns around and looks at the opposite man.",
+      "object": "The woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/9_aDEYi1OG0vU.mp4",
+      "interval": [
+        1.6766467065868262,
+        12.135728542914173
+      ],
+      "_win": [
+        1,
+        5
+      ],
+      "kf_ts": 1.0,
+      "pred_box": [
+        450.56,
+        110.88,
+        533.76,
+        293.04
+      ],
+      "spatial_iou": 0.03,
+      "temporal_hit": false
+    },
+    {
+      "vid": "112_G5Yr20A5z_Q",
+      "query": "The man in white stretched out and pulled the man in blue and walks behind the bald man.",
+      "object": "The man in white stretched out and pulled the man in blue and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/112_G5Yr20A5z_Q.mp4",
+      "interval": [
+        5.12,
+        12.4
+      ],
+      "_win": [
+        7,
+        18
+      ],
+      "kf_ts": 8.0,
+      "pred_box": [
+        351.538,
+        40.32,
+        559.526,
+        356.04
+      ],
+      "spatial_iou": 0.548,
+      "temporal_hit": true
+    },
+    {
+      "vid": "3_8JSxLhDMGtE",
+      "query": "The bald man comes in from the outside and sits down.",
+      "object": "The bald man comes in from the outside and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/3_8JSxLhDMGtE.mkv",
+      "interval": [
+        7.366666666666667,
+        12.7
+      ],
+      "_win": [
+        7,
+        12
+      ],
+      "kf_ts": 12.015,
+      "pred_box": [
+        299.754,
+        32.16,
+        584.99,
+        479.04
+      ],
+      "spatial_iou": 0.75,
+      "temporal_hit": true
+    },
+    {
+      "vid": "5_b-YoBU0XT90",
+      "query": "The man in the blue suit raises his hand and takes down the gun on his shoulder to the ground and holds it with both hands, then looks forward.",
+      "object": "The man in the blue suit",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/5_b-YoBU0XT90.mp4",
+      "interval": [
+        4.833333333333333,
+        10.0
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 7.007,
+      "pred_box": [
+        215.04,
+        102.96,
+        614.4,
+        708.48
+      ],
+      "spatial_iou": 0.728,
+      "temporal_hit": true
+    },
+    {
+      "vid": "38_bSZiZ4rOC7c",
+      "query": "The man in black short sleeves turns and walks to the door, opens the door and gets into the car.",
+      "object": "The man in black short sleeves",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/38_bSZiZ4rOC7c.mkv",
+      "interval": [
+        0.9580838323353293,
+        9.900199600798402
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 3.003,
+      "pred_box": null,
+      "temporal_hit": true
+    },
+    {
+      "vid": "48_Uw7387tc9PU",
+      "query": "The lady in red clothes puts down her apron, then turns and walks away.",
+      "object": "The lady in red clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/48_Uw7387tc9PU.mp4",
+      "interval": [
+        0.6,
+        8.266666666666666
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 3.003,
+      "pred_box": [
+        179.2,
+        48.0,
+        364.8,
+        479.04
+      ],
+      "spatial_iou": 0.81,
+      "temporal_hit": true
+    },
+    {
+      "vid": "53_XglAvHaEtHY",
+      "query": "The man in dark blue goes to the stool and turns to sit down, then reaches out to picks up the things on the table.",
+      "object": "The man in dark blue goes to the stool and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/53_XglAvHaEtHY.mp4",
+      "interval": [
+        4.5200000000000005,
+        11.36
+      ],
+      "_win": [
+        7,
+        16
+      ],
+      "kf_ts": 8.0,
+      "pred_box": [
+        437.76,
+        267.84,
+        888.96,
+        898.56
+      ],
+      "spatial_iou": 0.738,
+      "temporal_hit": true
+    },
+    {
+      "vid": "126_TM5MPJIq1Is",
+      "query": "The man in the black hat opens the drawer and takes out a bunch of keys, stands up and walks in front of the door to open it.",
+      "object": "The man in the black hat",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/126_TM5MPJIq1Is.mkv",
+      "interval": [
+        5.956738768718802,
+        13.77703826955075
+      ],
+      "_win": [
+        7,
+        14
+      ],
+      "kf_ts": 12.015,
+      "pred_box": [
+        325.12,
+        9.6,
+        524.8,
+        479.04
+      ],
+      "spatial_iou": 0.95,
+      "temporal_hit": true
+    },
+    {
+      "vid": "37_HJzgJ9ZjvJk",
+      "query": "The man in the hat walks around in front of the woman, then stops and turns.",
+      "object": "The man in the hat",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/37_HJzgJ9ZjvJk.mp4",
+      "interval": [
+        9.32,
+        14.8
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 7.0,
+      "pred_box": [
+        290.16,
+        42.84,
+        434.0,
+        356.04
+      ],
+      "spatial_iou": 0.779,
+      "temporal_hit": false
+    },
+    {
+      "vid": "41_PcFEhUKhN6g",
+      "query": "The man in black clothes hands the cup to the woman opposite and takes off his watch.",
+      "object": "The man in black clothes hands the cup to the woman opposite and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/41_PcFEhUKhN6g.mkv",
+      "interval": [
+        0.09983361064891846,
+        3.760399334442596
+      ],
+      "_win": [
+        1,
+        5
+      ],
+      "kf_ts": 2.005,
+      "pred_box": [
+        0.0,
+        57.6,
+        343.04,
+        411.36
+      ],
+      "spatial_iou": 0.835,
+      "temporal_hit": true
+    },
+    {
+      "vid": "5_U_WzY2k8IBM",
+      "query": "The man in the suit pushes the boy on his left, then walks to the boy on the opposite side and pats his face.",
+      "object": "The man in the suit pushes the boy on his left, then",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/5_U_WzY2k8IBM.mp4",
+      "interval": [
+        5.08,
+        13.919999999999998
+      ],
+      "_win": [
+        5,
+        16
+      ],
+      "kf_ts": 5.0,
+      "pred_box": [
+        304.548,
+        51.48,
+        416.724,
+        321.48
+      ],
+      "spatial_iou": 0.778,
+      "temporal_hit": false
+    },
+    {
+      "vid": "108_G5Yr20A5z_Q",
+      "query": "The man in white clothes walks up to the man in blue.",
+      "object": "The man in white clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/108_G5Yr20A5z_Q.mp4",
+      "interval": [
+        3.5199999999999996,
+        12.36
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 5.0,
+      "pred_box": [
+        81.026,
+        62.64,
+        262.856,
+        358.92
+      ],
+      "spatial_iou": 0.891,
+      "temporal_hit": true
+    },
+    {
+      "vid": "44_oD_wxyTHJ2I",
+      "query": "The man in white clothes comes down from the car to manage the door, and then walks to the woman with the child to hold her.",
+      "object": "The man in white clothes comes down from the car to manage the door, and then",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/44_oD_wxyTHJ2I.mp4",
+      "interval": [
+        4.333333333333334,
+        10.0
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 7.007,
+      "pred_box": [
+        143.04,
+        41.76,
+        307.68,
+        268.92
+      ],
+      "spatial_iou": 0.383,
+      "temporal_hit": true
+    },
+    {
+      "vid": "2_XglAvHaEtHY",
+      "query": "The sits man stands up and turns.",
+      "object": "the sit",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/2_XglAvHaEtHY.mp4",
+      "interval": [
+        3.12,
+        7.92
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 7.0,
+      "pred_box": [
+        556.8,
+        491.4,
+        942.72,
+        804.6
+      ],
+      "spatial_iou": 0.304,
+      "temporal_hit": true
+    },
+    {
+      "vid": "190_1ReZIMmD_8E",
+      "query": "The man in purple clothes walks from the door to the man in gray clothes and talks to him.",
+      "object": "The man in purple clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/190_1ReZIMmD_8E.mp4",
+      "interval": [
+        3.9520958083832336,
+        19.96007984031936
+      ],
+      "_win": [
+        3,
+        19
+      ],
+      "kf_ts": 19.0,
+      "pred_box": [
+        419.2,
+        66.24,
+        585.6,
+        474.72
+      ],
+      "spatial_iou": 0.832,
+      "temporal_hit": true
+    },
+    {
+      "vid": "16_cWYJHb25EVs",
+      "query": "The woman in the hat walks to the door from the man in blue and stops.",
+      "object": "The woman in the hat",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/16_cWYJHb25EVs.mp4",
+      "interval": [
+        13.919999999999998,
+        18.759999999999998
+      ],
+      "_win": [
+        12,
+        16
+      ],
+      "kf_ts": 13.0,
+      "pred_box": [
+        0.0,
+        0.0,
+        412.464,
+        360.0
+      ],
+      "spatial_iou": 0.429,
+      "temporal_hit": false
+    },
+    {
+      "vid": "165_E-6ruyZFfZs",
+      "query": "The man in green clothes lays on the back of the man in blue and leaves.",
+      "object": "The man in green clothes lays on the back of the man in blue and leaves",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/165_E-6ruyZFfZs.mkv",
+      "interval": [
+        3.6799999999999997,
+        8.24
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 4.003,
+      "pred_box": [
+        350.66,
+        17.28,
+        571.3,
+        479.04
+      ],
+      "spatial_iou": 0.848,
+      "temporal_hit": true
+    },
+    {
+      "vid": "122_DaUzhc9_6io",
+      "query": "The sitting man with glasses stands up, turns and walks to the woman in blue, and begins to dance.",
+      "object": "the man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/122_DaUzhc9_6io.mp4",
+      "interval": [
+        4.466666666666667,
+        10.166666666666666
+      ],
+      "_win": [
+        5,
+        9
+      ],
+      "kf_ts": 5.005,
+      "pred_box": [
+        325.12,
+        133.44,
+        472.32,
+        325.44
+      ],
+      "spatial_iou": 0.722,
+      "temporal_hit": true
+    },
+    {
+      "vid": "37_9mLYmkonWZQ",
+      "query": "The man in the vest runs from behind the man in the hat to him, turns, and grabs him.",
+      "object": "The man in the vest",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/37_9mLYmkonWZQ.mp4",
+      "interval": [
+        10.578842315369261,
+        14.37125748502994
+      ],
+      "_win": [
+        7,
+        14
+      ],
+      "kf_ts": 14.0,
+      "pred_box": [
+        199.408,
+        54.0,
+        435.6,
+        359.28
+      ],
+      "spatial_iou": 0.915,
+      "temporal_hit": true
+    },
+    {
+      "vid": "51_l2XO3tQk8lI",
+      "query": "The man with something in his hand turns his head to talk to the woman behind him, then keeps turning to speak to the woman behind him, and then walks away.",
+      "object": "The man with something in his hand",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/51_l2XO3tQk8lI.mp4",
+      "interval": [
+        2.56,
+        15.8
+      ],
+      "_win": [
+        1,
+        7
+      ],
+      "kf_ts": 1.0,
+      "pred_box": [
+        284.16,
+        0.0,
+        469.76,
+        350.944
+      ],
+      "spatial_iou": 0.765,
+      "temporal_hit": false
+    },
+    {
+      "vid": "59_BU98nWUtT5E",
+      "query": "The woman turns and undresses and turns to looks at the mirror.",
+      "object": "The woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/59_BU98nWUtT5E.mkv",
+      "interval": [
+        1.7564870259481038,
+        15.129740518962077
+      ],
+      "_win": [
+        7,
+        19
+      ],
+      "kf_ts": 19.003,
+      "pred_box": [
+        230.58,
+        120.0,
+        509.838,
+        479.04
+      ],
+      "spatial_iou": 0.938,
+      "temporal_hit": false
+    },
+    {
+      "vid": "50_9mLYmkonWZQ",
+      "query": "The woman turns and walks towards the door.",
+      "object": "The woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/50_9mLYmkonWZQ.mp4",
+      "interval": [
+        0.8383233532934131,
+        5.508982035928144
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 3.0,
+      "pred_box": [
+        242.0,
+        83.16,
+        334.928,
+        312.12
+      ],
+      "spatial_iou": 0.637,
+      "temporal_hit": true
+    },
+    {
+      "vid": "224_UOyyTUX5Vo4",
+      "query": "The man in green clothes walks across from the woman in the hat and sits down.",
+      "object": "The man in green clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/224_UOyyTUX5Vo4.mp4",
+      "interval": [
+        5.88,
+        16.84
+      ],
+      "_win": [
+        10,
+        16
+      ],
+      "kf_ts": 13.0,
+      "pred_box": [
+        110.4,
+        20.52,
+        287.04,
+        358.92
+      ],
+      "spatial_iou": 0.839,
+      "temporal_hit": true
+    },
+    {
+      "vid": "182_wEAeql4z1O0",
+      "query": "The man in the hat takes two steps, turns around, and speaks to the opposite man.",
+      "object": "The man in the hat",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/182_wEAeql4z1O0.mp4",
+      "interval": [
+        7.708333333333334,
+        19.166666666666668
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 15.016,
+      "pred_box": [
+        336.476,
+        95.04,
+        529.48,
+        474.24
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "102_QaIMUi-elFo",
+      "query": "The little girl follows the man in black to the crowd and stops.",
+      "object": "The little girl follows the man in black to the crowd and stops",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/102_QaIMUi-elFo.mkv",
+      "interval": [
+        13.347193347193347,
+        18.96049896049896
+      ],
+      "_win": [
+        5,
+        19
+      ],
+      "kf_ts": 8.011,
+      "pred_box": null,
+      "temporal_hit": false
+    },
+    {
+      "vid": "131_uNT6HrrnqPU",
+      "query": "The woman without a turban walks downstairs and stops.",
+      "object": "The woman without a turban",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/131_uNT6HrrnqPU.mp4",
+      "interval": [
+        6.16,
+        14.52
+      ],
+      "_win": [
+        7,
+        12
+      ],
+      "kf_ts": 7.0,
+      "pred_box": [
+        114.8,
+        75.6,
+        319.144,
+        358.92
+      ],
+      "spatial_iou": 0.635,
+      "temporal_hit": true
+    },
+    {
+      "vid": "72_Kb1fduj-jdY",
+      "query": "The man in red clothes follows the man in front to the bed and stops.",
+      "object": "The man in red clothes follows the man in front to the bed and stops",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/72_Kb1fduj-jdY.mp4",
+      "interval": [
+        10.259481037924152,
+        19.96007984031936
+      ],
+      "_win": [
+        10,
+        12
+      ],
+      "kf_ts": 10.0,
+      "pred_box": null,
+      "temporal_hit": false
+    },
+    {
+      "vid": "55__dBTTYDRdRQ",
+      "query": "Woman in white clothes gets up and grabs a man's hand and talks to him.",
+      "object": "Woman in white clothes gets up and grabs a man's hand and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/55__dBTTYDRdRQ.mp4",
+      "interval": [
+        0.12,
+        8.64
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 3.0,
+      "pred_box": null,
+      "temporal_hit": true
+    },
+    {
+      "vid": "62_-APF0-L14kw",
+      "query": "The man in red clothes goes to pulls the woman 's hand and walks away.",
+      "object": "The man in red clothes goes to pulls the woman 's hand and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/62_-APF0-L14kw.mkv",
+      "interval": [
+        7.0,
+        16.458333333333332
+      ],
+      "_win": [
+        18,
+        19
+      ],
+      "kf_ts": 19.022,
+      "pred_box": [
+        529.92,
+        141.84,
+        707.84,
+        660.24
+      ],
+      "spatial_iou": 0.18,
+      "temporal_hit": false
+    },
+    {
+      "vid": "26_l2XO3tQk8lI",
+      "query": "The standing little boy raises his hand to speak to the opposite man.",
+      "object": "the boy",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/26_l2XO3tQk8lI.mp4",
+      "interval": [
+        12.36,
+        19.08
+      ],
+      "_win": [
+        0,
+        7
+      ],
+      "kf_ts": 0.0,
+      "pred_box": [
+        48.0,
+        0.0,
+        356.48,
+        350.944
+      ],
+      "spatial_iou": 0.546,
+      "temporal_hit": false
+    },
+    {
+      "vid": "38_Kb1fduj-jdY",
+      "query": "The man in red clothes walks up the stairs and stops next to the man in black.",
+      "object": "The man in red clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/38_Kb1fduj-jdY.mp4",
+      "interval": [
+        8.1437125748503,
+        16.127744510978044
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 10.0,
+      "pred_box": [
+        490.24,
+        102.98,
+        803.84,
+        540.374
+      ],
+      "spatial_iou": 0.812,
+      "temporal_hit": true
+    },
+    {
+      "vid": "77_UOyyTUX5Vo4",
+      "query": "The woman in the gray dress gets out of the car, takes the bag hands by the man next to her, and walks forward.",
+      "object": "The woman in the gray dress gets out of the car,",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/77_UOyyTUX5Vo4.mp4",
+      "interval": [
+        9.48,
+        19.96
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 18.0,
+      "pred_box": [
+        95.496,
+        123.48,
+        224.664,
+        326.52
+      ],
+      "spatial_iou": 0.757,
+      "temporal_hit": true
+    },
+    {
+      "vid": "26_kvFlbTK812w",
+      "query": "The man in the red suit hands something to the man behind him, then stepped out of the iron door and hung something on the wall.",
+      "object": "The man in the red suit hands something to the man behind him, then stepped out of the iron door and hung something on the wall",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/26_kvFlbTK812w.mkv",
+      "interval": [
+        11.866666666666667,
+        16.833333333333332
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 16.019,
+      "pred_box": null,
+      "temporal_hit": true
+    },
+    {
+      "vid": "34_CrlfWnsS7ac",
+      "query": "The woman in the blue skirt waits for the man in the suit to come over, then takes him a few steps and stops.",
+      "object": "The woman in the blue skirt waits for the man in the suit to come over, then",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/34_CrlfWnsS7ac.mp4",
+      "interval": [
+        1.9126819126819128,
+        19.95841995841996
+      ],
+      "_win": [
+        0,
+        19
+      ],
+      "kf_ts": 3.003,
+      "pred_box": [
+        323.2,
+        49.68,
+        560.0,
+        358.92
+      ],
+      "spatial_iou": 0.827,
+      "temporal_hit": true
+    },
+    {
+      "vid": "18_Qes4a8HuyEc",
+      "query": "The man in floral clothes takes out a coat, puts on a sleeve, and walks to the table.",
+      "object": "The man in floral clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/18_Qes4a8HuyEc.mkv",
+      "interval": [
+        4.282744282744283,
+        12.266112266112266
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 9.012,
+      "pred_box": null,
+      "temporal_hit": true
+    },
+    {
+      "vid": "17_s2z5UASlrP8",
+      "query": "The officer on the right gets off the vehicle and walks around to the left door.",
+      "object": "The officer on the right gets off the vehicle and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/17_s2z5UASlrP8.mkv",
+      "interval": [
+        4.533333333333333,
+        9.833333333333332
+      ],
+      "_win": [
+        5,
+        9
+      ],
+      "kf_ts": 5.008,
+      "pred_box": [
+        415.584,
+        170.4,
+        511.68,
+        339.84
+      ],
+      "spatial_iou": 0.659,
+      "temporal_hit": true
+    },
+    {
+      "vid": "93_UOyyTUX5Vo4",
+      "query": "The man in the suit goes to the person in front of him and pats her on the shoulder.",
+      "object": "The man in the suit goes to the person in front of him and pats her on the shoulder",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/93_UOyyTUX5Vo4.mp4",
+      "interval": [
+        7.039999999999999,
+        14.28
+      ],
+      "_win": [
+        12,
+        19
+      ],
+      "kf_ts": 19.0,
+      "pred_box": null,
+      "temporal_hit": false
+    },
+    {
+      "vid": "28_-APF0-L14kw",
+      "query": "The man bends over and holds the woman in his arms, then stands up.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/28_-APF0-L14kw.mkv",
+      "interval": [
+        1.0810810810810811,
+        7.8170478170478175
+      ],
+      "_win": [
+        7,
+        12
+      ],
+      "kf_ts": 7.01,
+      "pred_box": [
+        0.0,
+        14.4,
+        627.2,
+        547.2
+      ],
+      "spatial_iou": 0.708,
+      "temporal_hit": true
+    },
+    {
+      "vid": "22_SHBMiL5f_3Q",
+      "query": "The woman with the orange collar presses the instrument switch, then turns to the back.",
+      "object": "The woman with the orange collar presses the instrument switch, then",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/22_SHBMiL5f_3Q.mkv",
+      "interval": [
+        11.177644710578843,
+        19.920159680638722
+      ],
+      "_win": [
+        12,
+        19
+      ],
+      "kf_ts": 13.003,
+      "pred_box": [
+        0.0,
+        50.4,
+        214.968,
+        479.04
+      ],
+      "spatial_iou": 0.753,
+      "temporal_hit": true
+    },
+    {
+      "vid": "32_vfjywN5CN0Y",
+      "query": "The man in brown clothes stands up and walks away.",
+      "object": "The man in brown clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/32_vfjywN5CN0Y.mp4",
+      "interval": [
+        0.041666666666666664,
+        7.0
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 15.0,
+      "pred_box": [
+        0.0,
+        0.0,
+        434.4,
+        360.0
+      ],
+      "spatial_iou": 0.078,
+      "temporal_hit": false
+    },
+    {
+      "vid": "48_HVAmkvLrthQ",
+      "query": "The man in the white shirt is forcibly stuffed into the car by two people",
+      "object": "The man in the white shirt",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/48_HVAmkvLrthQ.mkv",
+      "interval": [
+        13.477537437603992,
+        17.47088186356073
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 17.02,
+      "pred_box": [
+        542.08,
+        216.0,
+        638.72,
+        378.24
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "4_Gfdg_GcaNe8",
+      "query": "The bearded man raises his arms and turns his head.",
+      "object": "The bearded man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/4_Gfdg_GcaNe8.mkv",
+      "interval": [
+        0.7068607068607069,
+        6.153846153846154
+      ],
+      "_win": [
+        1,
+        5
+      ],
+      "kf_ts": 5.003,
+      "pred_box": [
+        355.84,
+        16.32,
+        1241.6,
+        543.456
+      ],
+      "spatial_iou": 0.81,
+      "temporal_hit": true
+    },
+    {
+      "vid": "158_VsYPP2I0aUQ",
+      "query": "The man in plaid falls on the box.",
+      "object": "The man in plaid falls on the box",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/158_VsYPP2I0aUQ.mp4",
+      "interval": [
+        3.0615640599001663,
+        19.966722129783694
+      ],
+      "_win": [
+        5,
+        19
+      ],
+      "kf_ts": 15.015,
+      "pred_box": [
+        257.28,
+        16.92,
+        362.88,
+        358.92
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "61_7T5G0CmwTPo",
+      "query": "The man in the yellow suit puts down the bucket in his hand and breaks it with a hammer.",
+      "object": "The man in the yellow suit",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/61_7T5G0CmwTPo.mkv",
+      "interval": [
+        14.451097804391217,
+        18.043912175648703
+      ],
+      "_win": [
+        14,
+        19
+      ],
+      "kf_ts": 16.003,
+      "pred_box": [
+        298.24,
+        175.68,
+        531.2,
+        473.76
+      ],
+      "spatial_iou": 0.677,
+      "temporal_hit": true
+    },
+    {
+      "vid": "204_o4xQ-BEa3Ss",
+      "query": "The man standing by the door frame walks into the room and looks at the front.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/204_o4xQ-BEa3Ss.mp4",
+      "interval": [
+        6.640000000000001,
+        15.68
+      ],
+      "_win": [
+        7,
+        18
+      ],
+      "kf_ts": 17.0,
+      "pred_box": [
+        102.4,
+        33.294,
+        438.4,
+        354.062
+      ],
+      "spatial_iou": 0.918,
+      "temporal_hit": false
+    },
+    {
+      "vid": "81_Vmef_8MY46w",
+      "query": "The standing woman reaches out to take over what the lying man gave, bends down, kisses the man next to him, and then left.",
+      "object": "the woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/81_Vmef_8MY46w.mp4",
+      "interval": [
+        2.72,
+        12.96
+      ],
+      "_win": [
+        5,
+        12
+      ],
+      "kf_ts": 12.0,
+      "pred_box": [
+        37.92,
+        33.48,
+        138.24,
+        315.72
+      ],
+      "spatial_iou": 0.726,
+      "temporal_hit": true
+    },
+    {
+      "vid": "243_8oL0i5WorkE",
+      "query": "The man in black clothes wrappers his neck around the white-haired man then loosens and turns forward.",
+      "object": "The man in black clothes wrappers his neck around the white-haired man then loosens and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/243_8oL0i5WorkE.mp4",
+      "interval": [
+        7.944111776447106,
+        19.96007984031936
+      ],
+      "_win": [
+        7,
+        18
+      ],
+      "kf_ts": 15.0,
+      "pred_box": [
+        107.52,
+        52.8,
+        312.32,
+        479.04
+      ],
+      "spatial_iou": 0.807,
+      "temporal_hit": true
+    },
+    {
+      "vid": "84_A9WSiEDeu0I",
+      "query": "The yellow-haired woman talks to the man in the white shirt and touches his head with his hands.",
+      "object": "The yellow-haired woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/84_A9WSiEDeu0I.mkv",
+      "interval": [
+        1.0778443113772456,
+        5.389221556886228
+      ],
+      "_win": [
+        1,
+        5
+      ],
+      "kf_ts": 4.003,
+      "pred_box": null,
+      "temporal_hit": true
+    },
+    {
+      "vid": "117_G5Yr20A5z_Q",
+      "query": "The man in black clothes turns around and walks forward.",
+      "object": "The man in black clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/117_G5Yr20A5z_Q.mp4",
+      "interval": [
+        3.96,
+        13.84
+      ],
+      "_win": [
+        10,
+        14
+      ],
+      "kf_ts": 10.0,
+      "pred_box": [
+        177.364,
+        7.2,
+        408.958,
+        358.92
+      ],
+      "spatial_iou": 0.954,
+      "temporal_hit": true
+    },
+    {
+      "vid": "22_yn9WN9lsHRE",
+      "query": "The man in black clothes takes off his pants.",
+      "object": "The man in black clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/22_yn9WN9lsHRE.mp4",
+      "interval": [
+        3.5599999999999996,
+        16.439999999999998
+      ],
+      "_win": [
+        7,
+        16
+      ],
+      "kf_ts": 15.0,
+      "pred_box": [
+        241.28,
+        66.96,
+        414.72,
+        315.72
+      ],
+      "spatial_iou": 0.485,
+      "temporal_hit": true
+    },
+    {
+      "vid": "214_ViY7CR2TSO8",
+      "query": "The blonde woman stands up and grabs the neck of the black-haired man.",
+      "object": "The blonde woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/214_ViY7CR2TSO8.mkv",
+      "interval": [
+        15.28942115768463,
+        18.522954091816366
+      ],
+      "_win": [
+        14,
+        16
+      ],
+      "kf_ts": 16.003,
+      "pred_box": [
+        431.36,
+        412.56,
+        729.6,
+        720.0
+      ],
+      "spatial_iou": 0.798,
+      "temporal_hit": true
+    },
+    {
+      "vid": "42_P5EhajqkqPw",
+      "query": "The man in the yellow dress puts the paper house on the table, then folds his hands on his hips.",
+      "object": "The man in the yellow dress",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/42_P5EhajqkqPw.mkv",
+      "interval": [
+        10.139720558882235,
+        17.44510978043912
+      ],
+      "_win": [
+        10,
+        16
+      ],
+      "kf_ts": 10.003,
+      "pred_box": null,
+      "temporal_hit": false
+    },
+    {
+      "vid": "71_8VZEwOCQ8bc",
+      "query": "The man in brown clothes comes down the steps, walks to the edge of the tree, then turns around.",
+      "object": "The man in brown clothes comes down the steps,",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/71_8VZEwOCQ8bc.mp4",
+      "interval": [
+        3.2,
+        9.44
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 5.0,
+      "pred_box": [
+        109.44,
+        84.96,
+        213.12,
+        359.28
+      ],
+      "spatial_iou": 0.805,
+      "temporal_hit": true
+    },
+    {
+      "vid": "12_XV_FF3WC7kA",
+      "query": "The man in the burgundy top looks up and turns.",
+      "object": "The man in the burgundy top",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/12_XV_FF3WC7kA.mp4",
+      "interval": [
+        1.1976047904191618,
+        6.387225548902196
+      ],
+      "_win": [
+        1,
+        5
+      ],
+      "kf_ts": 1.0,
+      "pred_box": [
+        424.96,
+        189.36,
+        651.52,
+        632.16
+      ],
+      "spatial_iou": 0.939,
+      "temporal_hit": false
+    },
+    {
+      "vid": "119_Uw7387tc9PU",
+      "query": "The lady with a big belly comes to the man in military uniform.",
+      "object": "The lady with a big belly comes to the man in military uniform",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/119_Uw7387tc9PU.mp4",
+      "interval": [
+        9.133333333333333,
+        18.666666666666668
+      ],
+      "_win": [
+        12,
+        19
+      ],
+      "kf_ts": 18.018,
+      "pred_box": [
+        248.32,
+        68.64,
+        401.28,
+        473.76
+      ],
+      "spatial_iou": 0.737,
+      "temporal_hit": true
+    },
+    {
+      "vid": "36_BLDTynQwGRI",
+      "query": "The long-haired man takes a few steps forward, puts his arms on the screen, and turns his head to says something to the white-haired man.",
+      "object": "The long-haired man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/36_BLDTynQwGRI.mkv",
+      "interval": [
+        7.858627858627859,
+        15.384615384615385
+      ],
+      "_win": [
+        7,
+        18
+      ],
+      "kf_ts": 9.003,
+      "pred_box": [
+        384.0,
+        0.0,
+        1280.0,
+        527.472
+      ],
+      "spatial_iou": 0.716,
+      "temporal_hit": true
+    },
+    {
+      "vid": "33_vfjywN5CN0Y",
+      "query": "The man in brown clothes goes to the counter and sits down.",
+      "object": "The man in brown clothes goes to the counter and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/33_vfjywN5CN0Y.mp4",
+      "interval": [
+        1.5,
+        7.416666666666667
+      ],
+      "_win": [
+        1,
+        5
+      ],
+      "kf_ts": 1.0,
+      "pred_box": [
+        0.0,
+        12.96,
+        285.6,
+        356.04
+      ],
+      "spatial_iou": 0.184,
+      "temporal_hit": false
+    },
+    {
+      "vid": "160_1ReZIMmD_8E",
+      "query": "The woman takes the gun and walks to the cabinet.",
+      "object": "The woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/160_1ReZIMmD_8E.mp4",
+      "interval": [
+        6.307385229540918,
+        10.858283433133733
+      ],
+      "_win": [
+        7,
+        12
+      ],
+      "kf_ts": 11.0,
+      "pred_box": [
+        318.08,
+        120.96,
+        437.12,
+        453.6
+      ],
+      "spatial_iou": 0.839,
+      "temporal_hit": false
+    },
+    {
+      "vid": "173_E-6ruyZFfZs",
+      "query": "The man with the candlestick goes to the lying man.",
+      "object": "The man with the candlestick goes to the",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/173_E-6ruyZFfZs.mkv",
+      "interval": [
+        1.3972055888223553,
+        9.181636726546905
+      ],
+      "_win": [
+        1,
+        3
+      ],
+      "kf_ts": 3.003,
+      "pred_box": [
+        123.716,
+        153.12,
+        297.864,
+        479.04
+      ],
+      "spatial_iou": 0.138,
+      "temporal_hit": true
+    },
+    {
+      "vid": "48_PmElx9ZVByw",
+      "query": "The man in white clothes walks over to the table, bends down and puts something down, and then walks in front of the man in green.",
+      "object": "The man in white clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/48_PmElx9ZVByw.mp4",
+      "interval": [
+        8.28,
+        17.84
+      ],
+      "_win": [
+        10,
+        16
+      ],
+      "kf_ts": 14.0,
+      "pred_box": [
+        282.9,
+        59.04,
+        405.9,
+        304.56
+      ],
+      "spatial_iou": 0.729,
+      "temporal_hit": true
+    },
+    {
+      "vid": "4_Ov0za6Xb1LM",
+      "query": "The woman with pigtails turns her head and looks at the man in black, raises her hand and points to the front.",
+      "object": "The woman with pigtails",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/4_Ov0za6Xb1LM.mp4",
+      "interval": [
+        4.6706586826347305,
+        12.614770459081836
+      ],
+      "_win": [
+        10,
+        12
+      ],
+      "kf_ts": 12.0,
+      "pred_box": [
+        107.52,
+        141.84,
+        556.8,
+        717.84
+      ],
+      "spatial_iou": 0.905,
+      "temporal_hit": true
+    },
+    {
+      "vid": "122_8oL0i5WorkE",
+      "query": "The woman hugs the man and talks to him again.",
+      "object": "The woman hugs the man and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/122_8oL0i5WorkE.mp4",
+      "interval": [
+        1.1177644710578842,
+        5.828343313373253
+      ],
+      "_win": [
+        0,
+        7
+      ],
+      "kf_ts": 3.0,
+      "pred_box": [
+        228.48,
+        75.84,
+        446.08,
+        479.04
+      ],
+      "spatial_iou": 0.825,
+      "temporal_hit": true
+    },
+    {
+      "vid": "5_PmElx9ZVByw",
+      "query": "The man in gray clothes turns around and stops at a table.",
+      "object": "The man in gray clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/5_PmElx9ZVByw.mp4",
+      "interval": [
+        11.120000000000001,
+        20.0
+      ],
+      "_win": [
+        14,
+        19
+      ],
+      "kf_ts": 14.0,
+      "pred_box": [
+        317.34,
+        83.16,
+        415.74,
+        320.4
+      ],
+      "spatial_iou": 0.917,
+      "temporal_hit": true
+    },
+    {
+      "vid": "55_pSdPmmJ3-ng",
+      "query": "The white woman runs into the dirt.",
+      "object": "The white woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/55_pSdPmmJ3-ng.mp4",
+      "interval": [
+        3.5199999999999996,
+        10.920000000000002
+      ],
+      "_win": [
+        3,
+        19
+      ],
+      "kf_ts": 19.0,
+      "pred_box": [
+        307.84,
+        186.24,
+        396.16,
+        402.24
+      ],
+      "spatial_iou": 0.21,
+      "temporal_hit": false
+    },
+    {
+      "vid": "145_26V9UzqSguo",
+      "query": "The man pushes the woman away and sits up.",
+      "object": "The man pushes the woman away and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/145_26V9UzqSguo.mp4",
+      "interval": [
+        6.04,
+        9.0
+      ],
+      "_win": [
+        7,
+        9
+      ],
+      "kf_ts": 9.0,
+      "pred_box": [
+        296.36,
+        74.16,
+        477.044,
+        359.28
+      ],
+      "spatial_iou": 0.677,
+      "temporal_hit": true
+    },
+    {
+      "vid": "4_9F2voT6QWvQ",
+      "query": "The man pinches the woman's shoulder and looks at the woman.",
+      "object": "The man pinches the woman's shoulder and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/4_9F2voT6QWvQ.mp4",
+      "interval": [
+        6.666666666666666,
+        19.916666666666668
+      ],
+      "_win": [
+        7,
+        19
+      ],
+      "kf_ts": 12.012,
+      "pred_box": [
+        622.08,
+        84.96,
+        1254.4,
+        629.28
+      ],
+      "spatial_iou": 0.587,
+      "temporal_hit": true
+    },
+    {
+      "vid": "11_fZs-yXm-uUs",
+      "query": "The man in the orange shirt goes to the stool and pulls it over.",
+      "object": "The man in the orange shirt goes to the stool and pulls it over",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/11_fZs-yXm-uUs.mp4",
+      "interval": [
+        3.2,
+        6.1
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 3.003,
+      "pred_box": [
+        172.8,
+        0.0,
+        462.0,
+        479.04
+      ],
+      "spatial_iou": 0.861,
+      "temporal_hit": false
+    },
+    {
+      "vid": "96_HV0H6oc4Kvs",
+      "query": "The man wearing a tie and no hat turns his head , smokes a cigarette , then grabs the opposite man 's collar with both hands, shakes it twice and pulls hard.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/96_HV0H6oc4Kvs.mp4",
+      "interval": [
+        3.04,
+        6.720000000000001
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 9.0,
+      "pred_box": [
+        113.28,
+        30.102,
+        576.0,
+        344.962
+      ],
+      "spatial_iou": 0.575,
+      "temporal_hit": false
+    },
+    {
+      "vid": "30_lDmLcWWBp1E",
+      "query": "The woman in the trench coat takes out a match from her bag and lights the cigarette in her mouth.",
+      "object": "The woman in the trench coat",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/30_lDmLcWWBp1E.mp4",
+      "interval": [
+        0.09983361064891846,
+        8.186356073211314
+      ],
+      "_win": [
+        5,
+        9
+      ],
+      "kf_ts": 9.009,
+      "pred_box": [
+        369.9,
+        92.16,
+        546.904,
+        358.92
+      ],
+      "spatial_iou": 0.817,
+      "temporal_hit": false
+    },
+    {
+      "vid": "35_6d5u6FHvz7Q",
+      "query": "The woman takes a box, walks to the man in red, puts it down, and turns away.",
+      "object": "The woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/35_6d5u6FHvz7Q.mp4",
+      "interval": [
+        1.7599999999999998,
+        8.88
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 7.0,
+      "pred_box": [
+        141.696,
+        61.2,
+        207.624,
+        281.88
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "19_tt0t_a1EDCE",
+      "query": "The boy in black clothes goes behind the girl.",
+      "object": "The boy in black clothes goes behind the girl",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/19_tt0t_a1EDCE.mp4",
+      "interval": [
+        10.299401197604789,
+        14.970059880239521
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 16.0,
+      "pred_box": [
+        221.44,
+        53.28,
+        806.4,
+        663.84
+      ],
+      "spatial_iou": 0.095,
+      "temporal_hit": false
+    },
+    {
+      "vid": "83_vsMgg4snZzM",
+      "query": "The man in black clothes follows the woman holding the child and walks away.",
+      "object": "The man in black clothes follows the woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/83_vsMgg4snZzM.mkv",
+      "interval": [
+        2.9141716566866265,
+        8.343313373253492
+      ],
+      "_win": [
+        5,
+        9
+      ],
+      "kf_ts": 7.003,
+      "pred_box": [
+        367.574,
+        93.6,
+        541.348,
+        479.04
+      ],
+      "spatial_iou": 0.867,
+      "temporal_hit": true
+    },
+    {
+      "vid": "98_FONjBIXaM-0",
+      "query": "The black-haired man takes off his glasses, climbs over the man's shoulder in front of him, turns his head, and speaks to him.",
+      "object": "The black-haired man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/98_FONjBIXaM-0.mp4",
+      "interval": [
+        4.4,
+        8.0
+      ],
+      "_win": [
+        5,
+        14
+      ],
+      "kf_ts": 14.0,
+      "pred_box": [
+        332.16,
+        102.72,
+        640.0,
+        479.04
+      ],
+      "spatial_iou": 0.471,
+      "temporal_hit": false
+    },
+    {
+      "vid": "65_2KpThOF_QmE",
+      "query": "The woman covers the man's eyes with both hands, then turns her head, and then turns to speak to the man.",
+      "object": "The woman covers the man's eyes with both hands, then",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/65_2KpThOF_QmE.mkv",
+      "interval": [
+        1.0,
+        10.8
+      ],
+      "_win": [
+        3,
+        14
+      ],
+      "kf_ts": 5.008,
+      "pred_box": [
+        569.6,
+        0.72,
+        1280.0,
+        717.84
+      ],
+      "spatial_iou": 0.52,
+      "temporal_hit": true
+    },
+    {
+      "vid": "24_y4lBI_gFnqI",
+      "query": "The man in the burgundy suit walks to the table and stops, then puts down his bag.",
+      "object": "The man in the burgundy suit",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/24_y4lBI_gFnqI.mkv",
+      "interval": [
+        14.109816971713812,
+        17.936772046589017
+      ],
+      "_win": [
+        12,
+        16
+      ],
+      "kf_ts": 15.018,
+      "pred_box": [
+        387.36,
+        146.4,
+        487.44,
+        347.52
+      ],
+      "spatial_iou": 0.613,
+      "temporal_hit": true
+    },
+    {
+      "vid": "28_9mLYmkonWZQ",
+      "query": "The man in white clothes turns his head and puts his contents down.",
+      "object": "The man in white clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/28_9mLYmkonWZQ.mp4",
+      "interval": [
+        0.08,
+        6.28
+      ],
+      "_win": [
+        0,
+        1
+      ],
+      "kf_ts": 0.0,
+      "pred_box": [
+        50.82,
+        9.36,
+        247.808,
+        355.68
+      ],
+      "spatial_iou": 0.982,
+      "temporal_hit": false
+    },
+    {
+      "vid": "36_3-ivkPTSTSw",
+      "query": "The woman follows the man and walks to the car.",
+      "object": "The woman follows the man and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/36_3-ivkPTSTSw.mp4",
+      "interval": [
+        0.06655574043261231,
+        7.753743760399335
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 4.004,
+      "pred_box": [
+        88.32,
+        159.84,
+        312.32,
+        473.28
+      ],
+      "spatial_iou": 0.555,
+      "temporal_hit": true
+    },
+    {
+      "vid": "21_gEI9qBdVt5I",
+      "query": "The man in green clothes stops by the car and opens the door.",
+      "object": "The man in green clothes stops by the car and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/21_gEI9qBdVt5I.mp4",
+      "interval": [
+        1.1314475873544092,
+        8.985024958402661
+      ],
+      "_win": [
+        5,
+        9
+      ],
+      "kf_ts": 7.0,
+      "pred_box": [
+        81.28,
+        117.12,
+        192.0,
+        369.6
+      ],
+      "spatial_iou": 0.783,
+      "temporal_hit": true
+    },
+    {
+      "vid": "20_woC9Vfbn74I",
+      "query": "The woman in the yellow dress dances while talking to the people next to her.",
+      "object": "The woman in the yellow dress dances while talking to the people next to her",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/20_woC9Vfbn74I.mkv",
+      "interval": [
+        7.166666666666667,
+        15.833333333333332
+      ],
+      "_win": [
+        7,
+        16
+      ],
+      "kf_ts": 11.003,
+      "pred_box": [
+        399.168,
+        66.24,
+        651.2,
+        479.04
+      ],
+      "spatial_iou": 0.828,
+      "temporal_hit": true
+    },
+    {
+      "vid": "81_G5Yr20A5z_Q",
+      "query": "The woman in the yellow skirt runs to the wall to stop, then turns around.",
+      "object": "The woman in the yellow skirt",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/81_G5Yr20A5z_Q.mp4",
+      "interval": [
+        4.28,
+        8.52
+      ],
+      "_win": [
+        7,
+        14
+      ],
+      "kf_ts": 13.0,
+      "pred_box": [
+        76.56,
+        121.68,
+        140.36,
+        296.64
+      ],
+      "spatial_iou": 0.146,
+      "temporal_hit": false
+    },
+    {
+      "vid": "14_0wBYFahr3uI",
+      "query": "The woman in the green skirt puts her hands together and lowers her head forward.",
+      "object": "The woman in the green skirt",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/14_0wBYFahr3uI.mp4",
+      "interval": [
+        5.114345114345115,
+        10.977130977130978
+      ],
+      "_win": [
+        5,
+        12
+      ],
+      "kf_ts": 7.007,
+      "pred_box": [
+        240.0,
+        107.04,
+        316.16,
+        372.0
+      ],
+      "spatial_iou": 0.866,
+      "temporal_hit": true
+    },
+    {
+      "vid": "56_P5EhajqkqPw",
+      "query": "The yellow-hair woman enters the house, walks to the sofa, stops and looks around.",
+      "object": "The yellow-hair woman enters the house,",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/56_P5EhajqkqPw.mkv",
+      "interval": [
+        13.040000000000001,
+        17.96
+      ],
+      "_win": [
+        12,
+        18
+      ],
+      "kf_ts": 12.003,
+      "pred_box": [
+        217.6,
+        171.36,
+        355.84,
+        417.6
+      ],
+      "spatial_iou": 0.616,
+      "temporal_hit": false
+    },
+    {
+      "vid": "15_Hi8QeP_VPu0",
+      "query": "The woman in black clothes shakes hands with the man in front of her.",
+      "object": "The woman in black clothes shakes hands with the man in front of her",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/15_Hi8QeP_VPu0.mp4",
+      "interval": [
+        0.07984031936127745,
+        6.187624750499002
+      ],
+      "_win": [
+        0,
+        7
+      ],
+      "kf_ts": 0.0,
+      "pred_box": [
+        196.48,
+        118.08,
+        440.852,
+        717.84
+      ],
+      "spatial_iou": 0.813,
+      "temporal_hit": false
+    },
+    {
+      "vid": "13_hbYvDvJrpNk",
+      "query": "The woman rides a bicycle from the front of the pillar, then stops, then parks in the parking area and got off",
+      "object": "The woman rides a bicycle from the front of the pillar, then stops, then parks in the parking area and got off",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/13_hbYvDvJrpNk.mp4",
+      "interval": [
+        9.120000000000001,
+        13.64
+      ],
+      "_win": [
+        3,
+        18
+      ],
+      "kf_ts": 10.0,
+      "pred_box": [
+        719.36,
+        94.112,
+        994.56,
+        542.368
+      ],
+      "spatial_iou": 0.888,
+      "temporal_hit": true
+    },
+    {
+      "vid": "162_wEAeql4z1O0",
+      "query": "The man in the green dress turns his head and looks at the man on the left, and then goes forward.",
+      "object": "The man in the green dress",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/162_wEAeql4z1O0.mp4",
+      "interval": [
+        13.097713097713097,
+        16.59043659043659
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 4.004266666666667,
+      "pred_box": [
+        102.48,
+        138.24,
+        456.89,
+        421.44
+      ],
+      "spatial_iou": 0.076,
+      "temporal_hit": false
+    },
+    {
+      "vid": "47_o-ZcbjLBtls",
+      "query": "The standing man turns his head and looks at the back, then reaches out and touches the leaves beside him.",
+      "object": "the man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/47_o-ZcbjLBtls.mkv",
+      "interval": [
+        11.381031613976706,
+        19.933444259567388
+      ],
+      "_win": [
+        14,
+        19
+      ],
+      "kf_ts": 19.022,
+      "pred_box": [
+        587.552,
+        113.28,
+        761.768,
+        377.28
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "39_cqkChR44vkA",
+      "query": "The bald man takes the wine glass on the table and takes a sip, then puts down the glass again.",
+      "object": "The bald man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/39_cqkChR44vkA.mkv",
+      "interval": [
+        8.542914171656687,
+        14.491017964071858
+      ],
+      "_win": [
+        5,
+        7
+      ],
+      "kf_ts": 7.003,
+      "pred_box": [
+        8.96,
+        100.8,
+        575.36,
+        473.76
+      ],
+      "spatial_iou": 0.717,
+      "temporal_hit": false
+    },
+    {
+      "vid": "11_yn9WN9lsHRE",
+      "query": "The man in white clothes pours a glass and gives it to the person on the right.",
+      "object": "The man in white clothes pours a glass and gives it to the person on the right",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/11_yn9WN9lsHRE.mp4",
+      "interval": [
+        5.92,
+        10.96
+      ],
+      "_win": [
+        5,
+        9
+      ],
+      "kf_ts": 9.0,
+      "pred_box": [
+        394.24,
+        5.04,
+        632.32,
+        351.36
+      ],
+      "spatial_iou": 0.929,
+      "temporal_hit": true
+    },
+    {
+      "vid": "4_P90hF2S1JzA",
+      "query": "The man in blue raised his hand from the left side of the woman lying on the bed to the left hand side of the nurse.",
+      "object": "The man in blue raised his hand from the left side of the woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/4_P90hF2S1JzA.mp4",
+      "interval": [
+        0.4658901830282862,
+        5.8236272878535775
+      ],
+      "_win": [
+        1,
+        5
+      ],
+      "kf_ts": 2.002,
+      "pred_box": [
+        135.0,
+        82.44,
+        224.1,
+        186.12
+      ],
+      "spatial_iou": 0.734,
+      "temporal_hit": true
+    },
+    {
+      "vid": "40_Uw7387tc9PU",
+      "query": "The woman in blue clothes takes the flower from the opposite man and turns around.",
+      "object": "The woman in blue clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/40_Uw7387tc9PU.mp4",
+      "interval": [
+        5.699999999999999,
+        13.166666666666666
+      ],
+      "_win": [
+        5,
+        9
+      ],
+      "kf_ts": 7.007,
+      "pred_box": [
+        408.32,
+        90.24,
+        608.0,
+        474.72
+      ],
+      "spatial_iou": 0.883,
+      "temporal_hit": true
+    },
+    {
+      "vid": "78_wEAeql4z1O0",
+      "query": "The girl in green clothes turns and walks to the man with the gun.",
+      "object": "The girl in green clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/78_wEAeql4z1O0.mp4",
+      "interval": [
+        6.375,
+        11.166666666666668
+      ],
+      "_win": [
+        5,
+        7
+      ],
+      "kf_ts": 5.005333333333334,
+      "pred_box": [
+        315.98,
+        170.4,
+        486.78,
+        418.56
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": false
+    },
+    {
+      "vid": "57_bUVls-bf0jM",
+      "query": "The black hat man walks to the white hat man and speaks to him.",
+      "object": "The black hat man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/57_bUVls-bf0jM.mkv",
+      "interval": [
+        2.08,
+        19.96
+      ],
+      "_win": [
+        3,
+        19
+      ],
+      "kf_ts": 17.003,
+      "pred_box": [
+        33.92,
+        91.68,
+        280.32,
+        421.44
+      ],
+      "spatial_iou": 0.857,
+      "temporal_hit": true
+    },
+    {
+      "vid": "80_E-6ruyZFfZs",
+      "query": "The woman pulls up the man's clothes and takes off.",
+      "object": "The woman pulls up the man's clothes and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/80_E-6ruyZFfZs.mkv",
+      "interval": [
+        11.816367265469061,
+        17.20558882235529
+      ],
+      "_win": [
+        12,
+        16
+      ],
+      "kf_ts": 15.003,
+      "pred_box": [
+        661.92,
+        131.04,
+        788.0,
+        386.4
+      ],
+      "spatial_iou": 0.239,
+      "temporal_hit": true
+    },
+    {
+      "vid": "35_WlgxRNCHQzw",
+      "query": "The woman in the white hat turns and stretches out her curtains .",
+      "object": "The woman in the white hat",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/35_WlgxRNCHQzw.mp4",
+      "interval": [
+        1.6,
+        10.760000000000002
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 9.0,
+      "pred_box": [
+        266.88,
+        51.48,
+        474.24,
+        356.04
+      ],
+      "spatial_iou": 0.971,
+      "temporal_hit": true
+    },
+    {
+      "vid": "85_E-6ruyZFfZs",
+      "query": "The woman walks to the man and stops.",
+      "object": "The woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/85_E-6ruyZFfZs.mkv",
+      "interval": [
+        13.572854291417165,
+        19.64071856287425
+      ],
+      "_win": [
+        14,
+        19
+      ],
+      "kf_ts": 19.003,
+      "pred_box": [
+        374.3,
+        111.84,
+        594.94,
+        479.04
+      ],
+      "spatial_iou": 0.265,
+      "temporal_hit": true
+    },
+    {
+      "vid": "25_9Rcxr3IEX4E",
+      "query": "The man in the scarf talks and moves his hands away from his chest and points forward.",
+      "object": "The man in the scarf",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/25_9Rcxr3IEX4E.mkv",
+      "interval": [
+        9.217970049916804,
+        13.044925124792012
+      ],
+      "_win": [
+        10,
+        14
+      ],
+      "kf_ts": 12.015,
+      "pred_box": [
+        195.84,
+        55.68,
+        428.16,
+        479.04
+      ],
+      "spatial_iou": 0.784,
+      "temporal_hit": true
+    },
+    {
+      "vid": "14_WMFTBgYWJS8",
+      "query": "The standing man puts on his coat.",
+      "object": "the man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/14_WMFTBgYWJS8.mkv",
+      "interval": [
+        12.745424292845257,
+        19.30116472545757
+      ],
+      "_win": [
+        12,
+        16
+      ],
+      "kf_ts": 14.017,
+      "pred_box": [
+        140.8,
+        103.68,
+        611.2,
+        410.88
+      ],
+      "spatial_iou": 0.819,
+      "temporal_hit": true
+    },
+    {
+      "vid": "104_AYebXQ8eUkM",
+      "query": "The man accompanies the woman to the stool.",
+      "object": "The man accompanies the woman to the stool",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/104_AYebXQ8eUkM.mp4",
+      "interval": [
+        1.157684630738523,
+        12.095808383233532
+      ],
+      "_win": [
+        5,
+        9
+      ],
+      "kf_ts": 7.0,
+      "pred_box": [
+        783.36,
+        226.08,
+        934.4,
+        631.44
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "50_KVq6If6ozMY",
+      "query": "The man in striped clothes jumps on his hands, runs down the stairs, and then bends down.",
+      "object": "The man in striped clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/50_KVq6If6ozMY.mp4",
+      "interval": [
+        6.5600000000000005,
+        11.120000000000001
+      ],
+      "_win": [
+        7,
+        19
+      ],
+      "kf_ts": 8.0,
+      "pred_box": [
+        28.044,
+        49.68,
+        270.6,
+        324.0
+      ],
+      "spatial_iou": 0.91,
+      "temporal_hit": true
+    },
+    {
+      "vid": "16_QMwT7DFA5O4",
+      "query": "Cycling men arguing with two others",
+      "object": "Cycling men arguing with two others",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/16_QMwT7DFA5O4.mp4",
+      "interval": [
+        11.319999999999999,
+        18.6
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 12.0,
+      "pred_box": [
+        163.836,
+        133.2,
+        225.336,
+        312.12
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "151_DaUzhc9_6io",
+      "query": "The man runs to the beauty standing on the left, holding her hand excitedly and pointing back and forth between the two women, showing anger",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/151_DaUzhc9_6io.mp4",
+      "interval": [
+        8.05324459234609,
+        12.645590682196339
+      ],
+      "_win": [
+        7,
+        9
+      ],
+      "kf_ts": 9.009,
+      "pred_box": [
+        0.0,
+        141.12,
+        112.0,
+        456.0
+      ],
+      "spatial_iou": 0.641,
+      "temporal_hit": true
+    },
+    {
+      "vid": "57_TCmNvNLRWrc",
+      "query": "The man in red clothes runs to the woman and sits down, then hugged her and looks at her.",
+      "object": "The man in red clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/57_TCmNvNLRWrc.mkv",
+      "interval": [
+        6.347305389221557,
+        16.047904191616766
+      ],
+      "_win": [
+        5,
+        16
+      ],
+      "kf_ts": 12.003,
+      "pred_box": [
+        268.8,
+        147.84,
+        492.8,
+        479.04
+      ],
+      "spatial_iou": 0.739,
+      "temporal_hit": true
+    },
+    {
+      "vid": "39_2qQs3Y9OJX0",
+      "query": "The man in the black uniform gets out of the car and hands something to the man in leather, and then he puts his hands on his hips.",
+      "object": "The man in the black uniform gets out of the car and hands something to the man in leather, and then he",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/39_2qQs3Y9OJX0.mp4",
+      "interval": [
+        3.0,
+        9.040000000000001
+      ],
+      "_win": [
+        3,
+        7
+      ],
+      "kf_ts": 7.0,
+      "pred_box": [
+        79.68,
+        102.96,
+        232.32,
+        292.32
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": true
+    },
+    {
+      "vid": "74_keUOiCcHtoQ",
+      "query": "The man in the green jacket takes a cup and takes a sip.",
+      "object": "The man in the green jacket",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/74_keUOiCcHtoQ.mkv",
+      "interval": [
+        7.48,
+        11.879999999999999
+      ],
+      "_win": [
+        10,
+        12
+      ],
+      "kf_ts": 10.003,
+      "pred_box": [
+        459.52,
+        36.0,
+        1062.4,
+        719.28
+      ],
+      "spatial_iou": 0.956,
+      "temporal_hit": true
+    },
+    {
+      "vid": "162_TM5MPJIq1Is",
+      "query": "The man in black clothes turns his head to look at the left and turns to the right.",
+      "object": "The man in black clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/162_TM5MPJIq1Is.mkv",
+      "interval": [
+        14.233333333333334,
+        18.03333333333333
+      ],
+      "_win": [
+        14,
+        19
+      ],
+      "kf_ts": 17.02,
+      "pred_box": [
+        122.24,
+        62.88,
+        288.0,
+        479.04
+      ],
+      "spatial_iou": 0.941,
+      "temporal_hit": true
+    },
+    {
+      "vid": "9_vsMgg4snZzM",
+      "query": "The girl in gray clothes drinks, puts down her tea cup, and turns away.",
+      "object": "The girl in gray clothes drinks,",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/9_vsMgg4snZzM.mkv",
+      "interval": [
+        8.52,
+        13.84
+      ],
+      "_win": [
+        10,
+        14
+      ],
+      "kf_ts": 11.003,
+      "pred_box": [
+        188.632,
+        123.84,
+        384.37,
+        420.48
+      ],
+      "spatial_iou": 0.854,
+      "temporal_hit": true
+    },
+    {
+      "vid": "204_ViY7CR2TSO8",
+      "query": "The man in the suit hands the wine glass to the woman in front of him, then turns and walks to the mirror.",
+      "object": "The man in the suit hands the wine glass to the woman in front of him, then",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/204_ViY7CR2TSO8.mkv",
+      "interval": [
+        8.8,
+        20.0
+      ],
+      "_win": [
+        12,
+        19
+      ],
+      "kf_ts": 16.003,
+      "pred_box": null,
+      "temporal_hit": true
+    },
+    {
+      "vid": "33_-APF0-L14kw",
+      "query": "The woman puts down her hand and goes to the man and sits down.",
+      "object": "The woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/33_-APF0-L14kw.mkv",
+      "interval": [
+        9.397089397089397,
+        19.085239085239085
+      ],
+      "_win": [
+        10,
+        14
+      ],
+      "kf_ts": 12.015,
+      "pred_box": [
+        367.36,
+        316.8,
+        483.84,
+        586.08
+      ],
+      "spatial_iou": 0.318,
+      "temporal_hit": true
+    },
+    {
+      "vid": "75_FONjBIXaM-0",
+      "query": "The fat man opens the car door, then puts his hand on his waist and leans on the door.",
+      "object": "The fat man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/75_FONjBIXaM-0.mp4",
+      "interval": [
+        10.379241516966067,
+        19.96007984031936
+      ],
+      "_win": [
+        0,
+        1
+      ],
+      "kf_ts": 1.0,
+      "pred_box": [
+        0.0,
+        210.24,
+        71.68,
+        479.04
+      ],
+      "spatial_iou": 0.0,
+      "temporal_hit": false
+    },
+    {
+      "vid": "13_QTf_v67C5KI",
+      "query": "The woman's face leans forward and kisses",
+      "object": "The woman's face leans forward and kisses",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/13_QTf_v67C5KI.mp4",
+      "interval": [
+        9.866666666666667,
+        15.3
+      ],
+      "_win": [
+        14,
+        16
+      ],
+      "kf_ts": 16.016,
+      "pred_box": [
+        204.672,
+        101.76,
+        522.912,
+        402.24
+      ],
+      "spatial_iou": 0.649,
+      "temporal_hit": false
+    },
+    {
+      "vid": "84_WMFTBgYWJS8",
+      "query": "The woman in yellow pants jumps off the car and runs away.",
+      "object": "The woman in yellow pants",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/84_WMFTBgYWJS8.mkv",
+      "interval": [
+        5.2,
+        10.533333333333331
+      ],
+      "_win": [
+        7,
+        9
+      ],
+      "kf_ts": 7.01,
+      "pred_box": [
+        228.48,
+        114.24,
+        350.72,
+        288.48
+      ],
+      "spatial_iou": 0.711,
+      "temporal_hit": true
+    },
+    {
+      "vid": "208_Ksd1JQFHYWA",
+      "query": "The man in the suit pours himself a glass of wine , cries with the opposite woman , takes a sip , and then turns his head and lowers the glass .",
+      "object": "The man in the suit pours himself a glass of wine , cries with the opposite woman ,",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/208_Ksd1JQFHYWA.mp4",
+      "interval": [
+        0.12,
+        18.52
+      ],
+      "_win": [
+        7,
+        18
+      ],
+      "kf_ts": 14.0,
+      "pred_box": [
+        0.0,
+        0.0,
+        558.08,
+        688.0
+      ],
+      "spatial_iou": 0.829,
+      "temporal_hit": true
+    },
+    {
+      "vid": "35_bzGQK5lH-RA",
+      "query": "The man walks to the child.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/35_bzGQK5lH-RA.mkv",
+      "interval": [
+        1.1177644710578842,
+        8.10379241516966
+      ],
+      "_win": [
+        0,
+        14
+      ],
+      "kf_ts": 7.003,
+      "pred_box": [
+        137.28,
+        23.04,
+        341.952,
+        479.04
+      ],
+      "spatial_iou": 0.895,
+      "temporal_hit": true
+    },
+    {
+      "vid": "1_x-6CtPWVi6E",
+      "query": "The man in uniform walks to the table, hands the contents to the seated person, and turns.",
+      "object": "The man in uniform",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/1_x-6CtPWVi6E.mp4",
+      "interval": [
+        9.7,
+        13.833333333333332
+      ],
+      "_win": [
+        10,
+        16
+      ],
+      "kf_ts": 10.01,
+      "pred_box": [
+        122.24,
+        52.92,
+        228.48,
+        288.0
+      ],
+      "spatial_iou": 0.867,
+      "temporal_hit": true
+    },
+    {
+      "vid": "69_CrlfWnsS7ac",
+      "query": "The man descended from the stairs and walks to the pillar to hold it.",
+      "object": "The man descended from the stairs and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/69_CrlfWnsS7ac.mp4",
+      "interval": [
+        5.987525987525988,
+        11.85031185031185
+      ],
+      "_win": [
+        10,
+        14
+      ],
+      "kf_ts": 14.014,
+      "pred_box": [
+        473.6,
+        110.16,
+        545.92,
+        358.92
+      ],
+      "spatial_iou": 0.34,
+      "temporal_hit": false
+    },
+    {
+      "vid": "1_cYt6NaQgcEk",
+      "query": "The man in plaid clothes walks to the table, bends down and looks at it, then walks to the window.",
+      "object": "The man in plaid clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/1_cYt6NaQgcEk.mp4",
+      "interval": [
+        2.8000000000000003,
+        12.04
+      ],
+      "_win": [
+        1,
+        5
+      ],
+      "kf_ts": 4.0,
+      "pred_box": [
+        341.76,
+        143.04,
+        554.88,
+        473.76
+      ],
+      "spatial_iou": 0.852,
+      "temporal_hit": true
+    },
+    {
+      "vid": "19_cqkChR44vkA",
+      "query": "The man in black clothes hands the wine glass to the woman in grey then turns and walks away.",
+      "object": "The man in black clothes hands the wine glass to the woman in grey then",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/19_cqkChR44vkA.mkv",
+      "interval": [
+        11.616766467065869,
+        14.41117764471058
+      ],
+      "_win": [
+        10,
+        14
+      ],
+      "kf_ts": 10.003,
+      "pred_box": null,
+      "temporal_hit": false
+    },
+    {
+      "vid": "22_fD6VkIRlIRI",
+      "query": "The man in the red scarf lifts something into his mouth and then picks up the teacup on the table.",
+      "object": "The man in the red scarf lifts something into his mouth and then",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/22_fD6VkIRlIRI.mp4",
+      "interval": [
+        12.579034941763727,
+        18.103161397670547
+      ],
+      "_win": [
+        12,
+        19
+      ],
+      "kf_ts": 12.012,
+      "pred_box": [
+        154.05,
+        44.64,
+        337.488,
+        326.52
+      ],
+      "spatial_iou": 0.895,
+      "temporal_hit": false
+    },
+    {
+      "vid": "27_bAVXp1oGjHA",
+      "query": "The man puts down his photo while talks and picks up another one to continues talks.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/27_bAVXp1oGjHA.mkv",
+      "interval": [
+        4.093178036605657,
+        19.933444259567388
+      ],
+      "_win": [
+        3,
+        19
+      ],
+      "kf_ts": 19.022,
+      "pred_box": [
+        0.0,
+        17.28,
+        389.76,
+        479.04
+      ],
+      "spatial_iou": 0.88,
+      "temporal_hit": true
+    },
+    {
+      "vid": "72_8oL0i5WorkE",
+      "query": "The man walks beside the woman.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/72_8oL0i5WorkE.mp4",
+      "interval": [
+        10.4,
+        14.239999999999998
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 19.0,
+      "pred_box": [
+        48.0,
+        52.8,
+        432.0,
+        479.04
+      ],
+      "spatial_iou": 0.54,
+      "temporal_hit": false
+    },
+    {
+      "vid": "4_BnIFkfDhJ2w",
+      "query": "The man looks at the woman who comes over, was takes away by the woman, looks at her, and continues to moves forward.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/4_BnIFkfDhJ2w.mkv",
+      "interval": [
+        6.44,
+        18.52
+      ],
+      "_win": [
+        7,
+        19
+      ],
+      "kf_ts": 19.003,
+      "pred_box": [
+        297.6,
+        0.0,
+        1622.4,
+        817.182
+      ],
+      "spatial_iou": 0.2,
+      "temporal_hit": false
+    },
+    {
+      "vid": "30_XOe9GeojzCs",
+      "query": "The man in the hat looks at his watch, throws down the things in his left hand, and then turns, pushes the stroller in one hand and holds the box in the other hand.",
+      "object": "The man in the hat",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/30_XOe9GeojzCs.mp4",
+      "interval": [
+        11.214642262895174,
+        18.302828618968384
+      ],
+      "_win": [
+        10,
+        18
+      ],
+      "kf_ts": 12.012,
+      "pred_box": [
+        298.24,
+        164.16,
+        650.24,
+        540.0
+      ],
+      "spatial_iou": 0.918,
+      "temporal_hit": true
+    },
+    {
+      "vid": "12_AYebXQ8eUkM",
+      "query": "The man in the yellow dress sits next to the woman and looks at her.",
+      "object": "The man in the yellow dress",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/12_AYebXQ8eUkM.mp4",
+      "interval": [
+        0.3592814371257485,
+        13.173652694610778
+      ],
+      "_win": [
+        1,
+        14
+      ],
+      "kf_ts": 2.0,
+      "pred_box": [
+        560.64,
+        178.56,
+        1034.24,
+        632.16
+      ],
+      "spatial_iou": 0.842,
+      "temporal_hit": true
+    },
+    {
+      "vid": "1_-APF0-L14kw",
+      "query": "The man pulls the girl and walks to the woman.",
+      "object": "The man pulls the girl and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/1_-APF0-L14kw.mkv",
+      "interval": [
+        6.875,
+        15.583333333333334
+      ],
+      "_win": [
+        12,
+        19
+      ],
+      "kf_ts": 19.022,
+      "pred_box": [
+        331.52,
+        71.28,
+        601.6,
+        717.84
+      ],
+      "spatial_iou": 0.014,
+      "temporal_hit": false
+    },
+    {
+      "vid": "18_DaUzhc9_6io",
+      "query": "The man holding the hat drops his hand and leans forward to kiss the woman.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/18_DaUzhc9_6io.mp4",
+      "interval": [
+        3.0948419301164725,
+        12.445923460898502
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 9.009,
+      "pred_box": [
+        6.4,
+        69.6,
+        485.12,
+        450.24
+      ],
+      "spatial_iou": 0.976,
+      "temporal_hit": true
+    },
+    {
+      "vid": "20_QTf_v67C5KI",
+      "query": "The yellow-haired man steps forward and takes the suitcase.",
+      "object": "The yellow-haired man steps forward and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/20_QTf_v67C5KI.mp4",
+      "interval": [
+        13.700000000000001,
+        19.9
+      ],
+      "_win": [
+        16,
+        19
+      ],
+      "kf_ts": 18.018,
+      "pred_box": [
+        215.28,
+        123.84,
+        289.536,
+        408.0
+      ],
+      "spatial_iou": 0.818,
+      "temporal_hit": true
+    },
+    {
+      "vid": "84_oD_wxyTHJ2I",
+      "query": "The man in white clothes picks up the stool in front of him and walks down to the man in glasses.",
+      "object": "The man in white clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/84_oD_wxyTHJ2I.mp4",
+      "interval": [
+        13.555093555093556,
+        19.542619542619544
+      ],
+      "_win": [
+        12,
+        19
+      ],
+      "kf_ts": 14.014,
+      "pred_box": [
+        119.04,
+        54.36,
+        216.0,
+        358.92
+      ],
+      "spatial_iou": 0.871,
+      "temporal_hit": true
+    },
+    {
+      "vid": "117_wEAeql4z1O0",
+      "query": "The man in the leather vest stands up from the chair, then turns and walks away.",
+      "object": "The man in the leather vest",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/117_wEAeql4z1O0.mp4",
+      "interval": [
+        5.791666666666667,
+        9.041666666666666
+      ],
+      "_win": [
+        0,
+        1
+      ],
+      "kf_ts": 0.0,
+      "pred_box": [
+        535.458,
+        205.44,
+        715.652,
+        421.44
+      ],
+      "spatial_iou": 0.74,
+      "temporal_hit": false
+    },
+    {
+      "vid": "8_rXFlJbXyZyc",
+      "query": "The man in the black coat stands up from the table and walks forward for a while and turns around.",
+      "object": "The man in the black coat",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/8_rXFlJbXyZyc.mp4",
+      "interval": [
+        13.916666666666666,
+        19.166666666666668
+      ],
+      "_win": [
+        10,
+        19
+      ],
+      "kf_ts": 17.017,
+      "pred_box": [
+        74.4,
+        72.0,
+        177.6,
+        356.04
+      ],
+      "spatial_iou": 0.848,
+      "temporal_hit": true
+    },
+    {
+      "vid": "23_tjqCzVjojCo",
+      "query": "The man goes to the stool and turns to sit down, then he stretched out and pulled the stool.",
+      "object": "The man goes to the stool and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/23_tjqCzVjojCo.mp4",
+      "interval": [
+        1.3972055888223553,
+        6.4271457085828345
+      ],
+      "_win": [
+        1,
+        5
+      ],
+      "kf_ts": 1.0,
+      "pred_box": null,
+      "temporal_hit": false
+    },
+    {
+      "vid": "59_1R7n8B8KkZE",
+      "query": "A man without a hat walks to a man with a hat and looks at him.",
+      "object": "A man without a hat",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/59_1R7n8B8KkZE.mkv",
+      "interval": [
+        4.36,
+        14.239999999999998
+      ],
+      "_win": [
+        5,
+        16
+      ],
+      "kf_ts": 11.003,
+      "pred_box": [
+        384.0,
+        113.28,
+        554.88,
+        479.04
+      ],
+      "spatial_iou": 0.954,
+      "temporal_hit": true
+    },
+    {
+      "vid": "146_w-jIrlwuv2Y",
+      "query": "The man put down his hand touching the woman's hair, then raised his hand to bring the cigarette to his mouth.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/146_w-jIrlwuv2Y.mkv",
+      "interval": [
+        12.24,
+        16.279999999999998
+      ],
+      "_win": [
+        12,
+        19
+      ],
+      "kf_ts": 19.003,
+      "pred_box": [
+        361.242,
+        20.64,
+        791.658,
+        479.04
+      ],
+      "spatial_iou": 0.844,
+      "temporal_hit": false
+    },
+    {
+      "vid": "97_Vmef_8MY46w",
+      "query": "The man holding the newspaper goes to the sitting man.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/97_Vmef_8MY46w.mp4",
+      "interval": [
+        4.640000000000001,
+        10.96
+      ],
+      "_win": [
+        0,
+        3
+      ],
+      "kf_ts": 2.0,
+      "pred_box": [
+        219.84,
+        141.12,
+        480.0,
+        355.68
+      ],
+      "spatial_iou": 0.1,
+      "temporal_hit": false
+    },
+    {
+      "vid": "231_kW5WyJ1QNpM",
+      "query": "The man in the red dress pulls the woman in the red dress all the way around, then released the woman in the red dress and walks away.",
+      "object": "The man in the red dress pulls the woman in the red dress all the way around, then released the woman in the red dress and",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/231_kW5WyJ1QNpM.mkv",
+      "interval": [
+        11.466666666666667,
+        19.3
+      ],
+      "_win": [
+        5,
+        19
+      ],
+      "kf_ts": 17.003,
+      "pred_box": [
+        292.922,
+        111.84,
+        612.318,
+        417.6
+      ],
+      "spatial_iou": 0.061,
+      "temporal_hit": true
+    },
+    {
+      "vid": "90_Uw7387tc9PU",
+      "query": "The man who is sitting gets up and pushes the woman who is sitting by the bed.",
+      "object": "The man who",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/90_Uw7387tc9PU.mp4",
+      "interval": [
+        5.633333333333334,
+        9.166666666666666
+      ],
+      "_win": [
+        5,
+        9
+      ],
+      "kf_ts": 7.007,
+      "pred_box": [
+        369.28,
+        109.44,
+        638.72,
+        479.04
+      ],
+      "spatial_iou": 0.914,
+      "temporal_hit": true
+    },
+    {
+      "vid": "32_uNT6HrrnqPU",
+      "query": "The long-haired woman turns and takes the basket in the opposite woman's hand.",
+      "object": "The long-haired woman",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/32_uNT6HrrnqPU.mp4",
+      "interval": [
+        8.08,
+        12.04
+      ],
+      "_win": [
+        10,
+        12
+      ],
+      "kf_ts": 11.0,
+      "pred_box": [
+        251.412,
+        20.52,
+        499.38,
+        356.04
+      ],
+      "spatial_iou": 0.912,
+      "temporal_hit": true
+    },
+    {
+      "vid": "84_r2llOyS-BmE",
+      "query": "The man looks at the woman, turns to watch the man on the right and sits down.",
+      "object": "The man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/84_r2llOyS-BmE.mp4",
+      "interval": [
+        12.28,
+        17.24
+      ],
+      "_win": [
+        12,
+        18
+      ],
+      "kf_ts": 15.0,
+      "pred_box": [
+        170.72,
+        24.48,
+        324.72,
+        355.68
+      ],
+      "spatial_iou": 0.751,
+      "temporal_hit": true
+    },
+    {
+      "vid": "87_8oL0i5WorkE",
+      "query": "The man in green clothes talks to the woman, then walks by the woman and dictates and looks at the speech before leaves.",
+      "object": "The man in green clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/87_8oL0i5WorkE.mp4",
+      "interval": [
+        0.11976047904191617,
+        19.481037924151696
+      ],
+      "_win": [
+        3,
+        19
+      ],
+      "kf_ts": 6.0,
+      "pred_box": [
+        122.24,
+        52.32,
+        327.68,
+        479.04
+      ],
+      "spatial_iou": 0.926,
+      "temporal_hit": true
+    },
+    {
+      "vid": "106_kW5WyJ1QNpM",
+      "query": "The squatting man turns his head and stands up, walks to the woman who is hugging, and stops.",
+      "object": "The squatting man",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/106_kW5WyJ1QNpM.mkv",
+      "interval": [
+        8.585690515806988,
+        19.933444259567388
+      ],
+      "_win": [
+        7,
+        19
+      ],
+      "kf_ts": 12.003,
+      "pred_box": [
+        85.4,
+        92.64,
+        391.132,
+        426.24
+      ],
+      "spatial_iou": 0.928,
+      "temporal_hit": true
+    },
+    {
+      "vid": "47_xH1WLtZ8csM",
+      "query": "The man in the suit reached out and took what was in the hands of the man on the left, then raised his head and looked up.",
+      "object": "The man in the suit reached out and took what",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/47_xH1WLtZ8csM.mp4",
+      "interval": [
+        4.0,
+        7.84
+      ],
+      "_win": [
+        3,
+        5
+      ],
+      "kf_ts": 3.0,
+      "pred_box": null,
+      "temporal_hit": false
+    },
+    {
+      "vid": "140_BU98nWUtT5E",
+      "query": "The man in the blue suit pulls the hand of the man in the black suit, then fastens his buttons, then puts his hands on his hips, looks at the man in the black suit.",
+      "object": "The man in the blue suit pulls the hand of the man in the black suit, then fastens his buttons, then",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/140_BU98nWUtT5E.mkv",
+      "interval": [
+        7.0,
+        18.28
+      ],
+      "_win": [
+        7,
+        18
+      ],
+      "kf_ts": 13.003,
+      "pred_box": [
+        338.184,
+        77.28,
+        679.784,
+        479.04
+      ],
+      "spatial_iou": 0.946,
+      "temporal_hit": true
+    },
+    {
+      "vid": "35_oITFHwzfw_k",
+      "query": "The man with the gun waves his hand to speak to the person next to him, then pats the door, and then waves his hand to speak.",
+      "object": "The man with the gun",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/35_oITFHwzfw_k.mkv",
+      "interval": [
+        4.550898203592814,
+        11.696606786427147
+      ],
+      "_win": [
+        5,
+        12
+      ],
+      "kf_ts": 12.003,
+      "pred_box": [
+        711.68,
+        80.64,
+        1103.36,
+        717.84
+      ],
+      "spatial_iou": 0.759,
+      "temporal_hit": false
+    },
+    {
+      "vid": "43_kW5WyJ1QNpM",
+      "query": "The man in striped clothes stands up from the stool, and then holds the woman's hand and kisses.",
+      "object": "The man in striped clothes",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/43_kW5WyJ1QNpM.mkv",
+      "interval": [
+        1.2333333333333334,
+        8.833333333333332
+      ],
+      "_win": [
+        3,
+        9
+      ],
+      "kf_ts": 7.003,
+      "pred_box": [
+        315.98,
+        115.2,
+        512.4,
+        421.44
+      ],
+      "spatial_iou": 0.777,
+      "temporal_hit": true
+    },
+    {
+      "vid": "151_G5Yr20A5z_Q",
+      "query": "The man in the black hat walks to the young man and stops him",
+      "object": "The man in the black hat",
+      "video": "/root/autodl-tmp/hcstvg2/v2_video/151_G5Yr20A5z_Q.mp4",
+      "interval": [
+        2.84,
+        7.880000000000001
+      ],
+      "_win": [
+        3,
+        5
+      ],
+      "kf_ts": 3.0,
+      "pred_box": [
+        255.838,
+        124.56,
+        326.018,
+        296.64
+      ],
+      "spatial_iou": 0.961,
+      "temporal_hit": true
+    }
+  ]
+}
