@@ -23,28 +23,33 @@ def main():
     a = ap.parse_args()
     bl = json.load(open(a.dump)); pos = json.load(open(a.pos))
     ours = {r["vid"]: r for r in json.load(open(a.ours))["per_sample"]}
-    bl_rows = {}
-    for k, tube in bl["predictions"].items():
-        stem = pos.get(k, {}).get("stem")
-        if not stem or k not in bl["video_predictions"] or k not in bl["gt_box"]:
-            continue
-        gt = bl["gt_box"][k]; gtf = sorted(int(f) for f in gt)
-        sted = bl["video_predictions"][k]["sted"]; kf = (int(sted[0])+int(sted[1]))//2
-        pf = sorted(int(f) for f in tube); pk = min(pf, key=lambda f: abs(f-kf))
-        gk = min(gtf, key=lambda f: abs(f-kf))
-        bl_rows[stem] = {"temporal_hit": bool(gtf[0] <= kf <= gtf[-1]),
-                         "spatial_iou": iou(tube[str(pk)], gt[str(gk)])}
+    def bridge_rows(mid):   # mid: "floor"/"ceil" — sted中点取整敏感(Codex复核), 双报
+        rows = {}
+        for k, tube in bl["predictions"].items():
+            stem = pos.get(k, {}).get("stem")
+            if not stem or k not in bl["video_predictions"] or k not in bl["gt_box"]:
+                continue
+            gt = bl["gt_box"][k]; gtf = sorted(int(f) for f in gt)
+            s0, s1 = bl["video_predictions"][k]["sted"]
+            kf = (int(s0)+int(s1)+ (1 if mid == "ceil" else 0)) // 2
+            pf = sorted(int(f) for f in tube); pk = min(pf, key=lambda f: abs(f-kf))
+            gk = min(gtf, key=lambda f: abs(f-kf))
+            rows[stem] = {"temporal_hit": bool(gtf[0] <= kf <= gtf[-1]),
+                          "spatial_iou": iou(tube[str(pk)], gt[str(gk)])}
+        return rows
+    bl_rows = bridge_rows("floor"); bl_rows_ceil = bridge_rows("ceil")
     common = [s for s in bl_rows if s in ours]
     def summ(rows):
         n = len(rows) or 1
-        hit = [r["spatial_iou"] for r in rows if r.get("temporal_hit") and "spatial_iou" in r]
+        hit = [r.get("spatial_iou", 0.0) for r in rows if r.get("temporal_hit")]  # 无框统一算0(两边一致, Codex复核修正)
         return {"n": n,
                 "temporal_recall": round(sum(1 for r in rows if r.get("temporal_hit"))/n, 4),
                 "acc@0.3_JOINT": round(sum(1 for r in rows if r.get("temporal_hit") and r.get("spatial_iou", 0) >= 0.3)/n, 4),
                 "acc@0.5_JOINT": round(sum(1 for r in rows if r.get("temporal_hit") and r.get("spatial_iou", 0) >= 0.5)/n, 4),
                 "iou_when_hit": round(sum(hit)/len(hit), 4) if hit else None}
     result = {"n_common": len(common),
-              "baseline_bridged": summ([bl_rows[s] for s in common]),
+              "baseline_bridged_floor": summ([bl_rows[s] for s in common]),
+              "baseline_bridged_ceil": summ([bl_rows_ceil[s] for s in common if s in bl_rows_ceil]),
               "ours": summ([ours[s] for s in common]),
               "baseline_native": {k: round(v, 4) for k, v in bl["metrics"].items() if not isinstance(v, dict)}}
     print(json.dumps(result, ensure_ascii=False, indent=2))
