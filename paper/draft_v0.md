@@ -15,7 +15,7 @@
 
 ### Abstract (<150 words)
 
-Existing video-language systems *describe* video in text (video RAG), *generate* media from text/image prompts, or — in recent any-to-any models — map video to a generated image without localization or faithfulness accountability; none take a **video plus a textual instruction** and return an **interleaved image-text** answer in which each image is **newly generated from, and verifiably faithful to, an explicitly localized keyframe**. We propose a cooperative two-agent framework — an *Understand Agent* that localizes question-relevant evidence and a *Generation Agent* that produces grounded images — coupled by a **shared multimodal RAG** memory. Our core method is a **question-driven, object-level localization-to-generation pipeline**: subject-verb-object cues from the instruction drive keyframe selection, open-vocabulary grounding, and a generate-or-crop decision, with cross-modal consistency checks for hallucination control. We formalize the task and introduce **VKIG-Bench**, to our knowledge the first benchmark scoring *keyframe consistency* and *spatio-temporal localization* alongside text and image quality. A real-video end-to-end prototype runs on a single 24GB GPU; understanding and generation succeed, while localization remains the current bottleneck. TODO: full quantitative results.
+Existing video-language systems *describe* video in text (video RAG), *generate* media from text/image prompts, or — in recent any-to-any models — map video to a generated image without localization or faithfulness accountability; none take a **video plus a textual instruction** and return an **interleaved image-text** answer in which each image is **newly generated from, and verifiably faithful to, an explicitly localized keyframe**. We propose a cooperative two-agent framework — an *Understand Agent* that localizes question-relevant evidence and a *Generation Agent* that produces grounded images — coupled by a **shared multimodal RAG** memory. Our core method is a **question-driven, object-level localization-to-generation pipeline**: subject-verb-object cues from the instruction drive keyframe selection, open-vocabulary grounding, and a generate-or-crop decision, with cross-modal consistency checks for hallucination control. We formalize the task and introduce **VKIG-Bench**, to our knowledge the first benchmark scoring *keyframe consistency* and *spatio-temporal localization* alongside text and image quality. A real-video prototype runs end-to-end on a single 24GB GPU. Diagnosing temporal keyframe selection as the dominant bottleneck (a temporal-oracle study), we introduce a **two-stage selector** — MLLM coarse temporal windowing followed by object-conditioned in-window selection — which lifts joint localization accuracy from 0.433 to **0.567** on HC-STVG v2, surpassing a NeurIPS'25 zero-shot STVG method (0.447) on the same clips without test-time tuning. TODO: generation-quality metrics.
 
 ---
 
@@ -28,7 +28,7 @@ Existing video-language systems *describe* video in text (video RAG), *generate*
 **Contributions.**
 - **A new task and benchmark.** We formalize *video-grounded interleaved image-text generation* and introduce **VKIG-Bench**, to our knowledge the first benchmark that scores **keyframe-consistency** (generated image vs. its source-keyframe object) and **spatio-temporal localization** (when/where the answer lives in the video), in addition to text correctness, image-text alignment, and image quality.
 - **A cooperative MAS + shared-RAG framework.** An Understand Agent and a Generation Agent communicate through a *shared* multimodal RAG memory with two feedback loops (grounding→reselection, generation→memory write-back), unifying the understanding and generation ends that prior video MAS keep separate [MAGNET, arXiv:2506.07016; LVAS-Agent, arXiv:2503.10719; MovieAgent, arXiv:2503.07314; Mora, arXiv:2403.13248].
-- **A question-driven, object-level localization-to-generation method.** We push question-driven keyframe selection [AKS, arXiv:2502.21271] down to the SVO **object level** [GROVE, arXiv:2503.10781], drive open-vocabulary grounding [Video-RAG, arXiv:2411.13093], and feed the result into a generate-or-crop decision — going beyond "select-only" interleaving [M2RAG, arXiv:2411.16365] — with cross-modal consistency checks for hallucination control [ScaleCap, arXiv:2506.19848]. **[VERIFIED]** end-to-end on real video; TODO: large-scale results.
+- **A two-stage temporal selector inside a question-driven, object-level localization-to-generation method.** A temporal-oracle study quantifies keyframe *timing* — not grounding — as the dominant bottleneck (§6.5); we address it with **MLLM coarse temporal windowing → object/action-conditioned in-window selection** (§4.3②), lifting joint localization acc@0.3 from 0.433 to **0.567** on HC-STVG v2 and surpassing a NeurIPS'25 zero-shot STVG baseline (0.447) on identical clips, training-free and without test-time tuning **[VERIFIED, n=282]**. The localized keyframe then drives open-vocabulary grounding and a generate-or-crop decision — beyond "select-only" interleaving [M2RAG, arXiv:2411.16365] — with cross-modal consistency checks [ScaleCap, arXiv:2506.19848].
 
 ---
 
@@ -87,21 +87,29 @@ This differs from prior single-direction video pipelines [MAGNET, arXiv:2506.070
 
 **① Instruction parsing → SVO.** POS tagging + dependency parse extract `T = {(s,v,o)}` from `Q`, yielding object set `O_Q` (literal terms + optional LLM synonym expansion). This *reverses* GROVE [arXiv:2503.10781], which grounds caption objects; we extract objects from the **instruction** (marked "inspired by"). Training-free.
 
-**② Q-driven keyframe selection.** BGE-M3 caption-similarity pruning [VideoEspresso, arXiv:2411.14794] reduces `N→N'`; then AKS [arXiv:2502.21271] is upgraded from query-level `s(Q,F)` to **object-level** `s(o,F)`. Object relevance and its aggregate:
+**② Two-stage temporal grounding and keyframe selection** *(the paper's core selection contribution; verified §6.6)*. Frame-wise similarity scoring — whether query-level `s(Q,F)` [AKS, arXiv:2502.21271] or our object-level `s(o,F)` — measures *appearance*, not *action timing*: it fires whenever the subject is visible, which on person-centric video is most of the clip. We therefore split temporal localization from appearance scoring:
+
+*Stage A — coarse temporal window (MLLM).* Sample a sparse grid `G = {F_1..F_g}` (uniform, `g=10` frames) and ask the video-MLLM `M` (Qwen3-VL) to localize the queried event over the ordered grid:
+
+```
+W = M( G, Q )  →  [t_s, t_e]        (grid indices → time window, half-cell dilation at borders)
+```
+
+This exploits the MLLM's cross-frame reasoning — which frame-wise embedding similarity fundamentally lacks — at the cost of one extra MLLM call per clip. Training-free; the gold interval is never revealed to `M` (audited, §6.6).
+
+*Stage B — object-conditioned selection within `W`.* Restricted to frames in `W`, score with a z-normalized mixture of query, object, and action-phrase channels and take the temporally-smoothed peak:
 
 ```
 s(o, F) = sim( ψ_img(F), ψ_txt(o) )
-S(O_Q, F) = Σ_{o∈O_Q} w_o · s(o, F),   Σ w_o = 1
+S(F) = w_q·ŝ(Q,F) + w_o·ŝ(o,F) + w_a·ŝ(a,F),   F ∈ W     (ŝ = z-scored; a = action phrase)
+F* = argmax_{F∈W} smooth(S(F))
 ```
 
-Frame selection trades relevance against temporal coverage:
+*Design context (not fully enabled in the verified runs):* BGE-M3 caption pruning [VideoEspresso, arXiv:2411.14794] before Stage A, and AKS-style coverage `c(I)` when a budget `B>1` of keyframes is requested; the coverage form below is our instantiation (AKS publishes no closed form):
 
 ```
-I* = argmax_{I⊆V, |I|≤B} [ Σ_{F∈I} S(O_Q,F) + λ·c(I) ]
-c(I) = − Σ_{j=1}^{M} | n_j(I) − |I|/M |     (M temporal bins; imbalance penalty)
+I* = argmax_{I⊆W, |I|≤B} [ Σ_{F∈I} S(F) + λ·c(I) ],   c(I) = − Σ_j | n_j(I) − |I|/M |
 ```
-
-solved by AKS's recursive judge-and-split (training-free). *Note:* AKS does not publish a closed form for `c(I)`; the above is our coverage instantiation (to be marked as such in camera-ready).
 
 **③ Object-level grounding.** For each `(F∈I*, o∈O_Q)`, open-vocabulary detection (Grounding-DINO / Video-RAG's APE [arXiv:2411.13093]) yields `(box, ρ(o,F))`, producing evidence set `B = {(F,o,box,ρ)}`.
 
@@ -278,15 +286,27 @@ To quantify *how much* of the localization score is due to content-based keyfram
 
 *External system baselines and the generation-quality metrics (VQAScore/DreamSim/FID) remain future work; the comparison above isolates the selection component, which is where our diagnosis localizes the problem. Planned external baselines (all top-venue accepted, per advisor guidance 2026-07): **Zero-Shot STVG with MLLMs** [NeurIPS 2025, arXiv:2509.15178] — the primary head-to-head (same task, same datasets HC-STVG/VidSTG, same training-free MLLM route, code released); **LLaVA-ST** [CVPR 2025] and **VideoRefer Suite** [CVPR 2025] as trained-SOTA references; **Video-RAG** (visually-aligned) [NeurIPS 2025, arXiv:2411.13093] for the video-RAG side; **M2RAG** [SIGIR 2025, arXiv:2411.16365] for interleaved generation. Open-o3-Video (under review) and M2IO-R1/SpaceVLLM (arXiv-only) are cited but not used as baselines.*
 
-### 6.6 Ablations **[PLANNED]**
+### 6.6 Selection ablation — the two-stage selector **[VERIFIED, n = 282]**
 
-TODO — table to be filled. Planned ablations: A1 remove SVO conditioning (`s(o,F)→s(Q,F)`); A2 remove object-level grounding (whole-frame conditioning); A3 remove generation (crop-only = M2RAG); A4 remove BGE-M3 pruning; A5 remove shared RAG; A6 sweep `τ_g/τ_r` (crop↔generate ratio curve); A7 remove feedback ①; A8 object-weight `w_o` strategies; A9 generator choice (OminiControl vs. Kontext vs. Qwen-Edit); A10 condition ablation (no keyframe / no structure map / no subject preservation).
+Holding grounding fixed (Qwen3-VL) and evaluating on the **same 282 HC-STVG test clips** as §6.5 (identical denominators throughout, strict temporal pad = 0):
+
+| Selection | Temporal recall | **acc@0.3 (joint)** | acc@0.5 |
+|---|---|---|---|
+| E0: object-conditioned scoring (§6.4 system) | 0.557 | 0.433 | 0.411 |
+| E1: E0 + action-phrase channel | 0.610 | 0.489 | 0.468 |
+| **E2: two-stage (MLLM window → in-window selection)** | **0.720** | **0.567** | **0.539** |
+| (ref) NeurIPS'25 zero-shot STVG, bridged (§6.5) | 0.642 | 0.447 | 0.394 |
+| (ref) temporal oracle upper bound | 1.000 | 0.780 | — |
+
+**Reading.** (1) Both improvements help and the trend is monotone (0.433→0.489→0.567); box quality when temporally correct stays flat (0.62–0.65 across E0/E1/E2), so the gains come **mainly from temporal recall** — exactly where §6.5 located the bottleneck. E1 and E2 are two independent modifications (not a nested stack); the full factorial ablation is future work. (2) **E2 surpasses the bridged NeurIPS'25 zero-shot STVG method by +0.12 acc@0.3 on the same clips** while requiring no gradient-based test-time tuning (it adds one MLLM call per clip; a wall-clock cost table is TODO). (3) The remaining oracle gap is 0.780−0.567 ≈ 0.21 (was ≈ 0.35): grid density, iterative window refinement, and audio/subtitle cues are natural next steps. **Leakage audit:** Stage A receives only the sparse frame grid and the query text; per-sample outputs show no gold-boundary snapping (median keyframe distance to gold boundary 1.76 s).
+
+*Still planned:* A1 remove SVO conditioning; A2 whole-frame conditioning; A3 crop-only (=M2RAG); A4 BGE-M3 pruning; A5 shared RAG; A6 τ_g/τ_r sweep; A7 feedback loop; A8 `w` mixtures; A9 generator choice; A10 condition ablation; grid-density sweep for Stage A; full factorial E1×E2.
 
 ---
 
 ## 7. Conclusion and Limitations
 
-**Conclusion.** We formalize *video-grounded interleaved image-text generation*, position it in an open four-property slot, and propose a cooperative two-agent framework over a shared multimodal RAG with a question-driven, object-level localization-to-generation method and a keyframe-consistency-aware benchmark (VKIG-Bench). A real-video prototype runs end to end on a single 24GB GPU, with understanding and generation verified.
+**Conclusion.** We formalize *video-grounded interleaved image-text generation*, position it in a precisely-scoped gap, and propose a cooperative two-agent framework over a shared multimodal RAG with a question-driven, object-level localization-to-generation method and a keyframe-consistency-aware benchmark (VKIG-Bench). A temporal-oracle study isolates keyframe timing as the dominant bottleneck, and our **two-stage temporal selector** (MLLM windowing → in-window selection) lifts joint localization from 0.433 to 0.567 on HC-STVG v2, surpassing a NeurIPS'25 zero-shot STVG method on identical clips. A real-video prototype runs end to end on a single 24GB GPU.
 
 **Limitations (honest).**
 - **Temporal keyframe selection is the dominant bottleneck.** Temporal recall is **0.26 (V-STaR) / 0.54 (HC-STVG)**, capping end-to-end localization at **0.23 / 0.43** (temporal-hit ∧ IoU≥0.3) — even though the box is accurate (**IoU 0.72 / 0.66**) once the moment is right. The bottleneck ordering (selection ≪ grounding) is identical on both datasets. Object-conditioned scoring improves the chosen frame's quality (V-STaR IoU-when-correct 0.69→0.79) but not temporal recall. Future work: question-conditioned temporal scoring, object-size weighting, audio/subtitle cues, a learned selector. **[VERIFIED, V-STaR n=150 / HC-STVG n=200]**
