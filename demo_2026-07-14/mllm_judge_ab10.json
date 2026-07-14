@@ -1,0 +1,42 @@
+{
+  "102_FONjBIXaM-0": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Poster stylizes image\"}"
+  },
+  "103_kW5WyJ1QNpM": {
+    "judge": "yes",
+    "raw": "{\"same_moment\": \"yes\", \"reason\": \"Identical subjects and composition\"}"
+  },
+  "141_G5Yr20A5z_Q": {
+    "judge": "yes",
+    "raw": "{\"same_moment\": \"yes\", \"reason\": \"All elements preserved\"}"
+  },
+  "143_phrYEKv0rmw": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Poster stylization alters appearance\"}"
+  },
+  "146_uNT6HrrnqPU": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Poster stylization differs\"}"
+  },
+  "152_5LrOQEt_XVM": {
+    "judge": "yes",
+    "raw": "{\"same_moment\": \"yes\", \"reason\": \"Identical characters, attire, and composition\""
+  },
+  "152_o4xQ-BEa3Ss": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Poster stylization differs\"}"
+  },
+  "167_VsYPP2I0aUQ": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different actors, clothing, pose\"}"
+  },
+  "189_Ksd1JQFHYWA": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Poster stylization alters appearance\"}"
+  },
+  "18_wEAeql4z1O0": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Poster stylization alters appearance\"}"
+  }
+}
