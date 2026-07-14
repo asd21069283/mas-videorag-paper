@@ -28,7 +28,7 @@ Existing video-language systems *describe* video in text (video RAG), *generate*
 **Contributions.**
 - **A new task and benchmark.** We formalize *video-grounded interleaved image-text generation* and introduce **VKIG-Bench**, to our knowledge the first benchmark that scores **keyframe-consistency** (generated image vs. its source-keyframe object) and **spatio-temporal localization** (when/where the answer lives in the video), in addition to text correctness, image-text alignment, and image quality.
 - **A cooperative MAS + shared-RAG framework.** An Understand Agent and a Generation Agent communicate through a *shared* multimodal RAG memory with two feedback loops (grounding→reselection, generation→memory write-back), unifying the understanding and generation ends that prior video MAS keep separate [MAGNET, arXiv:2506.07016; LVAS-Agent, arXiv:2503.10719; MovieAgent, arXiv:2503.07314; Mora, arXiv:2403.13248].
-- **A two-stage temporal selector inside a question-driven, object-level localization-to-generation method.** A temporal-oracle study quantifies keyframe *timing* — not grounding — as the dominant bottleneck (§6.5); we address it with **MLLM coarse temporal windowing → object/action-conditioned in-window selection** (§4.3②), lifting joint localization acc@0.3 from 0.433 to **0.567** on a 282-clip HC-STVG v2 subset and outperforming a bridged NeurIPS'25 zero-shot STVG baseline (0.447) on identical clips under our joint keyframe metric — training-free (no parameter training or adaptation) **[VERIFIED, n=282]**. The localized keyframe then drives open-vocabulary grounding and a generate-or-crop decision — beyond "select-only" interleaving [M2RAG, arXiv:2411.16365] — with cross-modal consistency checks [ScaleCap, arXiv:2506.19848].
+- **A two-stage temporal selector inside a question-driven, object-level localization-to-generation method.** A temporal-oracle study quantifies keyframe *timing* — not grounding — as the dominant bottleneck (§6.5); we address it by **adapting the coarse-to-fine selection paradigm** [UniTime, arXiv:2506.18883; Focus, arXiv:2510.27280] to keyframe selection for faithful generation — MLLM coarse temporal windowing → object-conditioned in-window selection (§4.3②) — lifting joint localization acc@0.3 from 0.433 to **0.567** on a 282-clip HC-STVG v2 subset and outperforming a bridged NeurIPS'25 zero-shot STVG baseline (0.447) on identical clips under our joint keyframe metric — training-free (no parameter training or adaptation) **[VERIFIED, n=282]**. The localized keyframe then drives open-vocabulary grounding and a generate-or-crop decision — beyond "select-only" interleaving [M2RAG, arXiv:2411.16365] — with cross-modal consistency checks [ScaleCap, arXiv:2506.19848].
 
 ---
 
@@ -95,7 +95,7 @@ This differs from prior single-direction video pipelines [MAGNET, arXiv:2506.070
 W = M( G, Q )  →  [t_s, t_e]        (grid indices → time window, half-cell dilation at borders)
 ```
 
-This exploits the MLLM's cross-frame reasoning — which frame-wise embedding similarity fundamentally lacks — at the cost of one extra MLLM call per clip. Training-free; the gold interval is never revealed to `M` (audited, §6.6).
+This exploits the MLLM's cross-frame reasoning — which frame-wise embedding similarity fundamentally lacks — at the cost of one extra MLLM call per clip. Coarse-to-fine temporal selection is an established paradigm in long-video *question answering* [UniTime, arXiv:2506.18883; Focus, arXiv:2510.27280; HiMu, arXiv:2603.18558; LeAdQA, arXiv:2507.14784]; our contribution is not the paradigm but its **diagnosis-driven adaptation to keyframe selection for faithful generation** — the oracle study (§6.5) localizes the pipeline's bottleneck to timing, and this adaptation resolves a large share of it (§6.6). Training-free; the gold interval is never revealed to `M` (sanity-checked, §6.6).
 
 *Stage B — object-conditioned selection within `W`.* Restricted to frames in `W`, score with a z-normalized two-channel mixture of query and object relevance and take the temporally-smoothed peak (this is the configuration verified as E2 in §6.6):
 
@@ -329,6 +329,7 @@ Holding grounding fixed (Qwen3-VL) and evaluating on the **same 282 HC-STVG test
 - M2RAG [arXiv:2411.16365]; M2IO-R1 [arXiv:2508.06328]; MRAMG-Bench [arXiv:2502.04176]
 - ImageRAG [arXiv:2502.09411]; ORIG [arXiv:2510.22521]; Gen-Searcher [arXiv:2603.28767]
 - AKS [arXiv:2502.21271]; VideoEspresso [arXiv:2411.14794]; GROVE [arXiv:2503.10781]
+- UniTime [arXiv:2506.18883]; Focus [arXiv:2510.27280]; HiMu [arXiv:2603.18558]; LeAdQA [arXiv:2507.14784]
 - ScaleCap [arXiv:2506.19848]; CUVA [arXiv:2405.00181]
 - MAGNET [arXiv:2506.07016]; LVAS-Agent [arXiv:2503.10719]; MovieAgent [arXiv:2503.07314]; Mora [arXiv:2403.13248]
 - BAGEL [arXiv:2505.14683]; Show-o2 [arXiv:2506.15564]; X-VILA [arXiv:2405.19335]; NExT-GPT [arXiv:2309.05519]; Emu3.5 [arXiv:2510.26583]
