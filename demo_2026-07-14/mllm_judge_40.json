@@ -1,0 +1,162 @@
+{
+  "102_FONjBIXaM-0": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different people, scenes, poses\"}"
+  },
+  "103_kW5WyJ1QNpM": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different lighting and style\"}"
+  },
+  "141_G5Yr20A5z_Q": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different people, settings, poses\"}"
+  },
+  "143_phrYEKv0rmw": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different person, clothing, pose\"}"
+  },
+  "146_uNT6HrrnqPU": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different poses and lighting\"}"
+  },
+  "152_5LrOQEt_XVM": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different people, outfits, poses\"}"
+  },
+  "152_o4xQ-BEa3Ss": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different people, poses, settings\"}"
+  },
+  "167_VsYPP2I0aUQ": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different people, scenes, poses\"}"
+  },
+  "189_Ksd1JQFHYWA": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different people, attire, pose\"}"
+  },
+  "18_wEAeql4z1O0": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different people, clothing, pose\"}"
+  },
+  "1_gEI9qBdVt5I": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different lighting and composition\"}"
+  },
+  "238_Kb1fduj-jdY": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different people, settings, poses\"}"
+  },
+  "23_EO1gLAoEZRA": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different people, scenes, poses\"}"
+  },
+  "23_UrsCy6qIGoo": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different people, different scenes\"}"
+  },
+  "24_WMFTBgYWJS8": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different person, pose, lighting\"}"
+  },
+  "251_ViY7CR2TSO8": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different person, attire, pose, setting\"}"
+  },
+  "26_l8_Mk3-sZsQ": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Text is corrupted\"}"
+  },
+  "27_E-fqjlYMFhE": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different people, outfits, poses\"}"
+  },
+  "27_kvFlbTK812w": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Poster stylized, altered lighting\"}"
+  },
+  "2_VNZ8JDb8sks": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Poster stylization differs\"}"
+  },
+  "2_WSPvfxtqisg": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different poses and lighting\"}"
+  },
+  "37_l2XO3tQk8lI": {
+    "judge": "yes",
+    "raw": "{\"same_moment\": \"yes\", \"reason\": \"Identical individuals, pose, and action\"}"
+  },
+  "3_t1LXrJOvPDg": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different poses and actions\"}"
+  },
+  "42_wfEOx36N4jA": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different people, poses, lighting\"}"
+  },
+  "48_ViY7CR2TSO8": {
+    "judge": "yes",
+    "raw": "{\"same_moment\": \"yes\", \"reason\": \"Same people, pose, scene\"}"
+  },
+  "50_TM5MPJIq1Is": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Lighting and composition differ\"}"
+  },
+  "52_9eAOr_ttXp0": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different person, pose, scene\"}"
+  },
+  "53_pSdPmmJ3-ng": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different attire, pose, lighting\"}"
+  },
+  "55_pGP_oIdKmRY": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different actors, attire, pose\"}"
+  },
+  "58_bzGQK5lH-RA": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different people, poses, settings\"}"
+  },
+  "5_tjqCzVjojCo": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different attire, pose, background\"}"
+  },
+  "60_BV1VreCWZ64": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Clothing and pose differ\"}"
+  },
+  "61_oWhvucAskhk": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different actors, poses, lighting\"}"
+  },
+  "64_gjdgj04FzR0": {
+    "judge": "yes",
+    "raw": "{\"same_moment\": \"yes\", \"reason\": \"Identical characters and scene\"}"
+  },
+  "6_QTmwhrVal1g": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Lighting and style differ\"}"
+  },
+  "71_1R7n8B8KkZE": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different actors, attire, lighting\"}"
+  },
+  "87_KkAf75yOKqs": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different people, clothing, pose\"}"
+  },
+  "88_xH1WLtZ8csM": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Different people, outfits, poses\"}"
+  },
+  "8_6d5u6FHvz7Q": {
+    "judge": "yes",
+    "raw": "{\"same_moment\": \"yes\", \"reason\": \"Identical people, poses, and scene\"}"
+  },
+  "95_OQxN4ksema0": {
+    "judge": "no",
+    "raw": "{\"same_moment\": \"no\", \"reason\": \"Lighting and style differ\"}"
+  }
+}

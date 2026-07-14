@@ -1,0 +1,12 @@
+{
+  "tag": "ep2_couple",
+  "video": "/root/autodl-tmp/duanju/守得云开见月明-全集_PNA.mp4",
+  "query": "Two people stand close together talking",
+  "object": "the couple standing close",
+  "kf_ts": 29.023,
+  "window_s": [
+    20.023,
+    55.023
+  ],
+  "bbox": null
+}

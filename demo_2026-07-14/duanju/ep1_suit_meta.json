@@ -1,0 +1,17 @@
+{
+  "tag": "ep1_suit",
+  "video": "/root/autodl-tmp/duanju/裴总每天都想父凭子贵 第1集_PNA.f100022.mp4",
+  "query": "A man in a suit talks to a woman face to face",
+  "object": "the man in a suit",
+  "kf_ts": 60.0,
+  "window_s": [
+    49.0,
+    60.0
+  ],
+  "bbox": [
+    193.68,
+    260.48,
+    314.64,
+    604.8
+  ]
+}

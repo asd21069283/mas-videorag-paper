@@ -1,0 +1,412 @@
+{
+  "summary": {
+    "n": 40,
+    "n_generated": 40,
+    "mean_clip_subject_sim": 0.6011,
+    "mean_clip_text_align": 0.2892,
+    "edit_prompt": "re-render as a cinematic promotional poster shot, dramatic lighting",
+    "selector": "E2 two-stage"
+  },
+  "per_sample": [
+    {
+      "vid": "50_TM5MPJIq1Is",
+      "kf_ts": 7.01,
+      "query": "The man standing by the stairs goes to the car.",
+      "object": "The man",
+      "temporal_hit": true,
+      "instruction": "The man, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.6571,
+      "clip_text_align": 0.2761
+    },
+    {
+      "vid": "88_xH1WLtZ8csM",
+      "kf_ts": 7.0,
+      "query": "The woman in the skirt of the flower walks to the door, then turns.",
+      "object": "The woman in the skirt of the flower",
+      "temporal_hit": true,
+      "instruction": "The woman in the skirt of the flower, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.4147,
+      "clip_text_align": 0.2279
+    },
+    {
+      "vid": "26_l8_Mk3-sZsQ",
+      "kf_ts": 15.018,
+      "query": "The sitting woman raises her hands, then straightens her body.",
+      "object": "the woman",
+      "temporal_hit": true,
+      "instruction": "the woman, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.7528,
+      "clip_text_align": 0.2302
+    },
+    {
+      "vid": "23_EO1gLAoEZRA",
+      "kf_ts": 16.016,
+      "query": "The undressed man is held by the woman in red, takes out a knife, and runs away from the woman's hand.",
+      "object": "The undressed man",
+      "temporal_hit": true,
+      "instruction": "The undressed man, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.5079,
+      "clip_text_align": 0.3013
+    },
+    {
+      "vid": "103_kW5WyJ1QNpM",
+      "kf_ts": 12.003,
+      "query": "The person standing next to the horse releases his hand and holds the rider, then takes the horse and walks away.",
+      "object": "The person",
+      "temporal_hit": true,
+      "instruction": "The person, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.5648,
+      "clip_text_align": 0.2483
+    },
+    {
+      "vid": "1_gEI9qBdVt5I",
+      "kf_ts": 13.0,
+      "query": "The red-haired woman stops at the door and looks at the front.",
+      "object": "The red-haired woman stops at the door and",
+      "temporal_hit": true,
+      "instruction": "The red-haired woman stops at the door and, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.4516,
+      "clip_text_align": 0.3164
+    },
+    {
+      "vid": "27_E-fqjlYMFhE",
+      "kf_ts": 5.0,
+      "query": "The man in the white suit follows the two men walking in front and stops by the wall.",
+      "object": "The man in the white suit follows the two men",
+      "temporal_hit": true,
+      "instruction": "The man in the white suit follows the two men, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.5707,
+      "clip_text_align": 0.2975
+    },
+    {
+      "vid": "55_pGP_oIdKmRY",
+      "kf_ts": 9.003,
+      "query": "The blindfolded man smells the handkerchief in the opposite woman's hand.",
+      "object": "The blindfolded man smells the handkerchief in the opposite woman's hand",
+      "temporal_hit": true,
+      "instruction": "The blindfolded man smells the handkerchief in the opposite woman's hand, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.634,
+      "clip_text_align": 0.3451
+    },
+    {
+      "vid": "146_uNT6HrrnqPU",
+      "kf_ts": 14.0,
+      "query": "The white-haired man walks behind the man holding the handrail.",
+      "object": "The white-haired man",
+      "temporal_hit": true,
+      "instruction": "The white-haired man, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.4821,
+      "clip_text_align": 0.3054
+    },
+    {
+      "vid": "58_bzGQK5lH-RA",
+      "kf_ts": 3.003,
+      "query": "The daughter on the bed puts on her top, then picks up a black dress and lifts the cup away.",
+      "object": "The daughter on the bed",
+      "temporal_hit": true,
+      "instruction": "The daughter on the bed, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.4459,
+      "clip_text_align": 0.3562
+    },
+    {
+      "vid": "71_1R7n8B8KkZE",
+      "kf_ts": 10.003,
+      "query": "The man in the suit goes to the man in white and looks at him.",
+      "object": "The man in the suit goes to the man in white and",
+      "temporal_hit": true,
+      "instruction": "The man in the suit goes to the man in white and, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.6398,
+      "clip_text_align": 0.327
+    },
+    {
+      "vid": "48_ViY7CR2TSO8",
+      "kf_ts": 14.003,
+      "query": "The man in gray clothes jumps from behind the sofa and sits on the couch.",
+      "object": "The man in gray clothes",
+      "temporal_hit": true,
+      "instruction": "The man in gray clothes, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.8009,
+      "clip_text_align": 0.2457
+    },
+    {
+      "vid": "37_l2XO3tQk8lI",
+      "kf_ts": 8.0,
+      "query": "But the man in glasses walks to the yellow-haired woman and stops, then turns her around.",
+      "object": "But the man in glasses",
+      "temporal_hit": true,
+      "instruction": "But the man in glasses, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.63,
+      "clip_text_align": 0.2531
+    },
+    {
+      "vid": "23_UrsCy6qIGoo",
+      "kf_ts": 7.0,
+      "query": "The standing woman goes to the sofa and turns to sit down.",
+      "object": "the woman",
+      "temporal_hit": true,
+      "instruction": "the woman, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.5318,
+      "clip_text_align": 0.2609
+    },
+    {
+      "vid": "143_phrYEKv0rmw",
+      "kf_ts": 10.01,
+      "query": "The man in green clothes stands up and puts down the cup, then takes something out of his pocket, walks to the table, puts it down, and opens it.",
+      "object": "The man in green clothes",
+      "temporal_hit": true,
+      "instruction": "The man in green clothes, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.4746,
+      "clip_text_align": 0.3343
+    },
+    {
+      "vid": "64_gjdgj04FzR0",
+      "kf_ts": 10.03870343492985,
+      "query": "The man in brown undressed and turns and walks up the steps.",
+      "object": "The man in brown undressed and",
+      "temporal_hit": true,
+      "instruction": "The man in brown undressed and, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.822,
+      "clip_text_align": 0.2913
+    },
+    {
+      "vid": "27_kvFlbTK812w",
+      "kf_ts": 8.011,
+      "query": "The man in black clothes walks from the door to the table and puts his contents on the table.",
+      "object": "The man in black clothes",
+      "temporal_hit": true,
+      "instruction": "The man in black clothes, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.9208,
+      "clip_text_align": 0.2481
+    },
+    {
+      "vid": "8_6d5u6FHvz7Q",
+      "kf_ts": 16.0,
+      "query": "The woman in the yellow clothes kneels on the ground and supports the man who is lying to sit up.",
+      "object": "The woman in the yellow clothes kneels on the ground and supports the man who",
+      "temporal_hit": true,
+      "instruction": "The woman in the yellow clothes kneels on the ground and supports the man who, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.716,
+      "clip_text_align": 0.3106
+    },
+    {
+      "vid": "53_pSdPmmJ3-ng",
+      "kf_ts": 7.0,
+      "query": "The woman in a turban turns around.",
+      "object": "The woman in a turban",
+      "temporal_hit": true,
+      "instruction": "The woman in a turban, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.5256,
+      "clip_text_align": 0.3166
+    },
+    {
+      "vid": "61_oWhvucAskhk",
+      "kf_ts": 7.003,
+      "query": "The man in the striped long sleeve kicks twice and then kicks the man in the white vest.",
+      "object": "The man in the striped long sleeve kicks twice and then kicks the man in the white vest",
+      "temporal_hit": true,
+      "instruction": "The man in the striped long sleeve kicks twice and then kicks the man in the white vest, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.741,
+      "clip_text_align": 0.3328
+    },
+    {
+      "vid": "42_wfEOx36N4jA",
+      "kf_ts": 5.0,
+      "query": "The boy with the accordion goes to the sitting boy and sits down.",
+      "object": "The boy with the accordion goes to the",
+      "temporal_hit": true,
+      "instruction": "The boy with the accordion goes to the, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.5141,
+      "clip_text_align": 0.3185
+    },
+    {
+      "vid": "189_Ksd1JQFHYWA",
+      "kf_ts": 7.0,
+      "query": "The man carries the little boy turns and walks to the sits woman , stops , and bends down .",
+      "object": "The man carries the little boy",
+      "temporal_hit": true,
+      "instruction": "The man carries the little boy, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.5769,
+      "clip_text_align": 0.3287
+    },
+    {
+      "vid": "3_t1LXrJOvPDg",
+      "kf_ts": 10.0,
+      "query": "The woman in a turban reaches out, pushes the door and comes in, looks down at the little girl, and closes the door.",
+      "object": "The woman in a turban reaches out, pushes the door and comes in,",
+      "temporal_hit": true,
+      "instruction": "The woman in a turban reaches out, pushes the door and comes in,, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.6122,
+      "clip_text_align": 0.2558
+    },
+    {
+      "vid": "152_o4xQ-BEa3Ss",
+      "kf_ts": 15.0,
+      "query": "The woman in black clothes turns around the man in a suit.",
+      "object": "The woman in black clothes",
+      "temporal_hit": true,
+      "instruction": "The woman in black clothes, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.5475,
+      "clip_text_align": 0.2642
+    },
+    {
+      "vid": "95_OQxN4ksema0",
+      "kf_ts": 3.006,
+      "query": "The man in black clothes bent over and leans over to look at the person opposite.",
+      "object": "The man in black clothes bent over and leans over to",
+      "temporal_hit": true,
+      "instruction": "The man in black clothes bent over and leans over to, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.6984,
+      "clip_text_align": 0.2368
+    },
+    {
+      "vid": "87_KkAf75yOKqs",
+      "kf_ts": 14.003,
+      "query": "The woman in blue clothes walks to the sitting man and puts her hand on his shoulder .",
+      "object": "The woman in blue clothes",
+      "temporal_hit": true,
+      "instruction": "The woman in blue clothes, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.4662,
+      "clip_text_align": 0.3051
+    },
+    {
+      "vid": "18_wEAeql4z1O0",
+      "kf_ts": 10.010666666666667,
+      "query": "The pigtailed woman glances back and passes the thing to the person opposite.",
+      "object": "The pigtailed woman glances back and passes the thing to the person opposite",
+      "temporal_hit": true,
+      "instruction": "The pigtailed woman glances back and passes the thing to the person opposite, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.5072,
+      "clip_text_align": 0.2344
+    },
+    {
+      "vid": "24_WMFTBgYWJS8",
+      "kf_ts": 10.013,
+      "query": "The man in white clothes gets up from the bed and walks to the wall.",
+      "object": "The man in white clothes gets up from the bed and",
+      "temporal_hit": true,
+      "instruction": "The man in white clothes gets up from the bed and, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.7152,
+      "clip_text_align": 0.3205
+    },
+    {
+      "vid": "152_5LrOQEt_XVM",
+      "kf_ts": 11.0,
+      "query": "The woman in pink clothes turns back and looks at the woman in blue, then watches the man in white speak, and then walks away.",
+      "object": "The woman in pink clothes",
+      "temporal_hit": true,
+      "instruction": "The woman in pink clothes, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.6556,
+      "clip_text_align": 0.2742
+    },
+    {
+      "vid": "251_ViY7CR2TSO8",
+      "kf_ts": 7.003,
+      "query": "The man in the gray suit stands up and turns around, then speaks a few words to the man in the brown suit, and then takes a few steps.",
+      "object": "The man in the gray suit",
+      "temporal_hit": true,
+      "instruction": "The man in the gray suit, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.5708,
+      "clip_text_align": 0.3256
+    },
+    {
+      "vid": "102_FONjBIXaM-0",
+      "kf_ts": 11.0,
+      "query": "The man in blue clothes takes something from his bag and places it on a stool in front of him.",
+      "object": "The man in blue clothes",
+      "temporal_hit": true,
+      "instruction": "The man in blue clothes, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.3762,
+      "clip_text_align": 0.272
+    },
+    {
+      "vid": "5_tjqCzVjojCo",
+      "kf_ts": 10.0,
+      "query": "The woman in the black turban walks to the stool and stops.",
+      "object": "The woman in the black turban",
+      "temporal_hit": true,
+      "instruction": "The woman in the black turban, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.5941,
+      "clip_text_align": 0.2871
+    },
+    {
+      "vid": "2_VNZ8JDb8sks",
+      "kf_ts": 7.003,
+      "query": "The woman in the skirt puts the man's feet on the bed, covers the quilt for him, and then picks up the hat.",
+      "object": "The woman in the skirt",
+      "temporal_hit": true,
+      "instruction": "The woman in the skirt, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.8293,
+      "clip_text_align": 0.2242
+    },
+    {
+      "vid": "52_9eAOr_ttXp0",
+      "kf_ts": 12.015,
+      "query": "The man in white clothes talks to another man, then gets up and walks past him.",
+      "object": "The man in white clothes",
+      "temporal_hit": true,
+      "instruction": "The man in white clothes, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.4935,
+      "clip_text_align": 0.3098
+    },
+    {
+      "vid": "60_BV1VreCWZ64",
+      "kf_ts": 14.003,
+      "query": "The man helps the woman to remove the gag and hugs the woman.",
+      "object": "The man helps the woman to remove the gag and hugs the woman",
+      "temporal_hit": true,
+      "instruction": "The man helps the woman to remove the gag and hugs the woman, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.7557,
+      "clip_text_align": 0.3172
+    },
+    {
+      "vid": "167_VsYPP2I0aUQ",
+      "kf_ts": 13.013,
+      "query": "The woman in the headdress is pushed to the door by a man in white clothes.",
+      "object": "The woman in the headdress",
+      "temporal_hit": true,
+      "instruction": "The woman in the headdress, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.4898,
+      "clip_text_align": 0.2969
+    },
+    {
+      "vid": "2_WSPvfxtqisg",
+      "kf_ts": 12.015,
+      "query": "The long-haired woman stretches out her hand and walks away.",
+      "object": "The long-haired woman stretches out her hand and",
+      "temporal_hit": true,
+      "instruction": "The long-haired woman stretches out her hand and, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.7653,
+      "clip_text_align": 0.2722
+    },
+    {
+      "vid": "6_QTmwhrVal1g",
+      "kf_ts": 18.021,
+      "query": "The man walks to the wall and then crouches",
+      "object": "The man",
+      "temporal_hit": true,
+      "instruction": "The man, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.7623,
+      "clip_text_align": 0.262
+    },
+    {
+      "vid": "141_G5Yr20A5z_Q",
+      "kf_ts": 3.0,
+      "query": "The woman in the yellow dress picks up the contents of the chair and walks into the door.",
+      "object": "The woman in the yellow dress",
+      "temporal_hit": true,
+      "instruction": "The woman in the yellow dress, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.4019,
+      "clip_text_align": 0.3387
+    },
+    {
+      "vid": "238_Kb1fduj-jdY",
+      "kf_ts": 6.0,
+      "query": "The man in red clothes walks to the man in the red turban, stops and speaks to him, then steps back a few steps and stops.",
+      "object": "The man in red clothes",
+      "temporal_hit": true,
+      "instruction": "The man in red clothes, re-render as a cinematic promotional poster shot, dramatic lighting",
+      "clip_subject_sim": 0.4262,
+      "clip_text_align": 0.3002
+    }
+  ]
+}
