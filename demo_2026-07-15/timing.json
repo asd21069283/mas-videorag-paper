@@ -1,0 +1,15 @@
+{
+  "n": 20,
+  "model_load_s": {
+    "clip": 16.3,
+    "qwen": 10.4
+  },
+  "per_sample_s": {
+    "read_frames": 1.07,
+    "e0_clip_select": 0.34,
+    "e2_stageA_extra": 1.46,
+    "qwen_grounding": 0.9
+  },
+  "e0_total_per_sample": 2.31,
+  "e2_total_per_sample": 3.77
+}
