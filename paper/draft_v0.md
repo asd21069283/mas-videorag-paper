@@ -310,6 +310,30 @@ Holding grounding fixed (Qwen3-VL) and evaluating on the **same 282 HC-STVG test
 
 ---
 
+### 6.7 Keyframe-faithfulness protocol and results — generation **[VERIFIED, n = 40 + A/B n = 10]**
+
+This section operationalizes the paper's faithfulness claim. **Protocol.** A generated image is *semantically faithful* to its source keyframe iff it depicts the *same moment*: same person(s), same clothing, same pose/action, same scene layout; lighting/color/style changes are permitted (§2 motivation; identity-level pixel fidelity is explicitly out of scope, §7). We evaluate with (i) **human annotation** (authors; binary + unsure) and (ii) an **MLLM judge** (Qwen3-VL, two-image prompt asking strictly for same-moment判定, JSON output).
+
+**Round 1 — baseline generation (n = 40).** FLUX.1-Kontext-dev conditioned on E2-selected keyframes with a *permissive* instruction ("re-render as a cinematic promotional poster, dramatic lighting"):
+
+| Measure | Value |
+|---|---|
+| Human faithfulness rate | **12/40 (30%)** |
+| CLIP subject similarity (same images) | 0.60 |
+| MLLM judge faithfulness | 4/40 (10%) |
+| Human–judge agreement (excl. unsure) | **79%**, with **zero false-accepts** (all 27 human-"unfaithful" caught) |
+
+Failure modes (human-categorized): **(a) wholesale re-imagination** — the scene is replaced entirely (e.g., an outdoor group scene regenerated as a studio portrait of one man); **(b) clothing/identity drift**; **(c) over-darkening** (the "dramatic lighting" token over-executed). Two takeaways: *CLIP similarity (0.60) is blind to 70% unfaithfulness* — direct evidence that a dedicated faithfulness protocol is necessary; and the MLLM judge, while conservative, never passes an unfaithful image, making it a usable automatic gate for scale.
+
+**Round 2 — instruction-constrained A/B (same 10 keyframes).** Replacing the instruction with an explicit preservation constraint ("enhance this exact frame…STRICTLY KEEP the same people, faces, clothing, poses and scene layout; only improve lighting/color/sharpness; keep bright; no text"):
+
+| Instruction | Human faithful | MLLM judge |
+|---|---|---|
+| Permissive | 1/10 (10%) | 0/10 |
+| **Constrained** | **10/10 (100%)** | 3/10 |
+
+**Unfaithfulness is therefore an instruction-constraint problem, not a model-capability ceiling** — and our protocol is what makes this controllable dimension measurable. **Open trade-off (honest).** The constrained output approaches a pixel-enhanced copy of the keyframe: faithfulness is achieved at the cost of the *poster-like artistry* the application calls for. Our two prompts are the endpoints of a **faithfulness–creativity trade-off**; mapping intermediate instruction strengths (content locked, lighting/composition freed) with a second aesthetic axis, and — if a single instruction cannot achieve both — dual-channel conditioning (identity/layout locked by image condition, style freed by text), are the immediate next experiments (§7).
+
 ## 7. Conclusion and Limitations
 
 **Conclusion.** We formalize *video-grounded interleaved image-text generation*, position it in a precisely-scoped gap, and propose a cooperative two-agent framework over a shared multimodal RAG with a question-driven, object-level localization-to-generation method and a keyframe-consistency-aware benchmark (VKIG-Bench). A temporal-oracle study isolates keyframe timing as the dominant bottleneck, and our **two-stage temporal selector** (MLLM windowing → in-window selection) lifts joint localization from 0.433 to 0.567 on a 282-clip HC-STVG v2 subset, outperforming a bridged NeurIPS'25 zero-shot STVG method on identical clips under our joint keyframe metric. A real-video prototype runs end to end on a single 24GB GPU.
