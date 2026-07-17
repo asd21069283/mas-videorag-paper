@@ -174,8 +174,11 @@ def main():
     N = len(R) or 1
     def ja(t): return round(sum(1 for r in R if r.get("temporal_hit") and r.get("spatial_iou", 0) >= t)/N, 4)
     hit = [r.get("spatial_iou", 0.0) for r in R if r.get("temporal_hit")]
+    # params 记录生效值: e2 的 Stage B 写死 w_obj=0.6 两通道(见上), CLI 的 w_obj/w_act 仅 e1 用
+    eff = ({"w_q": round(1.0 - a.w_obj - a.w_act, 3), "w_obj": a.w_obj, "w_act": a.w_act}
+           if a.exp == "e1" else {"w_obj": 0.6})
     summary = {
-        "exp": a.exp, "params": {"w_obj": a.w_obj, "w_act": a.w_act, "grid_n": a.grid_n},
+        "exp": a.exp, "params": {**eff, "grid_n": a.grid_n},
         "n": len(R),
         "temporal_recall": round(sum(1 for r in R if r.get("temporal_hit"))/N, 4),
         "localization_acc@0.3_JOINT": ja(0.3), "localization_acc@0.5_JOINT": ja(0.5),
