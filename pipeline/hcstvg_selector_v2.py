@@ -92,8 +92,11 @@ def main():
                     s_i, e_i = int(m.group(1))-1, int(m.group(2))-1
                     s_i = max(0, min(s_i, len(idxs)-1)); e_i = max(s_i, min(e_i, len(idxs)-1))
                     # 映射回原帧索引区间(段边界向外扩半格, 防边界截断)
-                    lo = idxs[s_i] - (idxs[1]-idxs[0])//2 if s_i > 0 else 0
-                    hi = idxs[e_i] + (idxs[1]-idxs[0])//2 if e_i < len(idxs)-1 else len(fr)-1
+                    # ⚠️修复(2026-07-18): grid_n≥视频帧数时 (idxs[1]-idxs[0])//2==0, 单格答案(start==end)会塌成单帧
+                    # 窗口, 再被下方 `if hi>lo else fr` 整段扔回全片=退化成E0基线; 至少±1帧保证真两阶段生效。
+                    half = max(1, (idxs[1]-idxs[0])//2)
+                    lo = idxs[s_i] - half if s_i > 0 else 0
+                    hi = idxs[e_i] + half if e_i < len(idxs)-1 else len(fr)-1
                     r["_win"] = (max(0, lo), min(len(fr)-1, hi))
             except Exception as e:
                 r["err_stage1"] = str(e)[:100]
@@ -109,7 +112,7 @@ def main():
             r["_kf"] = None; continue
         fr = r["_frames"]
         lo, hi = r.get("_win", (0, len(fr)-1))
-        sub = fr[lo:hi+1] if hi > lo else fr
+        sub = fr[lo:hi+1] if hi >= lo else fr   # 单帧窗口(lo==hi)也照用, 不再退回全片(见上方修复)
         imgs = [f[1] for f in sub]
         texts = [r["query"], r["object"] or r["query"]]
         if a.exp == "e1":

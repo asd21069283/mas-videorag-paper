@@ -1,4 +1,12 @@
 # spatiotemporal_iou.py
+# ⚠️ 二级/独立校验器, 非论文数字的权威来源(2026-07-18 代码审计标注)。
+#   论文 §6.3–6.6 的所有已发表定位数字由 pipeline/hcstvg_eval.py 与 batch_eval.py 产出。
+#   本脚本与它们【时间口径一致】(传 --t_pad 0 即严格命中), 但【空间 gold 口径不同】:
+#   本脚本对 gold evidence[0] 的固定框打分, 而 hcstvg_eval 取"距预测关键帧时刻最近的 tube 框"。
+#   因此两者在 temporal-hit 门控上一致、但逐样本 spatial IoU 不应期望逐位相等——勿把本脚本当复现基线。
+#   已知局限(不影响任何已发表数字, 仅防未来误用): evaluate() 对 pred 的 video 键在 gold 里找不到时
+#   静默 continue(缩小分母); gold_by 按 video 键折叠, 同一 video 多条样本只保留最后一条;
+#   若 pred 行把数据集 gold 副本嵌在 "gold" 键下会被当预测自比。多 QA/enriched-dump 场景勿直接用。
 # VKIG 评测·"时空定位"维度(纯 Python, 无需 GPU/模型, 可直接跑)。
 # 衡量: 预测的 evidence(keyframe_ts + bbox) 是否对上 gold 的时刻与位置。
 #   - temporal IoU: 预测关键帧时刻 vs gold 时间区间 [start,end] 的命中/IoU
