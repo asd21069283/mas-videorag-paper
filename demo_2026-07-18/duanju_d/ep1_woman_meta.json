@@ -1,0 +1,12 @@
+{
+  "tag": "ep1_woman",
+  "video": "/root/autodl-tmp/duanju/裴总每天都想父凭子贵 第1集_PNA.f100022.mp4",
+  "query": "The woman looks upset or is arguing",
+  "object": "the upset woman",
+  "kf_ts": 8.0,
+  "window_s": [
+    8.0,
+    26.0
+  ],
+  "bbox": null
+}
