@@ -185,6 +185,20 @@ with `L_ret = InfoNCE(ψ(o), ψ(correct evidence))` and `L_gnd = L_box(GIoU)+L_c
 
 ---
 
+### 4.5 Analysis: why temporal selection is the bottleneck
+
+*(An analytical account — not formal theorems — of the empirical bottleneck, tying §6.5–6.6 to the method. Numbers are recomputed in `pipeline/analysis_bottleneck.py`.)*
+
+**(1) An exact factorization of joint localization.** For any selector, joint accuracy at threshold τ factorizes as
+```
+A(τ) = R_t · S_t(τ)
+```
+where `R_t = P(keyframe ∈ gold window)` is temporal recall and `S_t(τ) = P(IoU ≥ τ | temporally correct)` is conditional spatial precision — an identity from the joint metric's definition (verified to hold exactly on all nine selector runs, both τ). Empirically **`S_t` is near-invariant across selectors** — 0.78–0.81 for every content selector (E0/E1/E2/uniform/oracle/g15/g20; the sole outlier is `random` at 0.73, depressed by its 23% no-box rate). Because grounding is held fixed, a selector can move `R_t` but not `S_t`; the temporal-oracle ceiling `A_oracle = 1·S_t = 0.787` is *mechanically* the conditional spatial precision. This turns "timing is the bottleneck" from an empirical remark into an identity: the entire selectable gap lives in `R_t`.
+
+**(2) Why frame-wise appearance scoring cannot localize timing.** A frame-wise score `S(F) = g(ψ_img(F), ψ_txt(o))` is an isolated function of each frame. On frames that are *appearance-equivalent* for the queried object (the subject is visible before, during, and after the event), `argmax S` is invariant to any permutation of their temporal order — it cannot separate "when the action happens" from "when the subject is merely present." For events defined by temporal *ordering* (e.g. "walks toward the car"), no appearance score — however strong the embedding — localizes the moment; a position-blind selector attains expected recall `E[|W|/L]` (the gold-window fraction). This is what we observe: `random` recall **0.350 ≈ E[|W|/L] = 0.365**, and the appearance-argmax E0 (recall **0.524**) does *not* beat the centered-midpoint prior (uniform, **0.557**) — appearance scoring buys nothing over a positional guess on this dataset. The two-stage selector escapes the invariance precisely because **Stage A's MLLM reads the *ordered* frame grid**, supplying the cross-frame temporal signal a per-frame embedding lacks; its recall gain over E0 is near-constant across gold-window widths (**+0.165 / +0.168 / +0.159** in narrow/medium/wide terciles, n=1000), i.e. it adds temporal discrimination rather than exploiting window size. *(Idealization: "appearance-equivalent" is an approximation — real frames vary; the claim is that the discriminative signal for timing is weak in the appearance channel, which the terciles and the E0≈uniform result bear out, not that it is exactly zero.)*
+
+---
+
 ## 5. VKIG-Bench
 
 ### 5.1 Why a new benchmark
