@@ -1,0 +1,566 @@
+[
+  {
+    "work": "VideoRAG-graph",
+    "cells": {
+      "C1": {
+        "v": "yes",
+        "ev": "Framework is built for 'extreme long-context videos': multi-hour videos are segmented into 30-second clips with VLM captioning (MiniCPM-V) + ASR (Distil-Whisper) and indexed into a cross-video knowledge graph (LongerVideos: 160+ videos, 134+ hours)."
+      },
+      "C2": {
+        "v": "no",
+        "ev": "Final output is text only: 'VideoRAG leverages a general-purpose LLM (e.g., GPT4 or DeepSeek) to generate responses based on the query q and retrieved content'; the paper describes no image-generation module."
+      },
+      "C3": {
+        "v": "no",
+        "ev": "Answers are plain LLM text; retrieved video frames appear only as illustration in case-study figures, not as an interleaved image-text answer format produced by the system."
+      },
+      "C4": {
+        "v": "partial",
+        "ev": "Temporal ('when') localization exists but only informally at clip granularity: retrieval natively operates on declared 30-second clip time intervals ('we segment videos into 30-second clips'), and the §4.4 case study demonstrates time-localized evidence retrieval ('VideoRAG accurately retrieved four continuous video segments from the OpenAI's 12-day show, ranging from 10:00 to 12:00 in Day 2', with key moments at 10:35/10:39/11:10); project page additionally claims 'Advanced Retrieval: Find specific moments and scenes with precision'. Still short of yes: no spatial 'where' (no bbox anywhere), timestamps in the case study are the paper's narration rather than a declared response-citation protocol, and no grounding metric (e.g., IoU) is evaluated — hence partial (temporal-only, informal), not no."
+      },
+      "C5": {
+        "v": "no",
+        "ev": "Vacuously absent: the system generates no images, so there is no declared protocol or metric for faithfulness of generated images to source keyframes."
+      },
+      "C6": {
+        "v": "no",
+        "ev": "Its LongerVideos benchmark uses LLM-judged answer-quality dimensions — Comprehensiveness, Empowerment, Trustworthiness, Depth, Density — with no keyframe-consistency evaluation dimension."
+      },
+      "C7": {
+        "v": "yes",
+        "ev": "Entire pipeline composes frozen off-the-shelf models (MiniCPM-V, Distil-Whisper, ImageBind, GPT-4o-mini, text-embedding-3-small); no training or fine-tuning of any component is reported."
+      }
+    },
+    "refuted": [
+      {
+        "col": "C4",
+        "from": "no",
+        "to": "partial",
+        "ev": "Temporal ('when') localization exists but only informally at clip granularity: retrieval natively operates on declared 30-second clip time intervals ('we segment videos into 30-second clips'), and the §4.4 case study demonstrates time-localized evidence retrieval ('VideoRAG accurately retrieved four continuous video segments from the OpenAI's 12-day show, ranging from 10:00 to 12:00 in Day 2', with key moments at 10:35/10:39/11:10); project page additionally claims 'Advanced Retrieval: Find specific moments and scenes with precision'. Still short of yes: no spatial 'where' (no bbox anywhere), timestamps in the case study are the paper's narration rather than a declared response-citation protocol, and no grounding metric (e.g., IoU) is evaluated — hence partial (temporal-only, informal), not no."
+      }
+    ]
+  },
+  {
+    "work": "Video-RAG-aligned",
+    "cells": {
+      "C1": {
+        "v": "yes",
+        "ev": "Takes video frames + query as input for long-video comprehension; evaluated on Video-MME, MLVU, LongVideoBench (abstract: 'training-free ... pipeline ... for long video comprehension')."
+      },
+      "C2": {
+        "v": "no",
+        "ev": "Pipeline outputs only textual auxiliary info (OCR/ASR/DET texts) and a final text answer; no image generation module anywhere in the method (full text confirms 'no images are generated')."
+      },
+      "C3": {
+        "v": "no",
+        "ev": "Final response is a plain text answer to multiple-choice QA ('auxiliary texts are combined with the query and the video to generate the response'); no interleaved image-text output."
+      },
+      "C4": {
+        "v": "partial",
+        "ev": "Internally its DET auxiliary texts carry bbox coordinates ('object located at [x,y] with dimensions') on CLIP-selected keyframes (scene graph + frame indices), but the answer exposes no when+where evidence protocol — localization is intermediate, never an output."
+      },
+      "C5": {
+        "v": "no",
+        "ev": "No generated images exist, so no declared faithfulness protocol/metric toward source keyframes; the paper defines no such measurement."
+      },
+      "C6": {
+        "v": "no",
+        "ev": "Evaluation is multiple-choice QA accuracy on Video-MME/MLVU/LongVideoBench; none of these report keyframe-consistency as an evaluated dimension."
+      },
+      "C7": {
+        "v": "yes",
+        "ev": "Explicitly 'a training-free and cost-effective pipeline' that is plug-and-play for existing LVLMs ('offers a training-free solution for a wide range of LVLMs')."
+      }
+    },
+    "refuted": []
+  },
+  {
+    "work": "M2RAG",
+    "cells": {
+      "C1": {
+        "v": "no",
+        "ev": "Input is retrieved multi-modal web documents only: each document consists of ordered elements where 'each element can be either a text paragraph or an image' — no video modality anywhere in the task definition."
+      },
+      "C2": {
+        "v": "no",
+        "ev": "Task definition is explicitly select-only: it 'aims to dynamically select the multi-modal content from multiple multi-modal inputs (text or images) to construct final multi-modal responses without generating any visual elements' — output images are retrieved web images placed via markdown placeholders."
+      },
+      "C3": {
+        "v": "yes",
+        "ev": "The system produces long-form responses 'with a mixed layout of text and image', inserting selected images into placeholders via single-stage or multi-stage (text generation → image interleaving → refinement) strategies."
+      },
+      "C4": {
+        "v": "no",
+        "ev": "Operates on static web pages only; no bounding-box or timestamp/time-interval protocol exists — the closest notion is an 'Image Reference' metric for citing inserted images, which localizes nothing in space or time."
+      },
+      "C5": {
+        "v": "no",
+        "ev": "No images are generated ('without generating any visual elements') and no video keyframes exist, so there is no protocol or metric for generated-image faithfulness to source frames; image metrics (Coherence/Helpfulness) only judge retrieved-image placement against surrounding text."
+      },
+      "C6": {
+        "v": "no",
+        "ev": "Its benchmark metrics are text-modal (Fluency, Relevance, Context Precision, Faithfulness) plus multi-modal (Image Coherence, Image Helpfulness, Image Reference, Image Recall) — no keyframe-consistency dimension, as the task involves no video."
+      },
+      "C7": {
+        "v": "partial",
+        "ev": "The proposed single-/multi-stage strategies run as zero-shot prompting on GPT-4o (training-free), but the paper's headline 'strong baselines' fine-tune Llama-3.1-8B/Qwen2.5-7B/Qwen2-VL-7B on 1.6K metric-filtered instances and outperform GPT-4o, so the advocated best pipeline is not training-free."
+      }
+    },
+    "refuted": []
+  },
+  {
+    "work": "M2IO-R1",
+    "cells": {
+      "C1": {
+        "v": "no",
+        "ev": "输入是文本query+图文文档知识库(webpages/academic papers/recipes),评测基准MRAMG-Bench/M2RAG/FTII-Bench均为静态图文,全文无video输入。"
+      },
+      "C2": {
+        "v": "no",
+        "ev": "原文明确'Rather than synthesizing visuals from scratch, MRAMG leverages authentic visuals'——图是从检索集里选择插入(image selection and placement),非新生成。"
+      },
+      "C3": {
+        "v": "yes",
+        "ev": "四阶段流水线第(4)步'interleave text and images into a coherent, grounded output',任务定义即生成interleaved text-image长式回答。"
+      },
+      "C4": {
+        "v": "no",
+        "ev": "定位仅指图在文本答案中的插入位置(输出为image IDs→sentence indices的字典),无视频时间区间或bbox式空间证据协议。"
+      },
+      "C5": {
+        "v": "no",
+        "ev": "不生成图也无关键帧概念;六项指标(Rec/F1/Ord/Rel/Pos/Ovr)全部衡量检索图的选择/排序/摆放与ground truth的一致,无生成图对源帧忠实性协议。"
+      },
+      "C6": {
+        "v": "no",
+        "ev": "未提出新benchmark,只在已有MRAMG-Bench/M2RAG/FTII-Bench上评测,且这些基准无关键帧一致性维度(全文无keyframe)。"
+      },
+      "C7": {
+        "v": "partial",
+        "ev": "旗舰方法Inserter-R1-3B确需GRPO训练,但§4.1原文明确'M2IO includes three variants...M2IO-Base (training-free)'——训练免费的M2IO-Base-3B/72B是三大命名变体之一而非消融,进入全部主表(Table1,3-9)且M2IO-Base-72B多处胜过R1-3B(如M2RAG Pos 82.3 vs 70.5、FTII F1 64.9 vs 52.7);四阶段流水线中检索(BGE-M3)/文本生成(提示GPT-4o)/合并(规则Merge)三段本就免训练,仅插入器在SFT/R1变体被训——框架有完整评测过的免训练实例化,no撑不住;但论文自我定位就是补prior training-free之缺('To bridge this gap...RL-based framework'),故非yes,取partial。"
+      }
+    },
+    "refuted": [
+      {
+        "col": "C7",
+        "from": "no",
+        "to": "partial",
+        "ev": "旗舰方法Inserter-R1-3B确需GRPO训练,但§4.1原文明确'M2IO includes three variants...M2IO-Base (training-free)'——训练免费的M2IO-Base-3B/72B是三大命名变体之一而非消融,进入全部主表(Table1,3-9)且M2IO-Base-72B多处胜过R1-3B(如M2RAG Pos 82.3 vs 70.5、FTII F1 64.9 vs 52.7);四阶段流水线中检索(BGE-M3)/文本生成(提示GPT-4o)/合并(规则Merge)三段本就免训练,仅插入器在SFT/R1变体被训——框架有完整评测过的免训练实例化,no撑不住;但论文自我定位就是补prior training-free之缺('To bridge this gap...RL-based framework'),故非yes,取partial。"
+      }
+    ]
+  },
+  {
+    "work": "ImageRAG",
+    "cells": {
+      "C1": {
+        "v": "no",
+        "ev": "输入仅为文本prompt(检索到的参考图作为条件),全文无任何视频输入或视频相关内容——它是文生图方法('dynamically retrieves relevant images and provides them to a text-to-image model as references')。"
+      },
+      "C2": {
+        "v": "yes",
+        "ev": "最终输出是扩散模型新生成的图像,检索图仅作conditioning参考而非直接返回('provides them to a text-to-image model as references',基座为OmniGen/SDXL+IP-Adapter/FLUX+OminiControl)。"
+      },
+      "C3": {
+        "v": "no",
+        "ev": "每个prompt输出单张生成图,不产生长式图文交错回答;论文无任何interleaved image-text answer/report形式的输出。"
+      },
+      "C4": {
+        "v": "no",
+        "ev": "无视频也无定位:不提供任何bbox或时间区间协议,生成整图且不做证据定位('The paper does not perform localization',仅用VLM判断缺失概念来触发检索)。"
+      },
+      "C5": {
+        "v": "no",
+        "ev": "无关键帧概念(无视频源);其CLIP/DINO/SigLIP/GPTScore评的是稀有概念文图对齐与生成质量,并非对源关键帧忠实性的声明协议+指标。"
+      },
+      "C6": {
+        "v": "no",
+        "ev": "评测基准为ImageNet/iNaturalist/CUB/Flowers/Dogs/Cars等细粒度稀有概念生成,没有任何把关键帧一致性作为评测维度的配套基准。"
+      },
+      "C7": {
+        "v": "yes",
+        "ev": "论文明确自称training-free:'a training-free method for rare concept generation','leverages the capabilities of existing image conditioning models, and does not require RAG-specific training'。"
+      }
+    },
+    "refuted": []
+  },
+  {
+    "work": "X-VILA",
+    "cells": {
+      "C1": {
+        "v": "yes",
+        "ev": "Omni-modality model explicitly \"incorporating image, video, and audio modalities\" as inputs for cross-modality understanding/reasoning/generation (abstract)."
+      },
+      "C2": {
+        "v": "yes",
+        "ev": "Generates images via diffusion decoders conditioned on LLM outputs (any-to-any generation), not retrieval or frame selection."
+      },
+      "C3": {
+        "v": "partial",
+        "ev": "Trained on an \"interleaved any-to-any modality instruction-following dataset\" and can emit text plus generated images in conversation, but demonstrated outputs are per-turn text+one media item, not long-form multi-image interleaved answers."
+      },
+      "C4": {
+        "v": "no",
+        "ev": "Paper contains no bounding-box or temporal-interval/timestamp output protocol for grounding evidence in the input video (no when+where localization)."
+      },
+      "C5": {
+        "v": "partial",
+        "ev": "VEH is explicitly claimed to \"significantly increase the consistency between the generation results and the visual context\" and X2A is a declared ImageBind-cosine metric, but X2A scores generations against ground-truth targets (not source keyframes) and VEH's input-consistency gain is shown qualitatively (Fig. 4), so there is no dedicated keyframe-faithfulness protocol."
+      },
+      "C6": {
+        "v": "partial",
+        "ev": "X2A基准的V2I方向即是把生成图与源视频自产的参考图算ImageBind余弦分——评测对从WebVid/ActivityNet-Captions纯视频语料合成(该语料无独立图像标注, 图像端只能取自源视频画面), 且作者明确用该基准上的VEH消融数字(Table 2 \"X2A scores on WebVid\")支撑能力声明 \"[VEH] can significantly increase the consistency between the generation results and the visual context\", 即作者自己把X2A当作生成结果对输入视觉上下文一致性的量化维度在用; 但基准从未把keyframe consistency列为命名评测维度、也未在文中写明V2I的GT图=抽取的关键帧(构造细节缺失, 属推断), 故只能撑到partial不能到yes。"
+      },
+      "C7": {
+        "v": "no",
+        "ev": "Requires a three-phase training recipe: encoder-LLM-decoder alignment (20k iters), interleaved data pre-training (10k), and X-to-X cross-modality instruction tuning (30k+20k iters)."
+      }
+    },
+    "refuted": [
+      {
+        "col": "C6",
+        "from": "no",
+        "to": "partial",
+        "ev": "X2A基准的V2I方向即是把生成图与源视频自产的参考图算ImageBind余弦分——评测对从WebVid/ActivityNet-Captions纯视频语料合成(该语料无独立图像标注, 图像端只能取自源视频画面), 且作者明确用该基准上的VEH消融数字(Table 2 \"X2A scores on WebVid\")支撑能力声明 \"[VEH] can significantly increase the consistency between the generation results and the visual context\", 即作者自己把X2A当作生成结果对输入视觉上下文一致性的量化维度在用; 但基准从未把keyframe consistency列为命名评测维度、也未在文中写明V2I的GT图=抽取的关键帧(构造细节缺失, 属推断), 故只能撑到partial不能到yes。"
+      }
+    ]
+  },
+  {
+    "work": "NExT-GPT",
+    "cells": {
+      "C1": {
+        "v": "yes",
+        "ev": "Abstract: accepts \"inputs ... in arbitrary combinations of text, images, videos, and audio\" via ImageBind-based multimodal encoders."
+      },
+      "C2": {
+        "v": "yes",
+        "ev": "Architecture \"connects an LLM with multimodal adaptors and different diffusion decoders\" (Stable Diffusion for images) — outputs are newly synthesized, not retrieved or cropped."
+      },
+      "C3": {
+        "v": "partial",
+        "ev": "Claims outputs \"in arbitrary combinations of text, images, videos, and audio\", but MosIT data is defined as 3-7 turn dialogues that \"switch the modalities alternately\" across turns — typically text plus one generated media item per response, not demonstrated long-form interleaved single answers."
+      },
+      "C4": {
+        "v": "no",
+        "ev": "Paper contains no temporal-grounding or bounding-box protocol; no mechanism to point to when/where evidence occurs in the input video."
+      },
+      "C5": {
+        "v": "no",
+        "ev": "Evaluation uses generation-quality metrics (FID/FAD/CLIPSIM) and human ratings (instruction following, rationality, quality); no declared protocol or metric for faithfulness of generated images to source video keyframes."
+      },
+      "C6": {
+        "v": "no",
+        "ev": "No benchmark in the paper scores keyframe consistency as an evaluation dimension; reported benchmarks are X-to-X captioning/generation tasks."
+      },
+      "C7": {
+        "v": "no",
+        "ev": "Requires three training stages — encoding-side alignment, decoding-side alignment, and MosIT instruction tuning — updating ~155M (\"only 1% of parameters\"), so the pipeline is not training-free."
+      }
+    },
+    "refuted": []
+  },
+  {
+    "cells": {
+      "C1": {
+        "v": "partial",
+        "ev": "接受交错图文输入('naturally accepts interleaved vision-language inputs'),Embodied Manipulation输入含observation sequence O={o1..oT}(帧序列式),但视觉分词器为逐图IBQ image tokenizer,推理输入规定为text/image-text prompt,无原生视频片段输入协议(视频仅是训练语料来源与输出侧DiT解码)。"
+      },
+      "C2": {
+        "v": "yes",
+        "ev": "原生自回归生成图像:T2I、any-to-image(X2I)、复杂text-rich图像生成,经next-token prediction+DiDA解码,是新生成而非检索/裁剪。"
+      },
+      "C3": {
+        "v": "yes",
+        "ev": "摘要明言'generates interleaved vision-language outputs'且具long-horizon vision-language generation(Visual Narrative/Visual Guidance均为长式图文交错输出)。"
+      },
+      "C4": {
+        "v": "no",
+        "ev": "全文无bbox/时间戳/时间区间形式的证据定位输出协议;'spatiotemporally consistent world exploration'指生成侧一致性,非对输入视频的when+where显式定位。"
+      },
+      "C5": {
+        "v": "partial",
+        "ev": "原no的证据不完整(称'仅用win-rate'):实际ChatGPT裁判对交错任务'assigns dimension-wise scores',声明维度含Visual Consistency(§6.4 Visual Guidance)与Background Consistency(§6.6 Embodied Manipulation,对给定初始提示帧);且X2I评测含对源/参考图像忠实性的声明指标——ICE-Bench SRC源一致性=CLIP相似度+平均L1(Table 13)、OmniContext Subject Consistency(GPT-4.1)、GEdit-Bench G_SC(GPT-4o),RL奖励亦用'VLM-based consistency metrics'。但所有协议锚定参考图像或生成序列自身,无任何对源视频关键帧的忠实性协议(模型本无视频输入协议),故只到partial不到yes。"
+      },
+      "C6": {
+        "v": "partial",
+        "ev": "原no漏了其自建交错基准:Embodied Manipulation基准(331样本,§6.6)的评分对象是'interleaved subtask-keyframe'格式输出,显式评分维度含Background Consistency+Physical Law Consistency——'关键帧'+'一致性'作为基准评分维度字面成立;World Exploration八维含Spatial Consistency/Global Coherence(§6.5)、Visual Guidance含Visual Consistency(§6.4)。但均为生成关键帧序列内部/对初始帧的一致性,非'生成图对源视频关键帧'的一致性维度,故partial非yes。"
+      },
+      "C7": {
+        "v": "no",
+        "ev": "端到端训练管线:>10万亿token交错语料预训练+SFT+大规模强化学习后训练+DiDA适配训练,全流程非training-free。"
+      }
+    },
+    "work": "Emu3.5",
+    "refuted": [
+      {
+        "col": "C5",
+        "from": "no",
+        "to": "partial",
+        "ev": "原no的证据不完整(称'仅用win-rate'):实际ChatGPT裁判对交错任务'assigns dimension-wise scores',声明维度含Visual Consistency(§6.4 Visual Guidance)与Background Consistency(§6.6 Embodied Manipulation,对给定初始提示帧);且X2I评测含对源/参考图像忠实性的声明指标——ICE-Bench SRC源一致性=CLIP相似度+平均L1(Table 13)、OmniContext Subject Consistency(GPT-4.1)、GEdit-Bench G_SC(GPT-4o),RL奖励亦用'VLM-based consistency metrics'。但所有协议锚定参考图像或生成序列自身,无任何对源视频关键帧的忠实性协议(模型本无视频输入协议),故只到partial不到yes。"
+      },
+      {
+        "col": "C6",
+        "from": "no",
+        "to": "partial",
+        "ev": "原no漏了其自建交错基准:Embodied Manipulation基准(331样本,§6.6)的评分对象是'interleaved subtask-keyframe'格式输出,显式评分维度含Background Consistency+Physical Law Consistency——'关键帧'+'一致性'作为基准评分维度字面成立;World Exploration八维含Spatial Consistency/Global Coherence(§6.5)、Visual Guidance含Visual Consistency(§6.4)。但均为生成关键帧序列内部/对初始帧的一致性,非'生成图对源视频关键帧'的一致性维度,故partial非yes。"
+      }
+    ]
+  },
+  {
+    "work": "Show-o2",
+    "cells": {
+      "C1": {
+        "v": "yes",
+        "ev": "Abstract: handles understanding/generation 'across diverse modalities, including text, images, and videos'; evaluated on video understanding benchmarks (VideoMME, MVBench, NExT-QA, ActNet-QA, PerceptionTest, LongVideoBench)."
+      },
+      "C2": {
+        "v": "yes",
+        "ev": "Natively generates new images via flow matching on a dedicated flow head in 3D-causal-VAE latent space (scored on GenEval/DPG-Bench/OneIG-Bench); output is synthesized, not retrieved or cropped."
+      },
+      "C3": {
+        "v": "yes",
+        "ev": "Paper demonstrates mixed-modality generation: the model predicts [BOI] mid-sequence and can 'interleavely generate coherent text and images, vividly narrating a story', with generated text/images fed back as context."
+      },
+      "C4": {
+        "v": "no",
+        "ev": "No bounding-box or temporal-interval output protocol anywhere in the paper; evaluation suite contains no grounding/localization benchmark — evidence-in-video when+where is not addressed."
+      },
+      "C5": {
+        "v": "partial",
+        "ev": "Table 9 evaluates image-to-video on VBench-I2V and reports 'I2V Subject' and 'I2V Background' — declared metrics (VBench++, arXiv:2411.13503: DINO feature similarity between the conditioning input image and generated frames) that verifiably score generated-output faithfulness to a source frame; direction is reversed vs. our task (source is a curated input image, output is video, not generated-image-vs-source-video-keyframe), so partial, not yes."
+      },
+      "C6": {
+        "v": "partial",
+        "ev": "The claimed evidence ('VBench consistency metrics measure intra-generated-video frame coherence only') is factually wrong for the columns Show-o2 reports: VBench-I2V's I2V Subject/I2V Background dimensions explicitly benchmark consistency of outputs with the source input image; still no dimension scores consistency against keyframes of an input video, hence partial."
+      },
+      "C7": {
+        "v": "no",
+        "ev": "Explicitly training-based: 'A two-stage training recipe is designed to effectively learn and scale to larger models', training projector, spatial(-temporal) fusion, and flow head."
+      }
+    },
+    "refuted": [
+      {
+        "col": "C5",
+        "from": "no",
+        "to": "partial",
+        "ev": "Table 9 evaluates image-to-video on VBench-I2V and reports 'I2V Subject' and 'I2V Background' — declared metrics (VBench++, arXiv:2411.13503: DINO feature similarity between the conditioning input image and generated frames) that verifiably score generated-output faithfulness to a source frame; direction is reversed vs. our task (source is a curated input image, output is video, not generated-image-vs-source-video-keyframe), so partial, not yes."
+      },
+      {
+        "col": "C6",
+        "from": "no",
+        "to": "partial",
+        "ev": "The claimed evidence ('VBench consistency metrics measure intra-generated-video frame coherence only') is factually wrong for the columns Show-o2 reports: VBench-I2V's I2V Subject/I2V Background dimensions explicitly benchmark consistency of outputs with the source input image; still no dimension scores consistency against keyframes of an input video, hence partial."
+      }
+    ]
+  },
+  {
+    "work": "BAGEL",
+    "cells": {
+      "C1": {
+        "v": "no",
+        "ev": "视频只作预训练语料('pretrained on ... interleaved text, image, video, and web data'),推理侧输入为图+文——全部理解基准(MME/MMBench/MM-Vet/MMMU/MathVista/MMVP)均为图像输入,论文未声明或评测视频输入的理解能力。"
+      },
+      "C2": {
+        "v": "yes",
+        "ev": "原生统一理解+生成,支持text-to-image(GenEval 88%)、自由式图像编辑('free-form image manipulation')及未来帧预测,输出为新生成图像而非检索/裁剪。"
+      },
+      "C3": {
+        "v": "partial",
+        "ev": "统一decoder-only模型在交错多模态序列上训练,可在一次响应中先输出思维链文本再生成图像、并按指令生成动态数量的多帧图像,但论文未把长式图文交错回答作为任务演示或评测。"
+      },
+      "C4": {
+        "v": "no",
+        "ev": "全文无bounding box、时间区间或任何时空grounding协议;不输出证据在视频中的when+where。"
+      },
+      "C5": {
+        "v": "no",
+        "ev": "论文未声明任何衡量生成图对源视频关键帧忠实性的协议或指标;世界建模类生成(导航/旋转/多帧)仅定性展示。"
+      },
+      "C6": {
+        "v": "no",
+        "ev": "评测基准为MME/MMBench/MM-Vet/MMMU/MathVista/MMVP(理解)+GenEval/WISE(生成)+GEdit-Bench/IntelligentBench(编辑),均不含关键帧一致性维度。"
+      },
+      "C7": {
+        "v": "no",
+        "ev": "主流程是重训练路线:Alignment→Pre-training→Continued Training→SFT多阶段、约7.8万亿token('pretrained on trillions of tokens'),非training-free。"
+      }
+    },
+    "refuted": []
+  },
+  {
+    "work": "PVTG",
+    "cells": {
+      "C1": {
+        "v": "yes",
+        "ev": "Task takes a video as input: the framework identifies \"visual anchors (i.e., key frames) from each video to guide the generation\", evaluated on video datasets EEGSVRec and PHD2 (arXiv:2607.12882 abstract)."
+      },
+      "C2": {
+        "v": "yes",
+        "ev": "Output is a newly synthesized image, not a retrieved frame: \"a VLM-guided diffusion pipeline transforms these anchors into thumbnails\" using Qwen-Image-Edit-2511 as a diffusion-based editor that re-generates the anchor into a personalized thumbnail."
+      },
+      "C3": {
+        "v": "no",
+        "ev": "Output is a single thumbnail image per user-video pair (metrics are computed on \"edited thumbnails without overlaid text captions\"); the paper has no long-form interleaved image-text answer format."
+      },
+      "C4": {
+        "v": "partial",
+        "ev": "The highlight retriever does frame-level temporal selection (scores each frame and \"selects the top-ranked frame\", trained/validated with mAP against highlight annotations), but this stays internal: the method outputs no time-interval or bounding-box evidence protocol and has no spatial (where) localization at all."
+      },
+      "C5": {
+        "v": "partial",
+        "ev": "Fidelity is measured with declared metrics — Content Fidelity via LPIPS and DINO-Sim, plus a VLM-judge \"fidelity score\" in a verify-retry loop — but the references are user-annotated ground-truth highlight keyframes and the editing instructions, not a stated protocol of faithfulness of the generated image to its specific source keyframe."
+      },
+      "C6": {
+        "v": "partial",
+        "ev": "No new benchmark is proposed (evaluation is on existing EEGSVRec/PHD2); the paper's own eval suite does include a keyframe-related \"Content Fidelity\" dimension (LPIPS/DINO-Sim vs GT highlight keyframes), but full text confirms \"no explicit metric measures consistency between generated thumbnail and source keyframe\"."
+      },
+      "C7": {
+        "v": "partial",
+        "ev": "Stage-2 generation is training-free by the authors' own declaration — \"we develop a training-free intensity predictor with offline calibration and online prediction\" (§3.4.2) — and uses only frozen off-the-shelf models (Qwen3.5-27B VLM + Qwen-Image-Edit-2511 editor, confirmed inference-only in the released repo); the paper even reports an end-to-end run with zero trained components (\"w/o PHR\" ablation: \"replaces our retrieval model with random frame selection\", NIMA 4.95 / LPIPS 0.57). Only the stage-1 highlight retriever is trained (Adam, lr 1e-4, focal loss, early stopping), so \"no\" overstates the training dependence while \"yes\" is blocked by the trained retriever being the paper's core contribution — partial."
+      }
+    },
+    "refuted": [
+      {
+        "col": "C7",
+        "from": "no",
+        "to": "partial",
+        "ev": "Stage-2 generation is training-free by the authors' own declaration — \"we develop a training-free intensity predictor with offline calibration and online prediction\" (§3.4.2) — and uses only frozen off-the-shelf models (Qwen3.5-27B VLM + Qwen-Image-Edit-2511 editor, confirmed inference-only in the released repo); the paper even reports an end-to-end run with zero trained components (\"w/o PHR\" ablation: \"replaces our retrieval model with random frame selection\", NIMA 4.95 / LPIPS 0.57). Only the stage-1 highlight retriever is trained (Adam, lr 1e-4, focal loss, early stopping), so \"no\" overstates the training dependence while \"yes\" is blocked by the trained retriever being the paper's core contribution — partial."
+      }
+    ]
+  },
+  {
+    "work": "ZeroShot-STVG",
+    "cells": {
+      "C1": {
+        "v": "yes",
+        "ev": "STVG task definition: takes video frames plus a text query and localizes the spatio-temporal tube of the video described by the query (abstract, arXiv:2509.15178)."
+      },
+      "C2": {
+        "v": "no",
+        "ev": "Outputs are spatio-temporal tubes (per-frame bounding boxes) over existing video frames; the full text contains no image-generation component of any kind."
+      },
+      "C3": {
+        "v": "no",
+        "ev": "Produces only localization predictions (tube = bboxes + temporal interval); no long-form or interleaved image-text answer format exists in the method or outputs."
+      },
+      "C4": {
+        "v": "yes",
+        "ev": "Core task is explicit when+where grounding: predicts a tube O={b_t} from t_s to t_e (bbox per frame within a temporal interval), evaluated with m_tIoU/m_vIoU/vIoU@0.3/0.5 on HCSTVG-v1/v2 and VidSTG."
+      },
+      "C5": {
+        "v": "no",
+        "ev": "No generated images exist, so no protocol or metric for generated-image faithfulness to source keyframes is declared; TAS 'consistency' refers to prediction consistency across temporally-augmented frames, not image faithfulness."
+      },
+      "C6": {
+        "v": "no",
+        "ev": "Evaluation uses standard STVG grounding benchmarks (HCSTVG-v1/v2, VidSTG) with IoU-based metrics only; no benchmark dimension measures keyframe consistency of generated images."
+      },
+      "C7": {
+        "v": "yes",
+        "ev": "Zero-shot with no training or fine-tuning on grounding data; caveat: per-sample test-time optimization ('During the inference process, we conduct backpropagation to optimize the learnable variable Vs as the spatial prompt'), i.e., training-free but not backprop-free at inference."
+      }
+    },
+    "refuted": []
+  },
+  {
+    "work": "AKS",
+    "cells": {
+      "C1": {
+        "v": "yes",
+        "ev": "面向长视频理解:输入为长视频,在其上做keyframe selection再送MLLM(\"Adaptive Keyframe Sampling for Long Video Understanding\", arXiv:2502.21271, CVPR2025)。"
+      },
+      "C2": {
+        "v": "no",
+        "ev": "输出是从原视频中【选择/采样】的关键帧索引集合作为MLLM上下文(\"outputs an index set indicating the M best keyframes\"),不生成任何新图像。"
+      },
+      "C3": {
+        "v": "no",
+        "ev": "系统最终输出是视频QA的文本答案;选出的关键帧仅作MLLM内部上下文,论文Figure 4展示帧只是示意,不构成面向用户的图文交错回答。"
+      },
+      "C4": {
+        "v": "no",
+        "ev": "全文核查无bbox或时间区间输出协议:关键帧选择只是上游预过滤(pre-filtering),回答协议不含证据的when+where定位(时间信息仅隐含在内部帧索引,无空间定位)。"
+      },
+      "C5": {
+        "v": "no",
+        "ev": "不存在生成图像,故无任何对源关键帧忠实性的声明协议或指标;论文只报下游QA accuracy。"
+      },
+      "C6": {
+        "v": "no",
+        "ev": "评测仅在LongVideoBench与VideoMME上报video QA accuracy(经LMMs-Eval),无把关键帧一致性作为评测维度的基准或指标。"
+      },
+      "C7": {
+        "v": "yes",
+        "ev": "免训练:plug-and-play模块,用预训练CLIP/BLIP ITM打相关性分+启发式自适应选帧算法(\"we choose a cheaper VL model (e.g., CLIP or BLIP ITM)\"),不微调任何组件。"
+      }
+    },
+    "refuted": []
+  },
+  {
+    "work": "MRAMG-Bench",
+    "cells": {
+      "C1": {
+        "v": "no",
+        "ev": "语料与六个数据集仅含文本与14,190张图片(Web/Academia/Lifestyle三域),原文通篇无视频输入,任务定义为对文本+图像语料的检索增强生成。"
+      },
+      "C2": {
+        "v": "no",
+        "ev": "原文明确答案图片是选取而非生成:\"return a multimodal answer by selecting appropriate images from D and integrating them with the generated text\",三种框架均以placeholder插入检索到的语料图。"
+      },
+      "C3": {
+        "v": "yes",
+        "ev": "任务即生成\"multimodal answers that combine both text and images\",rule-based框架按句切分文本并在匹配句位插图,产出interleaved text-image响应,且有Image Position/Ordering指标约束插入位置。"
+      },
+      "C4": {
+        "v": "no",
+        "ev": "无视频故无时间区间协议,亦无任何bounding box/空间定位协议;图片证据仅以文档内检索图整体插入,原文未出现spatio-temporal localization相关表述。"
+      },
+      "C5": {
+        "v": "no",
+        "ev": "不存在关键帧概念(无视频)且图片非生成而是检索插入,指标为Image Precision/Recall/F1/Ordering与LLM打分(Relevance/Effectiveness/Position),没有对源帧的生成忠实性协议。"
+      },
+      "C6": {
+        "v": "no",
+        "ev": "评测维度是插入图相对ground-truth图集的正确性、排序与放置合理性,不含任何keyframe consistency维度(基准本身无关键帧)。"
+      },
+      "C7": {
+        "v": "yes",
+        "ev": "其提出的三条生成框架(LLM-based prompting/MLLM-based CLIP选图+prompting/Rule-based二部图匹配插图)均为推理即用,原文未涉及任何训练或微调环节。"
+      }
+    },
+    "refuted": []
+  },
+  {
+    "work": "V-STaR",
+    "cells": {
+      "C1": {
+        "v": "yes",
+        "ev": "V-STaR是视频时空推理基准, 输入即视频: 评测Video-LLMs能否'reason through a sequential spatio-temporal logic in videos'(arXiv:2503.11495摘要)。"
+      },
+      "C2": {
+        "v": "no",
+        "ev": "模型输出为开放式文本答案+时间戳+bbox(what/when/where), GitHub README与论文全文无任何图像生成环节, 更非生成新图。"
+      },
+      "C3": {
+        "v": "no",
+        "ev": "回答形式是短式QA(open-ended文本由Qwen2.5-72B打0-4分)+时间区间+框, 不存在长式图文交错回答。"
+      },
+      "C4": {
+        "v": "yes",
+        "ev": "核心即RSTR链'what-when-where': when用时间区间按m_tIoU评, where用bbox按m_vIoU/AP@vIoU评(阈值tIoU=0.3, vIoU=0.1), 显式when+where协议齐全。"
+      },
+      "C5": {
+        "v": "no",
+        "ev": "全程无生成图像, 自然不存在'生成图对源关键帧忠实性'的声明协议或指标(指标只有Acc/m_tIoU/m_vIoU/mAM/mLGM)。"
+      },
+      "C6": {
+        "v": "no",
+        "ev": "基准评测维度为VQA准确率+时间/空间grounding及其AM/LGM聚合, 无关键帧一致性这一评测维度。"
+      },
+      "C7": {
+        "v": "yes",
+        "ev": "纯评测基准不提出也不训练任何模型(数据构建用semi-automated GPT-4 pipeline), 全程零训练——但注意其本无'生成主流程', 此列对基准行近似n/a、按零训练记yes。"
+      }
+    },
+    "refuted": []
+  }
+]

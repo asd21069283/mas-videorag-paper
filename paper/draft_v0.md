@@ -42,11 +42,39 @@ Existing video-language systems *describe* video in text (video RAG), *generate*
 
 **Hallucination control and causal video understanding.** ScaleCap [arXiv:2506.19848] uses heuristic Q&A plus contrastive sentence scoring to remove hallucinated caption content; we lift this test-time idea to **cross-modal (image-text mutual-evidence) consistency** as a RAG factuality gate. CUVA [arXiv:2405.00181] reframes video anomaly understanding as What/Why/How with multi-dimensional metrics; we borrow its causal dimensions for evaluation.
 
+**Capability comparison (Table 1).** The table below summarizes the surveyed landscape along the seven capability axes induced by our task definition (§2). Every cell was checked against the cited paper's text, and every ✗/△ we assign was additionally stress-tested by an adversarial pass instructed to *overturn* it from the cited work's own claims; per-cell source quotes are archived in `paper/table1_evidence.json`.
+
+| System | Video input | Newly-gen. image | Interleaved answer | Explicit ST-localization | Faithfulness protocol | Bench: keyframe consist. | Training-free |
+|---|---|---|---|---|---|---|---|
+| VideoRAG [2502.01549] | ✓ | ✗ | ✗ | △ᵃ | ✗ | ✗ | ✓ |
+| Video-RAG [2411.13093] | ✓ | ✗ | ✗ | △ᵃ | ✗ | ✗ | ✓ |
+| M2RAG [2411.16365] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | △ |
+| M2IO-R1 [2508.06328] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | △ |
+| MRAMG-Bench [2502.04176] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✓ |
+| ImageRAG [2502.09411] | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✓ |
+| X-VILA [2405.19335] | ✓ | ✓ | △ | ✗ | △ᵇ | △ᵇ | ✗ |
+| NExT-GPT [2309.05519] | ✓ | ✓ | △ | ✗ | ✗ | ✗ | ✗ |
+| Emu3.5 [2510.26583] | △ | ✓ | ✓ | ✗ | △ᵇ | △ᵇ | ✗ |
+| Show-o2 [2506.15564] | ✓ | ✓ | ✓ | ✗ | △ᵇ | △ᵇ | ✗ |
+| BAGEL [2505.14683] | ✗ | ✓ | △ | ✗ | ✗ | ✗ | ✗ |
+| PVTG [2607.12882] | ✓ | ✓ | ✗ | △ᶜ | △ᶜ | △ᶜ | △ |
+| Zero-Shot STVG [2509.15178] | ✓ | ✗ | ✗ | ✓ | ✗ | ✗ | ✓ᵈ |
+| AKS [2502.21271] | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ |
+| V-STaR [2503.11495] | ✓ | ✗ | ✗ | ✓ | ✗ | ✗ | ✓ |
+| **Ours (VKIG)** | ✓ | ✓ | ✓ᵉ | ✓ | ✓ | ✓ | ✓ |
+
+*Legend: ✓ provided; ✗ absent; △ partial. Columns = the four §2 properties expanded: video input; output image newly generated (not retrieved/selected); long-form interleaved image-text answer; explicit when+where evidence protocol (time interval + bbox, IoU-evaluated); a **declared** protocol+metric for generated-image faithfulness to the localized source keyframe; a benchmark scoring that keyframe consistency; training-free main pipeline.*
+*ᵃ Temporal-only and informal: VideoRAG retrieves 30-s clip intervals (case-study narration, no IoU protocol); Video-RAG carries internal DET boxes it never exposes as output evidence. ᵇ Consistency-style metrics exist but score generations against conditioning/reference inputs in image-to-X or embodied settings (X-VILA X2A vs. ground-truth targets; Emu3.5 ICE-Bench SRC / embodied Background-Consistency; Show-o2 VBench-I2V subject/background) — none is a protocol for question-driven, localized video-keyframe faithfulness, and all lack the when+where column. ᶜ PVTG (concurrent, 2026-07): single thumbnail per video; frame-level highlight retrieval without an output box/interval protocol; fidelity via LPIPS/DINO-Sim + a VLM verify-retry loop — the closest neighbor, and still without columns 3–4 in full. ᵈ Zero-shot but performs per-sample test-time gradient optimization; ours computes no gradients. ᵉ Verified end-to-end runs emit answer text + one generated image per query (§6.2); multi-image interleaving is the designed layout (§4.3⑤), currently demonstrated qualitatively.*
+
+**Takeaway.** No surveyed system provides **explicit spatio-temporal localization and a declared keyframe-faithfulness protocol together** (columns 4+5) — the conjunction our task and benchmark formalize; the nearest neighbor (concurrent PVTG) emits a single thumbnail with partial versions of both and no interleaved answer.
+
 **Video multi-agent systems and unified models.** Video MAS — MAGNET [arXiv:2506.07016] (RAG→scoring agents→meta-agent), LVAS-Agent [arXiv:2503.10719] (role-based dubbing crew), MovieAgent [arXiv:2503.07314] (director/writer agents with per-character LoRA), Mora [arXiv:2403.13248] (chained generation agents) — are largely **single-direction pipelines** with weak role asymmetry and no shared cross-end RAG; our two-agent design is differentiated by **bidirectional feedback and a shared memory**. Unified image-text models BAGEL [arXiv:2505.14683] and Show-o2 [arXiv:2506.15564] motivate our controllability/traceability argument: they could approximate the pipeline end-to-end but do not expose keyframe-grounded, source-traceable outputs or a way to verify them (untested here; a unified-model control is on the planned-baseline list, §6.5). Likewise, the any-to-any models conceded in §2 (X-VILA, NExT-GPT, Emu3.5) map video to generated images without an explicit localization protocol or a faithfulness metric.
 
 ---
 
 ## 4. Method
+
+**Overview.** Given a video `V` and an instruction `Q`, the *Understand Agent* parses `Q` into subject-verb-object cues, **temporally localizes** the queried event with a two-stage selector (§4.3② — the paper's core method contribution), grounds the target object in the selected keyframe, and drafts the textual answer; the *Generation Agent* turns each grounded keyframe into a **newly generated, faithfulness-constrained image** and lays out the interleaved answer. Both agents read and write one **shared multimodal RAG memory**, closed by two feedback loops (grounding→reselection, generation→memory write-back). The main pipeline is **training-free end to end**; every component labeled optional below is disabled in all verified runs (§4.4).
 
 ### 4.1 Task formalization
 
@@ -105,13 +133,7 @@ S(F) = (1−w_o)·ŝ(Q,F) + w_o·ŝ(o,F),   F ∈ W,  w_o = 0.6     (ŝ = z-scor
 F* = argmax_{F∈W} smooth(S(F))
 ```
 
-A three-channel variant adding an *action-phrase* channel `ŝ(a,F)` (weights `w_q,w_o,w_a = 0.3/0.4/0.3`, untuned defaults) is evaluated separately as E1 in §6.6; combining it with Stage A is future work (no factorial run yet).
-
-*Design context (not fully enabled in the verified runs):* BGE-M3 caption pruning [VideoEspresso, arXiv:2411.14794] before Stage A, and AKS-style coverage `c(I)` when a budget `B>1` of keyframes is requested; the coverage form below is our instantiation (AKS publishes no closed form):
-
-```
-I* = argmax_{I⊆W, |I|≤B} [ Σ_{F∈I} S(F) + λ·c(I) ],   c(I) = − Σ_j | n_j(I) − |I|/M |
-```
+A three-channel variant adding an *action-phrase* channel `ŝ(a,F)` (weights `w_q,w_o,w_a = 0.3/0.4/0.3`, untuned defaults) is evaluated separately as E1 in §6.6; combining it with Stage A is future work (no factorial run yet). With the default keyframe budget `B = 1` (all verified runs), `I* = {F*}`; the multi-keyframe coverage objective is a design extension (§4.4).
 
 **③ Object-level grounding.** For each `(F∈I*, o∈O_Q)`, open-vocabulary detection (Grounding-DINO / Video-RAG's APE [arXiv:2411.13093]) yields `(box, ρ(o,F))`, producing evidence set `B = {(F,o,box,ρ)}`.
 
@@ -123,7 +145,7 @@ cond(o)     = { subject crop of keyframe(o), SVO/scene text, (opt.) structure ma
 image(o)    = G(cond(o))
 ```
 
-Two generator lines serve as comparisons: **(A) subject-preserving** — FLUX.1-dev + OminiControl(subject) [arXiv:2411.15098] (optionally PuLID/InfiniteYou for people, ControlNet for layout); **(B) instruction edit** — FLUX.1 Kontext-dev or Qwen-Image-Edit. The decision rule (used in the crop-ablation and as a fallback gate):
+Two generator lines serve as comparisons: **(A) subject-preserving** (FLUX.1-dev + OminiControl(subject) [arXiv:2411.15098]) and **(B) instruction edit** (FLUX.1 Kontext-dev — the line used in all §6.7 runs — or Qwen-Image-Edit). The decision rule (used in the crop-ablation and as a fallback gate):
 
 ```
 ρ*(o) = max_{F∈I*} ρ(o,F);   r*(o) = max_{cand∈RAG} sim(ψ(o), ψ(cand))
@@ -135,16 +157,26 @@ This surpasses M2RAG's "select-only" [arXiv:2411.16365] by **generating** when n
 
 **⑤ Interleaved layout.** The Generation Agent aligns each `img_i` to the answer sentence mentioning `o_i`, writes captions, and emits `A`.
 
-### 4.4 Hallucination control via cross-modal consistency
+### 4.4 Hallucination control; design extensions (not enabled in verified runs)
 
-Lifting ScaleCap's contrastive idea [arXiv:2506.19848] from images to the video→image-text setting, we score whether image and text **mutually evidence** each other, and use it as a RAG factuality gate. An optional consistency loss (only when LoRA is enabled):
+**Hallucination control.** Lifting ScaleCap's contrastive idea [arXiv:2506.19848] from images to the video→image-text setting, we score whether image and text **mutually evidence** each other, and use it as a RAG factuality gate.
+
+**Design extensions.** The following are part of the method design but **disabled in every verified run** (§6), so no reported number depends on them:
+- *BGE-M3 caption pruning* [VideoEspresso, arXiv:2411.14794] before Stage A;
+- *AKS-style coverage* `c(I)` when a budget `B>1` of keyframes is requested — the form below is our instantiation (AKS publishes no closed form):
+
+```
+I* = argmax_{I⊆W, |I|≤B} [ Σ_{F∈I} S(F) + λ·c(I) ],   c(I) = − Σ_j | n_j(I) − |I|/M |
+```
+
+- *Optional LoRA consistency losses* (only if training is ever enabled; the main line is deliberately training-free, plug-and-play):
 
 ```
 L_cons = 1 − sim( ψ_img(img), ψ_txt(corresponding sentence) )
 L = L_ret + β·L_gnd + γ·L_cons
 ```
 
-with `L_ret = InfoNCE(ψ(o), ψ(correct evidence))` and `L_gnd = L_box(GIoU)+L_cls`. **The main line is deliberately training-free** (plug-and-play); LoRA and losses are optional enhancements.
+with `L_ret = InfoNCE(ψ(o), ψ(correct evidence))` and `L_gnd = L_box(GIoU)+L_cls`.
 
 ---
 
