@@ -1,0 +1,18 @@
+{
+  "permissive": {
+    "n": 39,
+    "auc": 0.846,
+    "p": 0.001,
+    "best_thr": 0.716,
+    "best_acc": 0.846,
+    "overlap_frac": 0.718
+  },
+  "constrained_D": {
+    "n": 40,
+    "auc": 0.673,
+    "p": 0.087,
+    "best_thr": 0.3,
+    "best_acc": 0.7,
+    "overlap_frac": 0.675
+  }
+}
