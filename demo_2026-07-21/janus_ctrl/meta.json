@@ -1,0 +1,202 @@
+{
+  "50_TM5MPJIq1Is": {
+    "query": "The man standing by the stairs goes to the car.",
+    "desc": "The man standing by the stairs, wearing a hat and a dark coat, walks towards the car. He is seen in the second frame of the top row, where he is positioned near the car, and in the second frame of the bottom row, he is seen walking away from the car.",
+    "interval": [
+      0.33277870216306155,
+      8.153078202995008
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "88_xH1WLtZ8csM": {
+    "query": "The woman in the skirt of the flower walks to the door, then turns.",
+    "desc": "In the second frame of the second row, the woman in the skirt of the flower is walking towards the door, and in the third frame of the second row, she turns to look at the man in the suit standing near the table. The man in the suit is standing with his hands in his pockets, looking at her. The scene is set in a room with wooden walls and a table in the background.",
+    "interval": [
+      0.68,
+      9.68
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "26_l8_Mk3-sZsQ": {
+    "query": "The sitting woman raises her hands, then straightens her body.",
+    "desc": "The sitting woman raises her hands, then straightens her body. She is wearing a white top and has her hair tied back. The scene is a cozy indoor setting with warm lighting, and the people around her are engaged in conversation.",
+    "interval": [
+      14.885654885654887,
+      19.916839916839916
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "23_EO1gLAoEZRA": {
+    "query": "The undressed man is held by the woman in red, takes out a knife, and runs away from the woman's hand.",
+    "desc": "The undressed man is being held by the woman in red, who is holding a knife. The man is running away from the woman's hand, and the scene takes place in an outdoor setting with trees and a stone structure in the background.",
+    "interval": [
+      10.881863560732112,
+      19.966722129783694
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "103_kW5WyJ1QNpM": {
+    "query": "The person standing next to the horse releases his hand and holds the rider, then takes the horse and walks away.",
+    "desc": "The person standing next to the horse releases his hand and holds the rider, then takes the horse and walks away. The scene shows a person in a brown robe holding a rider, with the horse standing nearby, and then the person takes the horse and moves away, leaving the rider behind.",
+    "interval": [
+      8.452579034941763,
+      12.412645590682196
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "1_gEI9qBdVt5I": {
+    "query": "The red-haired woman stops at the door and looks at the front.",
+    "desc": "The red-haired woman, wearing a white shirt and a red cap, stops at the door and looks at the front. She is standing next to a man who is seated at a desk, and they are in an office setting with a window in the background.",
+    "interval": [
+      10.149750415973378,
+      14.675540765391016
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "27_E-fqjlYMFhE": {
+    "query": "The man in the white suit follows the two men walking in front and stops by the wall.",
+    "desc": "The man in the white suit is walking behind two men in suits, following them as they move towards the wall. He stops and stands still, observing the wall art or scene in front of him.",
+    "interval": [
+      4.99001996007984,
+      13.812375249500999
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "55_pGP_oIdKmRY": {
+    "query": "The blindfolded man smells the handkerchief in the opposite woman's hand.",
+    "desc": "The blindfolded man, dressed in a black suit, leans in closely to the woman holding the handkerchief, who is wearing a white dress and a black headband. The woman's hand is extended towards the man, and the man's face is turned towards the handkerchief, indicating he is smelling it. The scene is set indoors, with a window in the background allowing natural light to illuminate the room.",
+    "interval": [
+      4.12,
+      10.96
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "146_uNT6HrrnqPU": {
+    "query": "The white-haired man walks behind the man holding the handrail.",
+    "desc": "The white-haired man is walking behind the man holding the handrail, both of them descending the staircase. The man holding the handrail is wearing a dark suit, while the white-haired man is also dressed in a dark suit, and they are both in a formal setting.",
+    "interval": [
+      8.68,
+      14.6
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "58_bzGQK5lH-RA": {
+    "query": "The daughter on the bed puts on her top, then picks up a black dress and lifts the cup away.",
+    "desc": "The daughter on the bed is wearing a white top and is lifting a black dress while holding a cup. She is sitting on the bed with her back slightly turned to the camera, and the scene is set in a room with a lattice wall and a table with food items in the background.",
+    "interval": [
+      2.48,
+      10.2
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "55_8JSxLhDMGtE": {
+    "query": "The man in the gray suit grabs the man in the suit and presses him on the car to hold his neck, then is beaten by the man and falls on the wall, then is beaten on the belly and is knocked down.",
+    "desc": "The man in the gray suit is wearing a gray suit and is seen grabbing the man in the green suit, holding his neck, and then being beaten by the man in the green suit. The man in the green suit is wearing a green suit and is seen holding the man in the gray suit by the neck and then striking him. The scene takes place on the side of a car, with the man in the green suit standing on the car while the man in the gray suit is on the ground.",
+    "interval": [
+      9.766666666666667,
+      17.533333333333335
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "71_1R7n8B8KkZE": {
+    "query": "The man in the suit goes to the man in white and looks at him.",
+    "desc": "The man in the suit, dressed in a dark suit and tie, approaches the man in white, who is wearing a white shirt. The man in white is seated on a couch, with his hands on his hips, looking at the man in the suit. The scene takes place in a room with patterned wallpaper and a potted plant in the background.",
+    "interval": [
+      5.269461077844312,
+      10.738522954091817
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "48_ViY7CR2TSO8": {
+    "query": "The man in gray clothes jumps from behind the sofa and sits on the couch.",
+    "desc": "The man in gray clothes jumps from behind the sofa and sits on the couch. The woman in red is standing nearby, looking at him with a surprised expression.",
+    "interval": [
+      11.217564870259482,
+      14.011976047904191
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "10_Gvp-cj3bmIY": {
+    "query": "The woman in green clothes sits up and lies beside the bed.",
+    "desc": "The woman in green clothes sits up and lies beside the bed. She is wearing a green top and has long dark hair. The scene shows her in a relaxed position, with her back against the bed and her legs stretched out.",
+    "interval": [
+      12.135728542914173,
+      17.24550898203593
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "37_l2XO3tQk8lI": {
+    "query": "But the man in glasses walks to the yellow-haired woman and stops, then turns her around.",
+    "desc": "The man in glasses, wearing a white lab coat, approaches the yellow-haired woman from behind. He stops in front of her and turns her around to face him.",
+    "interval": [
+      3.5999999999999996,
+      11.16
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "23_UrsCy6qIGoo": {
+    "query": "The standing woman goes to the sofa and turns to sit down.",
+    "desc": "The standing woman, dressed in a green sweater and black pants, moves towards the yellow sofa and turns to sit down. She is seated on the sofa with her back facing the camera, and her legs are bent at the knees, indicating she is in the process of sitting down.",
+    "interval": [
+      5.8,
+      16.919999999999998
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "143_phrYEKv0rmw": {
+    "query": "The man in green clothes stands up and puts down the cup, then takes something out of his pocket, walks to the table, puts it down, and opens it.",
+    "desc": "The man in green clothes stands up and puts down the cup, then takes something out of his pocket, walks to the table, puts it down, and opens it. The scene shows a group of people in historical attire, with the man in green standing out as he interacts with the table.",
+    "interval": [
+      5.5,
+      14.125
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "64_gjdgj04FzR0": {
+    "query": "The man in brown undressed and turns and walks up the steps.",
+    "desc": "The man in brown, wearing a hat and a beige coat, is seen undressing and turning away from the group. He then walks up the steps, leaving the group behind. The people in the scene are dressed in traditional red and white attire, and their poses suggest they are engaged in a communal activity, possibly a ritual or gathering.",
+    "interval": [
+      4.949698189134809,
+      15.492957746478872
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "27_kvFlbTK812w": {
+    "query": "The man in black clothes walks from the door to the table and puts his contents on the table.",
+    "desc": "The man in black clothes walks from the door to the table and puts his contents on the table. He is wearing a black hat and a black coat, and his face is partially illuminated by the light from the door.",
+    "interval": [
+      1.8635607321131449,
+      10.582362728785357
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  },
+  "8_6d5u6FHvz7Q": {
+    "query": "The woman in the yellow clothes kneels on the ground and supports the man who is lying to sit up.",
+    "desc": "The woman in the yellow clothes kneels on the ground and supports the man who is lying by placing her hands on his back and helping him sit up. The man, who is wearing a red hat and yellow pants, is initially lying on the floor, and the woman is assisting him to sit up.",
+    "interval": [
+      5.04,
+      20.0
+    ],
+    "no_timestamp_output": true,
+    "no_bbox_output": true
+  }
+}
