@@ -1,0 +1,50 @@
+{
+  "dreamsim": {
+    "e2_40": {
+      "auc": 0.873,
+      "faithful_mean": 0.3729,
+      "unfaithful_mean": 0.6071
+    },
+    "d40": {
+      "auc": 0.756,
+      "faithful_mean": 0.359,
+      "unfaithful_mean": 0.4199
+    }
+  },
+  "dino_sim": {
+    "e2_40": {
+      "auc": 0.87,
+      "faithful_mean": 0.6186,
+      "unfaithful_mean": 0.2908
+    },
+    "d40": {
+      "auc": 0.766,
+      "faithful_mean": 0.7338,
+      "unfaithful_mean": 0.6233
+    }
+  },
+  "lpips": {
+    "e2_40": {
+      "auc": 0.719,
+      "faithful_mean": 0.5979,
+      "unfaithful_mean": 0.6863
+    },
+    "d40": {
+      "auc": 0.64,
+      "faithful_mean": 0.5413,
+      "unfaithful_mean": 0.593
+    }
+  },
+  "clip_subject": {
+    "e2_40": {
+      "auc": 0.846,
+      "faithful_mean": 0.719,
+      "unfaithful_mean": 0.5466
+    },
+    "d40": {
+      "auc": 0.673,
+      "faithful_mean": 0.72,
+      "unfaithful_mean": 0.6804
+    }
+  }
+}

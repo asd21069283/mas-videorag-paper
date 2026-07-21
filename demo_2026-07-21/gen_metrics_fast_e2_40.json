@@ -1,0 +1,169 @@
+{
+  "summary": {
+    "n": 40,
+    "dino_sim": 0.388,
+    "lpips": 0.6611
+  },
+  "per_sample": {
+    "102_FONjBIXaM-0": {
+      "dino_sim": 0.0356,
+      "lpips": 0.7855
+    },
+    "103_kW5WyJ1QNpM": {
+      "dino_sim": 0.4278,
+      "lpips": 0.7085
+    },
+    "141_G5Yr20A5z_Q": {
+      "dino_sim": 0.0344,
+      "lpips": 0.7528
+    },
+    "143_phrYEKv0rmw": {
+      "dino_sim": 0.0446,
+      "lpips": 0.7181
+    },
+    "146_uNT6HrrnqPU": {
+      "dino_sim": 0.0714,
+      "lpips": 0.7962
+    },
+    "152_5LrOQEt_XVM": {
+      "dino_sim": 0.6201,
+      "lpips": 0.6084
+    },
+    "152_o4xQ-BEa3Ss": {
+      "dino_sim": 0.1456,
+      "lpips": 0.6195
+    },
+    "167_VsYPP2I0aUQ": {
+      "dino_sim": 0.066,
+      "lpips": 0.8257
+    },
+    "189_Ksd1JQFHYWA": {
+      "dino_sim": 0.3482,
+      "lpips": 0.7284
+    },
+    "18_wEAeql4z1O0": {
+      "dino_sim": 0.1839,
+      "lpips": 0.6821
+    },
+    "1_gEI9qBdVt5I": {
+      "dino_sim": 0.4686,
+      "lpips": 0.7756
+    },
+    "238_Kb1fduj-jdY": {
+      "dino_sim": 0.0303,
+      "lpips": 0.6717
+    },
+    "23_EO1gLAoEZRA": {
+      "dino_sim": 0.0956,
+      "lpips": 0.7358
+    },
+    "23_UrsCy6qIGoo": {
+      "dino_sim": 0.1025,
+      "lpips": 0.7967
+    },
+    "24_WMFTBgYWJS8": {
+      "dino_sim": 0.5739,
+      "lpips": 0.6545
+    },
+    "251_ViY7CR2TSO8": {
+      "dino_sim": 0.2854,
+      "lpips": 0.7587
+    },
+    "26_l8_Mk3-sZsQ": {
+      "dino_sim": 0.701,
+      "lpips": 0.5805
+    },
+    "27_E-fqjlYMFhE": {
+      "dino_sim": 0.1921,
+      "lpips": 0.6272
+    },
+    "27_kvFlbTK812w": {
+      "dino_sim": 0.7691,
+      "lpips": 0.4103
+    },
+    "2_VNZ8JDb8sks": {
+      "dino_sim": 0.8241,
+      "lpips": 0.4445
+    },
+    "2_WSPvfxtqisg": {
+      "dino_sim": 0.4474,
+      "lpips": 0.7447
+    },
+    "37_l2XO3tQk8lI": {
+      "dino_sim": 0.5546,
+      "lpips": 0.6696
+    },
+    "3_t1LXrJOvPDg": {
+      "dino_sim": 0.3394,
+      "lpips": 0.5809
+    },
+    "42_wfEOx36N4jA": {
+      "dino_sim": 0.7401,
+      "lpips": 0.6118
+    },
+    "48_ViY7CR2TSO8": {
+      "dino_sim": 0.6721,
+      "lpips": 0.5299
+    },
+    "50_TM5MPJIq1Is": {
+      "dino_sim": 0.2465,
+      "lpips": 0.741
+    },
+    "52_9eAOr_ttXp0": {
+      "dino_sim": 0.0729,
+      "lpips": 0.7799
+    },
+    "53_pSdPmmJ3-ng": {
+      "dino_sim": 0.3144,
+      "lpips": 0.7731
+    },
+    "55_pGP_oIdKmRY": {
+      "dino_sim": 0.533,
+      "lpips": 0.5647
+    },
+    "58_bzGQK5lH-RA": {
+      "dino_sim": 0.1827,
+      "lpips": 0.7145
+    },
+    "5_tjqCzVjojCo": {
+      "dino_sim": 0.3541,
+      "lpips": 0.7515
+    },
+    "60_BV1VreCWZ64": {
+      "dino_sim": 0.6183,
+      "lpips": 0.4358
+    },
+    "61_oWhvucAskhk": {
+      "dino_sim": 0.5578,
+      "lpips": 0.489
+    },
+    "64_gjdgj04FzR0": {
+      "dino_sim": 0.8283,
+      "lpips": 0.4452
+    },
+    "6_QTmwhrVal1g": {
+      "dino_sim": 0.7432,
+      "lpips": 0.5925
+    },
+    "71_1R7n8B8KkZE": {
+      "dino_sim": 0.4045,
+      "lpips": 0.6613
+    },
+    "87_KkAf75yOKqs": {
+      "dino_sim": 0.2517,
+      "lpips": 0.6515
+    },
+    "88_xH1WLtZ8csM": {
+      "dino_sim": 0.3117,
+      "lpips": 0.707
+    },
+    "8_6d5u6FHvz7Q": {
+      "dino_sim": 0.647,
+      "lpips": 0.6931
+    },
+    "95_OQxN4ksema0": {
+      "dino_sim": 0.6818,
+      "lpips": 0.6275
+    }
+  }
+}
