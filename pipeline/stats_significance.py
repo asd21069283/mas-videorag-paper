@@ -7,7 +7,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 random.seed(20260720)  # 固定种子, 结果可复现
 
 FILES = {
-    "E0@300 (uniform)": "demo_2026-07-04/results_json/hcstvg_bl_uniform.json",
+    # 注意: bl_uniform=视频中点先验基线(§6.5的uniform行), 不是E0系统——勿再标成E0(07-21 Codex复核抓过此雷)
+    "uniform@300 (midpoint)": "demo_2026-07-04/results_json/hcstvg_bl_uniform.json",
     "random@300":       "demo_2026-07-04/results_json/hcstvg_bl_random.json",
     "oracle@300":       "demo_2026-07-04/results_json/hcstvg_bl_middle_gt.json",
     "E1@300":           "demo_2026-07-13/sel_e1_300.json",
@@ -92,7 +93,7 @@ def main():
 
     print("\n=== Paired significance (McNemar on acc@0.3 + Wilcoxon on spatial_iou) ===")
     PAIRS = [
-        ("E0@300 (uniform)", "E2@300 (g10)"),
+        ("uniform@300 (midpoint)", "E2@300 (g10)"),
         ("E1@300", "E2@300 (g10)"),
         ("E0@1000 (main)", "E2@1000"),
         ("E2@300 (g10)", "E2 g20"),

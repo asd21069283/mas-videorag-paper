@@ -1,6 +1,6 @@
 {
   "point_and_ci": {
-    "E0@300 (uniform)": {
+    "uniform@300 (midpoint)": {
       "temporal_recall": [
         0.5567,
         0.5,
@@ -155,7 +155,7 @@
     }
   },
   "paired_tests": {
-    "E0@300 (uniform) → E2@300 (g10)": {
+    "uniform@300 (midpoint) → E2@300 (g10)": {
       "acc@0.3": [
         0.44,
         0.57

@@ -1,0 +1,22 @@
+{
+  "round1_permissive": {
+    "TP": 4,
+    "FN": 8,
+    "FP": 0,
+    "TN": 27,
+    "n": 39,
+    "excluded_unsure": 1,
+    "agreement": 0.7949,
+    "cohen_kappa": 0.4091
+  },
+  "round3_constrained_D": {
+    "TP": 25,
+    "FN": 3,
+    "FP": 7,
+    "TN": 5,
+    "n": 40,
+    "excluded_unsure": 0,
+    "agreement": 0.75,
+    "cohen_kappa": 0.3421
+  }
+}
