@@ -195,7 +195,29 @@ A(τ) = R_t · S_t(τ)
 ```
 where `R_t = P(keyframe ∈ gold window)` is temporal recall and `S_t(τ) = P(IoU ≥ τ | temporally correct)` is conditional spatial precision — an identity from the joint metric's definition (verified to hold exactly on all nine selector runs, both τ). Empirically **`S_t` is near-invariant across selectors** — 0.78–0.81 for every content selector (E0/E1/E2/uniform/oracle/g15/g20; the sole outlier is `random` at 0.73, depressed by its 23% no-box rate). Because grounding is held fixed, a selector can move `R_t` but not `S_t`; the temporal-oracle ceiling `A_oracle = 1·S_t = 0.787` is *mechanically* the conditional spatial precision. This turns "timing is the bottleneck" from an empirical remark into an identity: the entire selectable gap lives in `R_t`.
 
+| Selector | `A` (acc@0.3) | `R_t` | `S_t` | no-box rate |
+|---|---|---|---|---|
+| random (n=300) | 0.257 | 0.350 | 0.733 | 23.3% |
+| uniform/midpoint (n=300) | 0.440 | 0.557 | 0.790 | 16.0% |
+| E0 (n=1000) | 0.419 | 0.524 | 0.800 | 6.3% |
+| E1 (n=300) | 0.497 | 0.613 | 0.810 | 7.7% |
+| E2 g=10 (n=300) | 0.570 | 0.717 | 0.795 | 6.3% |
+| E2 g=10 (n=1000) | 0.540 | 0.688 | 0.785 | 5.7% |
+| E2 g=15 (n=300) | 0.603 | 0.753 | 0.801 | 7.7% |
+| E2 g=20 (n=300) | 0.627 | 0.783 | 0.800 | 6.7% |
+| temporal oracle (n=300) | 0.787 | 1.000 | 0.787 | 6.0% |
+
+*Table: the factorization `A = R_t·S_t` holds exactly on every run; `S_t` stays in a 0.79–0.81 band for every content selector while `R_t` spans 0.35–1.00 — selectors move timing, not box quality.*
+
 **(2) Why frame-wise appearance scoring cannot localize timing.** A frame-wise score `S(F) = g(ψ_img(F), ψ_txt(o))` is an isolated function of each frame. On frames that are *appearance-equivalent* for the queried object (the subject is visible before, during, and after the event), `argmax S` is invariant to any permutation of their temporal order — it cannot separate "when the action happens" from "when the subject is merely present." For events defined by temporal *ordering* (e.g. "walks toward the car"), no appearance score — however strong the embedding — localizes the moment; a position-blind selector attains expected recall `E[|W|/L]` (the gold-window fraction). This is what we observe: `random` recall **0.350 ≈ E[|W|/L] = 0.365**, and the appearance-argmax E0 (recall **0.524**) does *not* beat the centered-midpoint prior (uniform, **0.557**) — appearance scoring buys nothing over a positional guess on this dataset. The two-stage selector escapes the invariance precisely because **Stage A's MLLM reads the *ordered* frame grid**, supplying the cross-frame temporal signal a per-frame embedding lacks; its recall gain over E0 is near-constant across gold-window widths (**+0.165 / +0.168 / +0.159** in narrow/medium/wide terciles, n=1000), i.e. it adds temporal discrimination rather than exploiting window size. *(Idealization: "appearance-equivalent" is an approximation — real frames vary; the claim is that the discriminative signal for timing is weak in the appearance channel, which the terciles and the E0≈uniform result bear out, not that it is exactly zero.)*
+
+| Gold-window tercile | chance = E[\|W\|/L] | E0 recall | E2 recall | E2 gain |
+|---|---|---|---|---|
+| narrow | 0.211 | 0.408 | 0.574 | +0.165 |
+| medium | 0.320 | 0.514 | 0.682 | +0.168 |
+| wide | 0.563 | 0.650 | 0.808 | +0.159 |
+
+*Table: temporal recall by gold-window width (terciles of the same 1000 clips). E2's gain over E0 is near-constant across difficulty — added temporal discrimination, not window-size exploitation.*
 
 ---
 
@@ -359,7 +381,36 @@ Holding grounding fixed (Qwen3-VL) and evaluating on the **282-clip common subse
 
 **Stage-A grid density [VERIFIED, n = 300].** Densifying the sparse grid monotonically improves the window and the end metric — `g=10/15/20` → temporal recall 0.717/0.753/0.783, acc@0.3 **0.570/0.603/0.627** — shrinking the oracle gap to ≈0.16 at `g=20` (cost: proportionally more image tokens in the single Stage-A call). (Numbers are from the fixed selector: an earlier single-frame-window collapse bug silently reverted 10–13% of `g≥15` samples to the E0 baseline, mildly depressing those runs; `g=10` — and therefore every headline number — was unaffected, regression-verified bit-for-bit after the fix.) Saturation and cost-accuracy trade-off beyond `g=20` are TODO.
 
+| Stage-A grid | Temporal recall | acc@0.3 [95% CI] | acc@0.5 |
+|---|---|---|---|
+| g = 10 | 0.717 | 0.570 [0.513, 0.627] | 0.543 |
+| g = 15 | 0.753 | 0.603 [0.547, 0.660] | 0.587 |
+| g = 20 | 0.783 | **0.627** [0.570, 0.680] | 0.607 |
+
+*Table: Stage-A grid-density sweep (n=300, fixed selector). Monotone in all three metrics; oracle gap at g=20 ≈ 0.16.*
+
 **Statistical significance [VERIFIED].** All point estimates carry 95% bootstrap CIs (10k resamples), and the two-stage gains are significant on paired tests over identical clips (`pipeline/stats_significance.py`). E0→E2 lifts acc@0.3 **0.419→0.540 at n=1000** (Δ+0.121; McNemar *p* < 10⁻⁴; Wilcoxon on box IoU *p* < 10⁻⁴) and 0.440→0.570 at n=300 (Δ+0.130; McNemar *p* = 0.0006). The E1→E2 step is weaker and honestly reported as such (Δ+0.073; McNemar *p* = 0.015; Wilcoxon on box IoU *p* = 0.079, n.s.), consistent with E1/E2 being independent, non-stacked modifications. Most tellingly, densifying the grid **g10→g20 raises acc@0.3 (Δ+0.057; McNemar *p* = 0.043) while leaving conditional box IoU statistically unchanged (Wilcoxon *p* = 0.90)** — a significance-level confirmation that the selector's benefit is *temporal recall*, not box quality, exactly where §6.5 located the bottleneck.
+
+| Paired comparison (same clips) | acc@0.3 | Δ | McNemar b/c | McNemar *p* | Wilcoxon (IoU) *p* |
+|---|---|---|---|---|---|
+| E0 → E2 (n=1000) | 0.419 → 0.540 | +0.121 | 61/182 | < 10⁻⁴ *** | < 10⁻⁴ *** |
+| E0 → E2 (n=300) | 0.440 → 0.570 | +0.130 | 42/81 | 0.0006 *** | 0.0001 *** |
+| E1 → E2 (n=300) | 0.497 → 0.570 | +0.073 | 27/49 | 0.015 * | 0.079 n.s. |
+| E2 g10 → g20 (n=300) | 0.570 → 0.627 | +0.057 | 23/40 | 0.043 * | 0.90 n.s. |
+
+*Table: paired significance tests. b/c = discordant pairs (first-only-correct / second-only-correct).*
+
+| Selector run | acc@0.3 [95% CI] | Temporal recall | acc@0.5 |
+|---|---|---|---|
+| random (n=300) | 0.257 [0.210, 0.307] | 0.350 | 0.250 |
+| uniform/midpoint (n=300) | 0.440 [0.383, 0.497] | 0.557 | 0.423 |
+| E0 (n=1000) | 0.419 [0.388, 0.450] | 0.524 | 0.396 |
+| E1 (n=300) | 0.497 [0.440, 0.553] | 0.613 | 0.477 |
+| E2 (n=300) | 0.570 [0.513, 0.627] | 0.717 | 0.543 |
+| E2 (n=1000) | 0.540 [0.509, 0.571] | 0.688 | 0.517 |
+| temporal oracle (n=300) | 0.787 [0.740, 0.833] | 1.000 | 0.753 |
+
+*Table: bootstrap 95% CIs (10k resamples) for all headline localization runs, full-set denominators (282-subset values in the ablation table above).*
 
 *Still planned:* A1 remove object conditioning; A2 whole-frame conditioning; A3 crop-only (=M2RAG); A4 BGE-M3 pruning; A5 shared RAG; A6 τ_g/τ_r sweep; A7 feedback loop; A8 `w` mixtures; A9 generator choice; A10 condition ablation; full factorial E1×E2; grid `g>20` saturation.
 
@@ -379,6 +430,15 @@ This section operationalizes the paper's faithfulness claim. **Protocol.** A gen
 | Human–judge agreement (excl. unsure) | **31/39 (79.5%)**, with **zero false-accepts** (all 27 human-"unfaithful" caught) |
 
 Failure modes (human-categorized): **(a) wholesale re-imagination** — the scene is replaced entirely (e.g., an outdoor group scene regenerated as a studio portrait of one man); **(b) clothing/identity drift**; **(c) over-darkening** (the "dramatic lighting" token over-executed). Two takeaways. First, **CLIP subject similarity is a weak, unreliable proxy for faithfulness**: it *does* correlate with human judgment (AUC 0.85, Mann-Whitney *p* = 0.001; faithful mean 0.72 vs. unfaithful 0.55), but it admits **no usable threshold** — 72% of pairs fall in the class-overlap band [0.45, 0.76], and the best single cutoff still misclassifies 6/39; the reassuring mean of 0.60 conceals that 70% are unfaithful. A metric that ranks yet cannot gate is precisely why a dedicated protocol is needed. Second, the MLLM judge, while conservative, never passed an unfaithful image in this sample, making it a conservative *candidate* gate — held-out independent validation is required before large-scale use. *(CLIP-AUC analysis: `pipeline/clip_faithfulness_auc.py`.)*
+
+| CLIP subject sim as a faithfulness proxy | permissive (Round 1, n=39) | constrained (Round 3, n=40) |
+|---|---|---|
+| AUC vs. human label | 0.846 | 0.673 |
+| Mann-Whitney *p* | 0.001 | 0.087 (n.s.) |
+| best single-threshold accuracy | 84.6% | 70.0% (= majority base rate) |
+| samples inside class-overlap band | 72% | 68% |
+
+*Table: CLIP's discriminative power over human faithfulness labels, by prompting regime — it ranks in the permissive regime but cannot gate, and collapses to base-rate performance when failures become expression-level.*
 
 **Round 2 — instruction-constrained A/B (same 10 keyframes).** Replacing the instruction with an explicit preservation constraint ("enhance this exact frame…STRICTLY KEEP the same people, faces, clothing, poses and scene layout; only improve lighting/color/sharpness; keep bright; no text"):
 
@@ -402,7 +462,38 @@ Failure modes (human-categorized): **(a) wholesale re-imagination** — the scen
 
 **Round 3 — the best tier at scale [VERIFIED, n = 40].** Applying the D-tier instruction to all 40 E2-selected keyframes (same keyframes and denominator as Round 1): human faithfulness **28/40 (70%)** vs. the permissive baseline's 12/40 (30%) — instruction control holds at scale, though below the 10-pair probe's 90% (small-n optimism). Poster-likeness averages **1.78** (71/40; n = 40; the 10-pair probe gave 1.50), confirming partial-artistry recovery. The annotation standard was sharpened for this round: an image whose **emotional expression contradicts the source moment** (e.g., crying → smiling) counts as unfaithful; micro-level facial redraw without an emotion change does not. CLIP subject similarity rises to **0.708** (vs. 0.601 permissive), but its discriminative power **collapses in this regime**: AUC drops from 0.85 (permissive) to **0.67** (constrained, *p* = 0.087 — no longer significant), because here the failures are expression-level rather than wholesale, and CLIP cannot see them. **Both automatic signals degrade together**: the MLLM judge passes 32/40, agrees with the human on 30/40 (75%), but **accepts 7 pairs the human rejected** — its zero-false-accept property (Round 1) does *not* transfer to the constrained regime. The joint lesson is sharp — **automatic proxies (CLIP score, MLLM judge) get less reliable exactly as the failures get subtler**, so the human protocol is the stable anchor and both automatic gates need held-out validation before any automated use.
 
-**Cost (measured, single RTX 4090D, n=20 clips, per-sample averages).** Frame reading 1.07 s; E0 CLIP selection 0.34 s; E2 Stage-A adds **1.46 s** (one MLLM call over a 10-frame grid); grounding 0.90 s — E0 total ≈ 2.31 s vs. E2 ≈ 3.77 s per clip (one-time model loading: CLIP 16.3 s, Qwen3-VL 10.4 s). The two-stage selector's accuracy gain (§6.6) thus costs ~1.5 s per clip and no gradient computation, versus per-sample test-time *tuning* in the NeurIPS'25 baseline.
+| Measure (same 40 keyframes) | permissive (Round 1) | best tier D (Round 3) |
+|---|---|---|
+| Human faithfulness | 12/40 (30%) | **28/40 (70%)** |
+| MLLM judge pass | 4/40 | 32/40 |
+| Judge false-accepts (vs. human) | **0** | 7 |
+| Human–judge agreement | 31/39 (79.5%) | 30/40 (75.0%) |
+| Cohen κ (human vs. judge) | 0.41 | 0.34 |
+| CLIP subject similarity (mean) | 0.601 | 0.708 |
+| CLIP AUC vs. human label | 0.846 | 0.673 |
+| Poster-likeness (1–3) | — | 1.78 |
+
+*Table: instruction control at scale, and the simultaneous degradation of both automatic proxies. Cohen κ stays fair-to-moderate in both regimes — quantitative grounds for treating the judge as a candidate gate only.*
+
+| Human \\ Judge | R1: yes | R1: no | | R3: yes | R3: no |
+|---|---|---|---|---|---|
+| **yes** | 4 | 8 | | 25 | 3 |
+| **no** | **0** | 27 | | **7** | 5 |
+
+*Table: human×judge confusion matrices (Round 1, n=39 excl. one unsure; Round 3, n=40). The zero false-accept cell (bold) in Round 1 becomes 7 in Round 3 — the regime shift in one number.*
+
+**Cost (measured, single RTX 4090D, n=20 clips, per-sample averages).**
+
+| Stage (per clip) | E0 pipeline | E2 pipeline |
+|---|---|---|
+| Frame reading | 1.07 s | 1.07 s |
+| Stage-A MLLM coarse window | — | **+1.46 s** |
+| CLIP frame scoring | 0.34 s | 0.34 s |
+| Qwen3-VL grounding | 0.90 s | 0.90 s |
+| **Total** | **≈ 2.31 s** | **≈ 3.77 s** |
+| One-time model loading | CLIP 16.3 s | + Qwen3-VL 10.4 s |
+
+*Table: measured per-clip latency. The two-stage selector's accuracy gain (§6.6) costs ~1.5 s per clip with **no gradient computation**, versus per-sample test-time *tuning* in the NeurIPS'25 baseline.*
 
 ## 7. Conclusion and Limitations
 
