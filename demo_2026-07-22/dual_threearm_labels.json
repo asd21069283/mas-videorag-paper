@@ -1,0 +1,122 @@
+{
+  "00__dualB__18_wEAeql4z1O0": {
+    "faithful": "no",
+    "artistry": "1"
+  },
+  "01__dualA__103_kW5WyJ1QNpM": {
+    "faithful": "no",
+    "artistry": "1"
+  },
+  "02__dualA__152_o4xQ-BEa3Ss": {
+    "faithful": "no",
+    "artistry": "2"
+  },
+  "03__dualB__103_kW5WyJ1QNpM": {
+    "faithful": "no",
+    "artistry": "1"
+  },
+  "04__twopass__152_o4xQ-BEa3Ss": {
+    "faithful": "yes",
+    "artistry": "1"
+  },
+  "05__dualB__143_phrYEKv0rmw": {
+    "faithful": "no",
+    "artistry": "2"
+  },
+  "06__dualB__152_5LrOQEt_XVM": {
+    "faithful": "no",
+    "artistry": "2"
+  },
+  "07__twopass__102_FONjBIXaM-0": {
+    "faithful": "yes",
+    "artistry": "1"
+  },
+  "08__dualA__146_uNT6HrrnqPU": {
+    "faithful": "no",
+    "artistry": "1"
+  },
+  "09__dualA__102_FONjBIXaM-0": {
+    "faithful": "no",
+    "artistry": "2"
+  },
+  "10__twopass__152_5LrOQEt_XVM": {
+    "faithful": "yes",
+    "artistry": "3"
+  },
+  "11__twopass__18_wEAeql4z1O0": {
+    "faithful": "yes",
+    "artistry": "2"
+  },
+  "12__dualA__152_5LrOQEt_XVM": {
+    "faithful": "no",
+    "artistry": "2"
+  },
+  "13__twopass__146_uNT6HrrnqPU": {
+    "faithful": "yes",
+    "artistry": "2"
+  },
+  "14__dualB__102_FONjBIXaM-0": {
+    "faithful": "no",
+    "artistry": "1"
+  },
+  "15__twopass__189_Ksd1JQFHYWA": {
+    "faithful": "yes",
+    "artistry": "2"
+  },
+  "16__dualA__18_wEAeql4z1O0": {
+    "faithful": "no",
+    "artistry": "1"
+  },
+  "17__dualB__141_G5Yr20A5z_Q": {
+    "faithful": "no",
+    "artistry": "3"
+  },
+  "18__dualB__189_Ksd1JQFHYWA": {
+    "faithful": "no",
+    "artistry": "2"
+  },
+  "19__dualA__143_phrYEKv0rmw": {
+    "faithful": "no",
+    "artistry": "2"
+  },
+  "20__dualB__152_o4xQ-BEa3Ss": {
+    "faithful": "no",
+    "artistry": "1"
+  },
+  "21__twopass__143_phrYEKv0rmw": {
+    "faithful": "yes",
+    "artistry": "2"
+  },
+  "22__twopass__167_VsYPP2I0aUQ": {
+    "faithful": "yes",
+    "artistry": "2"
+  },
+  "23__twopass__103_kW5WyJ1QNpM": {
+    "faithful": "yes",
+    "artistry": "3"
+  },
+  "24__dualA__189_Ksd1JQFHYWA": {
+    "faithful": "no",
+    "artistry": "2"
+  },
+  "25__dualB__167_VsYPP2I0aUQ": {
+    "faithful": "no",
+    "artistry": "1"
+  },
+  "26__twopass__141_G5Yr20A5z_Q": {
+    "faithful": "yes",
+    "artistry": "1"
+  },
+  "27__dualA__141_G5Yr20A5z_Q": {
+    "faithful": "no",
+    "artistry": "2"
+  },
+  "28__dualB__146_uNT6HrrnqPU": {
+    "faithful": "no",
+    "artistry": "2"
+  },
+  "29__dualA__167_VsYPP2I0aUQ": {
+    "faithful": "no",
+    "artistry": "1"
+  }
+}
