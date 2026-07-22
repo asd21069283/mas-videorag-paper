@@ -512,7 +512,7 @@ The finding is therefore not a CLIP quirk but a **family-wide property**: appear
 
 ### 6.8 Unified-model (monolith) control **[VERIFIED, n = 20]**
 
-**Protocol.** The §2 hypothesis — that a single unified model does not replace the localization-grounded pipeline — gets its first instantiation. **Janus-Pro-7B** (a unified understanding+generation model) receives an 8-frame uniform grid of the clip plus the query, *describes* the queried moment, then *generates* the answer image from its own description (describe-then-generate; the model offers no image-conditioned generation). Its outputs carry **no timestamp and no bounding box — the localization protocol is structurally absent**, not merely unmeasured (recorded per-sample in `demo_2026-07-21/janus_ctrl/meta.json`). Same 20 HC-STVG clips, same human protocol and annotator as §6.7.
+**Protocol.** The §2 hypothesis — that a single unified model does not replace the localization-grounded pipeline — gets its first instantiation. **Janus-Pro-7B** [arXiv:2501.17811] (a unified understanding+generation model) receives an 8-frame uniform grid of the clip plus the query, *describes* the queried moment, then *generates* the answer image from its own description (describe-then-generate; the model offers no image-conditioned generation). Its outputs carry **no timestamp and no bounding box — the localization protocol is structurally absent**, not merely unmeasured (recorded per-sample in `demo_2026-07-21/janus_ctrl/meta.json`). Same 20 HC-STVG clips, same human protocol and annotator as §6.7.
 
 | Measure (n = 20) | Unified control (Janus-Pro-7B) | Ours (best tier D, §6.7) |
 |---|---|---|
@@ -549,7 +549,7 @@ The finding is therefore not a CLIP quirk but a **family-wide property**: appear
 - Zero-Shot STVG with MLLMs [arXiv:2509.15178]; VideoRAG-over-corpus (Jeong et al.) [arXiv:2501.05874] — distinct from VideoRAG [arXiv:2502.01549]
 - ScaleCap [arXiv:2506.19848]; CUVA [arXiv:2405.00181]
 - MAGNET [arXiv:2506.07016]; LVAS-Agent [arXiv:2503.10719]; MovieAgent [arXiv:2503.07314]; Mora [arXiv:2403.13248]
-- BAGEL [arXiv:2505.14683]; Show-o2 [arXiv:2506.15564]; X-VILA [arXiv:2405.19335]; NExT-GPT [arXiv:2309.05519]; Emu3.5 [arXiv:2510.26583]
+- BAGEL [arXiv:2505.14683]; Show-o2 [arXiv:2506.15564]; X-VILA [arXiv:2405.19335]; NExT-GPT [arXiv:2309.05519]; Emu3.5 [arXiv:2510.26583]; Janus-Pro [arXiv:2501.17811]
 - V-STaR [arXiv:2503.11495]; Open-o3-Video/STGR [arXiv:2510.20579]; PVTG (personalized video thumbnail generation) [arXiv:2607.12882]
 - Qwen3-VL [arXiv:2511.21631]; OminiControl [arXiv:2411.15098]; VQAScore [project page]
 
