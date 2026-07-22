@@ -1,0 +1,745 @@
+\documentclass[10pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{natbib}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\setcitestyle{numbers,square}
+
+\title{\textbf{VKIG: Video-Keyframe-Grounded Interleaved Image-Text Generation\\
+with Cooperative Agents and Shared Multimodal Retrieval}}
+\author{Zizhou Liu\\City University of Hong Kong}
+\date{}
+
+\newcommand{\verified}{\textsc{[Verified]}}
+\newcommand{\planned}{\textsc{[Planned]}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Existing video-language systems \emph{describe} video in text (video RAG), \emph{generate} media from text/image prompts, or --- in recent any-to-any models --- map video to a generated image without localization or faithfulness accountability; to our knowledge, none take a \textbf{video plus a textual instruction} and return an \textbf{interleaved image-text} answer in which each image is \textbf{newly generated from, and verifiably faithful to, an explicitly localized keyframe}. We propose a cooperative two-agent framework --- an \emph{Understand Agent} that localizes question-relevant evidence and a \emph{Generation Agent} that produces grounded images --- coupled by a \textbf{shared multimodal RAG} memory. Our core method is a \textbf{question-driven, object-level localization-to-generation pipeline}: target-object cues from the instruction (a per-source heuristic in the verified runs; \S4.3\textcircled{1}) drive keyframe selection, open-vocabulary grounding, and image generation, with cross-modal consistency checks for hallucination control. We formalize the task and introduce \textbf{VKIG-Bench}, to our knowledge the first benchmark scoring \emph{keyframe consistency} and \emph{spatio-temporal localization} alongside text and image quality. A real-video prototype runs end-to-end on a single 24GB GPU. Diagnosing temporal keyframe selection as the dominant bottleneck (a temporal-oracle study), we introduce a \textbf{two-stage selector} --- MLLM coarse temporal windowing followed by object-conditioned in-window selection --- which lifts joint localization accuracy from 0.433 to \textbf{0.567} on a 282-clip HC-STVG v2 subset (separately, 0.627 with a denser grid, n=300) --- outperforming a NeurIPS'25 zero-shot STVG method (0.447) on the same clips after bridging both outputs to our joint keyframe metric --- and holds at scale (0.419$\rightarrow$0.540, n=1000), training-free (no parameter training or adaptation). On the generation side, our faithfulness protocol (human + MLLM-judge) exposes failures that automatic metrics cannot reliably gate --- four standard metrics (CLIP, DINOv2, DreamSim, LPIPS) rank faithfulness at up to AUC 0.87 under permissive prompts, yet \textbf{every one degrades once failures become expression-level} under constrained prompts --- only 30\% of permissively-prompted generations depict the true moment ($n=40$) --- and shows faithfulness is instruction-controllable (10\%$\rightarrow$100\% in a matched A/B, $n=10$; the best faithfulness-artistry tier sustains 70\% at $n=40$), with the faithfulness--creativity trade-off mapped --- and its single-instruction plateau \textbf{broken by sequential two-pass editing} (100\% faithful at poster-likeness 1.90 vs.\ 1.50 single-pass, same keyframes; deeper chains saturate there), while parallel anchors preserve only what they encode --- semantic conditioning loses the moment, geometric conditioning keeps composition and reaches 2.30 artistry but loses appearance. A unified-model control (Janus-Pro-7B, $n=20$) renders heavily stylized yet content-deformed answers --- \textbf{0/20 faithful} to the actual clip, with no localization output at all --- evidence that without keyframe grounding, a monolith offers style without provenance.
+\end{abstract}
+
+\setcounter{section}{1}
+
+\section{Introduction}
+
+\paragraph{Motivation.} Much of today's content work consists of turning \emph{moments} inside video into \textbf{usable, faithful visual assets}. A creator on a video platform needs a cover image of their clip's highlight --- a cover that misrepresents the content is penalized as click-bait, so it must depict a \emph{real} moment, yet a raw screenshot is rarely presentable. An enterprise turns screen recordings into \textbf{step-by-step illustrated manuals} --- an inherently \emph{interleaved image-text} artifact, one localized moment per step. A short-drama platform mass-produces posters and highlight art from episodes. In all of these the needed answer is a \textbf{picture plus a few words}, traceable to a real moment yet rendered for presentation: faithfulness here means \textbf{semantic consistency} --- same subject, scene, and composition --- not pixel-level identity recovery. (Identity-critical uses such as forensic review employ only the \emph{localization} half of our pipeline and receive the original frame; generated imagery is never evidence.) Frontier MLLMs can watch video and \emph{tell} you about it, but they neither localize precisely (quantified in \S6.6) nor produce an accountable image; general text-to-image models produce images with no provenance in a source video. To our knowledge, few current systems close this loop end to end; a concurrent preprint \citep{pvtg2607} does close a video$\rightarrow$faithful-thumbnail loop for the cover-image use case (preference-aware highlight retrieval $\rightarrow$ VLM-guided diffusion), but emits a single thumbnail with no explicit spatio-temporal localization protocol, no protocol-level faithfulness metric, and no instruction-driven interleaved answer (\S3). Retrieval-augmented video question answering \citep{videorag2502,videorag2411} reads long videos and answers \textbf{in text only} --- it \emph{tells} but does not \emph{show}. Conversely, retrieval-augmented image generation \citep{imagerag2502,orig2510,gensearcher2603} and interleaved image-text generators \citep{m2rag2411,m2ior12508} \emph{show}, but take \textbf{text (or image) input, never video}, and the displayed images are usually \textbf{retrieved/selected} rather than newly generated and grounded in a specific source frame.
+
+\paragraph{Gap.} We characterize the target task by four jointly-required properties: (a) \textbf{video input}, (b) output images that are \textbf{newly generated}, (c) \textbf{interleaved image-text} output, and (d) orchestration by a \textbf{multi-agent system (MAS) with shared multimodal RAG}. We are careful about what is and is not new here. \emph{Any-to-any} models --- X-VILA \citep{xvila2405} and NExT-GPT \citep{nextgpt2309} --- can already map video input to a generated image, and X-VILA's visual-embedding highway even targets input-output visual consistency; unified generators \citep{emu352510,showo22506} produce interleaved image-text natively. \textbf{What, to our knowledge, no reviewed work provides is the conjunction we formalize}: question-driven, \emph{explicit spatio-temporal localization} of the evidence (when/where in the video), image generation that is \textbf{verifiably faithful to the localized source keyframe} (a stated protocol and metric, not an emergent property), a long-form interleaved image-text answer, and a benchmark that scores this keyframe consistency --- video-side multimodal RAG \citep{vimrag2602,videoragcorpus2501} lacks (b)(c); interleaved generation/benchmarks \citep{mramgbench2502,m2ior12508} lack (a); any-to-any models lack the localization protocol, the faithfulness accountability, and (d). The most credible threat remains a \emph{single unified} model bolted onto an off-the-shelf video RAG; we hypothesize that a MAS+RAG design is \textbf{not easily replaceable} by such a monolith because it provides \textbf{controllability, source traceability, and keyframe consistency} that a black-box end-to-end model does not expose --- a claim our benchmark is designed to test, and whose first instantiation we run in \S6.8: a 7B unified model (Janus-Pro) produces heavily stylized but content-deformed answers that are \textbf{0/20 faithful} to the actual clip and emit no localization at all; fuller comparisons (BAGEL/Show-o2 + off-the-shelf video RAG) remain future work.
+
+\paragraph{Contributions.}
+\begin{itemize}
+\item \textbf{A new task and benchmark.} We formalize \emph{video-grounded interleaved image-text generation} and introduce \textbf{VKIG-Bench}, to our knowledge the first benchmark that scores \textbf{keyframe-consistency} (generated image vs.\ its source-keyframe object) and \textbf{spatio-temporal localization} (when/where the answer lives in the video), in addition to text correctness, image-text alignment, and image quality.
+\item \textbf{A cooperative MAS + shared-RAG framework.} An Understand Agent and a Generation Agent communicate through a \emph{shared} multimodal RAG memory with two feedback loops (grounding$\rightarrow$reselection, generation$\rightarrow$memory write-back), unifying the understanding and generation ends that prior video MAS keep separate \citep{magnet2506,lvasagent2503,movieagent2503,mora2403}.
+\item \textbf{A two-stage temporal selector inside a question-driven, object-level localization-to-generation method.} A temporal-oracle study quantifies keyframe \emph{timing} --- not grounding --- as the dominant bottleneck (\S6.5); we address it by \textbf{adapting the coarse-to-fine selection paradigm} \citep{unitime2506,focus2510} to keyframe selection for faithful generation --- MLLM coarse temporal windowing $\rightarrow$ object-conditioned in-window selection (\S4.3\textcircled{2}) --- lifting joint localization acc@0.3 from 0.433 to \textbf{0.567} on a 282-clip HC-STVG v2 subset and outperforming a bridged NeurIPS'25 zero-shot STVG baseline (0.447) on identical clips under our joint keyframe metric --- training-free (no parameter training or adaptation) \verified{, $n=282$}. The localized keyframe then drives open-vocabulary grounding and a generate-or-crop decision --- beyond ``select-only'' interleaving \citep{m2rag2411} --- with cross-modal consistency checks \citep{scalecap2506}.
+\end{itemize}
+
+\section{Related Work}
+
+\paragraph{Video multimodal RAG (text output).} VideoRAG \citep{videorag2502} builds cross-video knowledge graphs over hundreds of hours and answers with a single RAG pipeline; Video-RAG \citep{videorag2411} is a training-free plug-in that extracts OCR/ASR/open-vocabulary detections as auxiliary text. VimRAG \citep{vimrag2602} extends multimodal RAG on the video side. All output \textbf{text}; their video front-ends are reusable for our Understand Agent, but none close the loop to a generated image. The distinction we draw: Video-RAG's detector yields boxes/keyframes that it only converts to text --- we route the same signal into \textbf{image production}.
+
+\paragraph{Interleaved image-text generation and retrieval-augmented generation.} M2RAG \citep{m2rag2411} retrieves web image-text and produces interleaved answers, but \textbf{selects} images rather than generating them. M2IO-R1 \citep{m2ior12508} adds RL-based, trainable interleaved generation. MRAMG-Bench \citep{mramgbench2502} benchmarks multimodal answer generation. Retrieval-augmented \emph{generation of new images} --- ImageRAG \citep{imagerag2502}, ORIG \citep{orig2510}, Gen-Searcher \citep{gensearcher2603} --- is the closest on the output side but is \textbf{text-input, no video}. Closest on the video$\rightarrow$generated-image axis is a concurrent thumbnail-generation preprint \citep{pvtg2607}: preference-aware highlight retrieval selects a keyframe and VLM-guided diffusion renders a faithful thumbnail --- a single cover image, with no bbox/temporal-IoU localization protocol, no protocolized faithfulness metric, and no interleaved answer. We inherit their interleaving/judging scaffolds and replace the image pool with \textbf{video-derived keyframe conditions}.
+
+\paragraph{Keyframe selection and grounded captioning.} AKS \citep{aks2502} frames keyframe selection as maximizing question-relevance plus temporal coverage, training-free. VideoEspresso \citep{videoespresso2411} de-duplicates frames via BGE-M3 caption similarity and reasons over $\sim$2 frames. GROVE \citep{grove2503} generates captions while densely grounding mentioned objects via SVO triples. We combine these: \textbf{object-conditioned} question-driven selection (AKS$\times$GROVE) with BGE-M3 redundancy pruning (VideoEspresso), then ground at the object level.
+
+\paragraph{Hallucination control and causal video understanding.} ScaleCap \citep{scalecap2506} uses heuristic Q\&A plus contrastive sentence scoring to remove hallucinated caption content; we lift this test-time idea to \textbf{cross-modal (image-text mutual-evidence) consistency} as a RAG factuality gate. CUVA \citep{cuva2405} reframes video anomaly understanding as What/Why/How with multi-dimensional metrics; we borrow its causal dimensions for evaluation.
+
+\paragraph{Capability comparison (Table 1).} The table below summarizes the surveyed landscape along the seven capability axes induced by our task definition (\S2). Every cell was checked against the cited paper's text, and every \(\times\)/\(\triangle\) we assign was additionally stress-tested by an adversarial pass instructed to \emph{overturn} it from the cited work's own claims; per-cell source quotes are archived in \texttt{paper/table1\_evidence.json}.
+
+\begin{table}[htbp]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccccc}
+\toprule
+System & Video input & Newly-gen.\ image & Interleaved answer & Explicit ST-localization & Faithfulness protocol & Bench: keyframe consist. & Training-free \\
+\midrule
+VideoRAG \citep{videorag2502} & \checkmark & $\times$ & $\times$ & $\triangle$\textsuperscript{a} & $\times$ & $\times$ & \checkmark \\
+Video-RAG \citep{videorag2411} & \checkmark & $\times$ & $\times$ & $\triangle$\textsuperscript{a} & $\times$ & $\times$ & \checkmark \\
+M2RAG \citep{m2rag2411} & $\times$ & $\times$ & \checkmark & $\times$ & $\times$ & $\times$ & $\triangle$ \\
+M2IO-R1 \citep{m2ior12508} & $\times$ & $\times$ & \checkmark & $\times$ & $\times$ & $\times$ & $\triangle$ \\
+MRAMG-Bench \citep{mramgbench2502} & $\times$ & $\times$ & \checkmark & $\times$ & $\times$ & $\times$ & \checkmark \\
+ImageRAG \citep{imagerag2502} & $\times$ & \checkmark & $\times$ & $\times$ & $\times$ & $\times$ & \checkmark \\
+X-VILA \citep{xvila2405} & \checkmark & \checkmark & $\triangle$ & $\times$ & $\triangle$\textsuperscript{b} & $\triangle$\textsuperscript{b} & $\times$ \\
+NExT-GPT \citep{nextgpt2309} & \checkmark & \checkmark & $\triangle$ & $\times$ & $\times$ & $\times$ & $\times$ \\
+Emu3.5 \citep{emu352510} & $\triangle$ & \checkmark & \checkmark & $\times$ & $\triangle$\textsuperscript{b} & $\triangle$\textsuperscript{b} & $\times$ \\
+Show-o2 \citep{showo22506} & \checkmark & \checkmark & \checkmark & $\times$ & $\triangle$\textsuperscript{b} & $\triangle$\textsuperscript{b} & $\times$ \\
+BAGEL \citep{bagel2505} & $\times$ & \checkmark & $\triangle$ & $\times$ & $\times$ & $\times$ & $\times$ \\
+PVTG \citep{pvtg2607} & \checkmark & \checkmark & $\times$ & $\triangle$\textsuperscript{c} & $\triangle$\textsuperscript{c} & $\triangle$\textsuperscript{c} & $\triangle$ \\
+Zero-Shot STVG \citep{zeroshotstvg2509} & \checkmark & $\times$ & $\times$ & \checkmark & $\times$ & $\times$ & \checkmark\textsuperscript{d} \\
+AKS \citep{aks2502} & \checkmark & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & \checkmark \\
+V-STaR \citep{vstar2503} & \checkmark & $\times$ & $\times$ & \checkmark & $\times$ & $\times$ & \checkmark \\
+\textbf{Ours (VKIG)} & \checkmark & \checkmark & \checkmark\textsuperscript{e} & \checkmark & \checkmark & \checkmark\textsuperscript{f} & \checkmark \\
+\bottomrule
+\end{tabular}%
+}
+\caption{Capability comparison across the surveyed landscape (\S3).}
+\end{table}
+
+\footnotesize
+\textit{Legend: \checkmark\ provided; $\times$ absent; $\triangle$ partial. The seven columns operationalize the capability axes induced by our task (\S2): video input; output image newly generated (not retrieved/selected); long-form interleaved image-text answer; explicit when+where evidence protocol (time interval + bbox, IoU-evaluated); a \textbf{declared} protocol+metric for generated-image faithfulness to the localized source keyframe; a benchmark scoring that keyframe consistency; training-free main pipeline. (The \S2 MAS+shared-RAG property is an architectural axis, not a per-system capability column, and is discussed in text.)}
+
+\textit{\textsuperscript{a} Temporal-only and informal: VideoRAG retrieves 30-s clip intervals (case-study narration, no IoU protocol); Video-RAG carries internal DET boxes it never exposes as output evidence. \textsuperscript{b} Consistency-style metrics exist but score generations against conditioning/reference inputs in image-to-X or embodied settings (X-VILA X2A vs.\ ground-truth targets; Emu3.5 ICE-Bench SRC / embodied Background-Consistency; Show-o2 VBench-I2V subject/background) --- none is a protocol for question-driven, localized video-keyframe faithfulness, and all lack the when+where column. \textsuperscript{c} PVTG (concurrent, 2026-07): single thumbnail per video; frame-level highlight retrieval without an output box/interval protocol; fidelity via LPIPS/DINO-Sim + a VLM verify-retry loop --- the closest neighbor, and still without columns 3--4 in full. \textsuperscript{d} Zero-shot but performs per-sample test-time gradient optimization; ours computes no gradients. \textsuperscript{e} Verified end-to-end runs emit answer text + one generated image per query (\S6.2); multi-image interleaving is the designed layout (\S4.3\textcircled{5}), \textbf{not yet demonstrated} --- verified runs cover the single-image-per-query case. \textsuperscript{f} Keyframe-consistency scoring is operationalized as a stated protocol with human + MLLM-judge evaluation at $n=40$ (\S6.7); full VKIG-Bench construction (300+$\rightarrow$1--2k samples with DreamSim/VQAScore metrics) is in progress (\S5.3, \S7).}
+\normalsize
+
+\paragraph{Takeaway.} No surveyed system provides \textbf{explicit spatio-temporal localization and a declared keyframe-faithfulness protocol together} (columns 4+5) --- the conjunction our task and benchmark formalize; the nearest neighbor (concurrent PVTG) emits a single thumbnail with partial versions of both and no interleaved answer.
+
+\paragraph{Video multi-agent systems and unified models.} Video MAS --- MAGNET \citep{magnet2506} (RAG$\rightarrow$scoring agents$\rightarrow$meta-agent), LVAS-Agent \citep{lvasagent2503} (role-based dubbing crew), MovieAgent \citep{movieagent2503} (director/writer agents with per-character LoRA), Mora \citep{mora2403} (chained generation agents) --- are largely \textbf{single-direction pipelines} with weak role asymmetry and no shared cross-end RAG; our two-agent design is differentiated by \textbf{bidirectional feedback and a shared memory}. Unified image-text models BAGEL \citep{bagel2505} and Show-o2 \citep{showo22506} motivate our controllability/traceability argument: they could approximate the pipeline end-to-end but do not expose keyframe-grounded, source-traceable outputs or a way to verify them --- a first such control (Janus-Pro-7B) is run in \S6.8 (0/20 faithful, no localization output); BAGEL/Show-o2 comparisons remain planned (\S6.5). Likewise, the any-to-any models conceded in \S2 (X-VILA, NExT-GPT, Emu3.5) map video to generated images without an explicit localization protocol or a faithfulness metric.
+
+\section{Method}
+
+\paragraph{Overview.} Given a video $V$ and an instruction $Q$, the \emph{Understand Agent} extracts the queried target object(s) from $Q$, \textbf{temporally localizes} the event with a two-stage selector (\S4.3\textcircled{2} --- the paper's core method contribution), grounds the target object in the selected keyframe, and drafts the textual answer; the \emph{Generation Agent} turns each grounded keyframe into a \textbf{newly generated, faithfulness-constrained image} and lays out the interleaved answer. The main pipeline is \textbf{training-free end to end}. \S4 describes the full design; the \textbf{verified runs (\S6) execute the localization $\rightarrow$ grounding $\rightarrow$ generation backbone}, whereas the shared-RAG retrieval/write-back memory, the two feedback loops (grounding$\rightarrow$reselection, generation$\rightarrow$memory), and multi-image interleaved layout are part of the design and were \textbf{not activated} in the reported runs (itemized in \S4.4). No reported number depends on any non-activated component.
+
+\subsection{Task formalization}
+
+\textbf{Input:} a video clip $V = \{F_1, \ldots, F_N\}$ and a textual instruction $Q$.
+\textbf{Output:} an interleaved answer $A = [t_1, img_1, t_2, img_2, \ldots]$, where each $t_i$ is a text span and each $img_i$ is a \textbf{new image generated from a keyframe of $V$}, carrying provenance $(\text{keyframe\_ts}_i, \text{bbox}_i, o_i)$.
+
+We seek $f: (V, Q) \rightarrow A$ satisfying four objectives:
+\begin{enumerate}
+\item \textbf{Text correctness} --- $t_*$ correctly answers $Q$;
+\item \textbf{Image-text consistency} --- $img_i$ is semantically consistent with adjacent $t_i$;
+\item \textbf{Keyframe consistency (core)} --- $img_i$ faithfully preserves the target object $o_i$ from its source keyframe $V[\text{keyframe\_ts}_i]$;
+\item \textbf{Localization correctness} --- $(\text{keyframe\_ts}_i, \text{bbox}_i)$ is the correct spatio-temporal location of the queried content in $V$.
+\end{enumerate}
+
+\textbf{Notation:}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}ll@{}}
+\toprule
+Symbol & Meaning \\
+\midrule
+$V = \{F_1,\ldots,F_N\}$ & input frame sequence \\
+$Q$ & user instruction \\
+$T = \{(s,v,o)_k\}$ & SVO triples from $Q$ (design-level, \S4.3\textcircled{1}; verified runs use the target object $o$ only) \\
+$o \in O_Q$ & target object; $O_Q$ the queried object set \\
+$s(o,F)$ & object-conditioned frame relevance \\
+$c(I)$ & temporal coverage of frame subset $I \subseteq V$ \\
+$I^*$ & optimal keyframe subset, size $\le B$ (keyframe budget; $B=1$ in all verified runs) \\
+$E = \{b_k\}$ & object-level evidence set; item $b = (F,o,box,\rho)$ \\
+$\rho(o,F)$ & grounding confidence of $o$ in frame $F$ \\
+$\tau_g, \tau_r$ & grounding / retrieval thresholds (design-level gate, \S4.4) \\
+$\psi_{img}, \psi_{txt}$ & frame/text embedding --- \textbf{CLIP ViT-B/32} in all verified frame scoring (\S4.3\textcircled{2}) \\
+$\psi(\cdot)$ & BGE-M3 text embedding, used only for the design-level RAG retrieval (\S4.4) \\
+\bottomrule
+\end{tabular}
+\caption{Notation used throughout the method (\S4).}
+\end{table}
+
+\subsection{Architecture: two agents over a shared multimodal RAG}
+
+The \textbf{Understand Agent} parses $Q$, selects keyframes, grounds objects, and writes a textual answer. The \textbf{Generation Agent} turns grounded evidence into images and lays out the interleaved answer. By design they read and write a \textbf{shared multimodal RAG} store (frame embeddings, cropped images, detection cache; OCR/ASR/caption text), queried by $\mathrm{sim}(\psi(o), \psi(cand)) \ge \tau_r$. \textbf{This store and its retrieval, and the two feedback loops below, are architectural --- not activated in any verified run} (\S4.4); there, inter-stage state is passed as per-sample JSON. Two feedback loops connect them:
+\begin{itemize}
+\item \textbf{Feedback \textcircled{1} (grounding$\rightarrow$reselection):} if every keyframe for object $o$ has $\rho(o,F) < \tau_g$, return to keyframe selection with a larger budget $B$ or relaxed pruning.
+\item \textbf{Feedback \textcircled{2} (generation$\rightarrow$memory):} newly generated images are written back to the shared RAG for reuse, avoiding redundant generation.
+\end{itemize}
+
+This differs from prior single-direction video pipelines \citep{magnet2506,lvasagent2503} by closing an Understand$\leftrightarrow$Generation loop over \textbf{shared} memory.
+
+\subsection{Question-driven object-level localization-to-generation}
+
+\textbf{\textcircled{1} Instruction $\rightarrow$ target object(s).} The grounding target set $O_Q$ is obtained per data source: on \textbf{HC-STVG} (the main-results dataset) by a verb-boundary noun-phrase heuristic over the caption, with the annotation \texttt{sub} field as fallback (\S6.4; over-long in $\sim$29\% of samples, a disclosed conservative factor); on \textbf{V-STaR} (dev subset) by taking the benchmark's \emph{annotated} target object directly --- an oracle-style input on object \emph{identity} that isolates temporal/spatial localization from object naming (disclosed in \S6.3); short-drama demos take a user-supplied object. Full subject-verb-object parsing (POS tagging + dependency parse, optional LLM synonym expansion) --- which would \emph{reverse} GROVE \citep{grove2503} by extracting objects from the \textbf{instruction} rather than grounding caption objects --- is a design-level generalization (\S4.4), \textbf{not instantiated in the verified runs}. Training-free throughout.
+
+\textbf{\textcircled{2} Two-stage temporal grounding and keyframe selection} \emph{(the paper's core selection contribution; verified \S6.6)}. Frame-wise similarity scoring --- whether query-level $s(Q,F)$ \citep{aks2502} or our object-level $s(o,F)$ --- measures \emph{appearance}, not \emph{action timing}: it fires whenever the subject is visible, which on person-centric video is most of the clip. We therefore split temporal localization from appearance scoring:
+
+\emph{Stage A --- coarse temporal window (MLLM).} Sample a sparse grid $G = \{F_1..F_g\}$ (uniform, $g=10$ frames) and ask the video-MLLM $M$ (Qwen3-VL) to localize the queried event over the ordered grid:
+
+\begin{equation}
+W = M(G, Q) \;\rightarrow\; [t_s, t_e] \qquad \text{(grid indices $\rightarrow$ time window, half-cell dilation at borders)}
+\end{equation}
+
+This exploits the MLLM's cross-frame reasoning --- which frame-wise embedding similarity fundamentally lacks --- at the cost of one extra MLLM call per clip. Coarse-to-fine temporal selection is an established paradigm in long-video \emph{question answering} \citep{unitime2506,focus2510,himu2603,leadqa2507}; our contribution is not the paradigm but its \textbf{diagnosis-driven adaptation to keyframe selection for faithful generation} --- the oracle study (\S6.5) localizes the pipeline's bottleneck to timing, and this adaptation resolves a large share of it (\S6.6). Training-free; the gold interval is never revealed to $M$ (sanity-checked, \S6.6).
+
+\emph{Stage B --- object-conditioned selection within $W$.} Restricted to frames in $W$, score with a z-normalized two-channel mixture of query and object relevance and take the temporally-smoothed peak (this is the configuration verified as E2 in \S6.6):
+
+\begin{align}
+s(o, F) &= \mathrm{sim}\big(\psi_{img}(F), \psi_{txt}(o)\big) \\
+S(F) &= (1-w_o)\cdot \hat{s}(Q,F) + w_o\cdot \hat{s}(o,F), \qquad F \in W,\ w_o = 0.6 \\
+F^* &= \arg\max_{F\in W} \mathrm{smooth}\big(S(F)\big)
+\end{align}
+where $\hat{s}$ denotes the z-scored channel.
+
+A three-channel variant adding an \emph{action-phrase} channel $\hat{s}(a,F)$ (weights $w_q,w_o,w_a = 0.3/0.4/0.3$, untuned defaults) is evaluated separately as E1 in \S6.6; combining it with Stage A is future work (no factorial run yet). With the default keyframe budget $B=1$ (all verified runs), $I^* = \{F^*\}$; the multi-keyframe coverage objective is a design extension (\S4.4).
+
+\textbf{\textcircled{3} Object-level grounding.} For each $(F\in I^*, o\in O_Q)$, open-vocabulary detection yields $(box, \rho(o,F))$, producing evidence set $E = \{(F,o,box,\rho)\}$. \textbf{In all verified runs this role is filled by Qwen3-VL's native grounding} (a bbox prompt on the selected keyframe; \S6.2--6.3); Grounding-DINO and Video-RAG's APE \citep{videorag2411} are the alternatives evaluated on 50 clips and dropped in favor of Qwen3-VL (\S6.2, \S6.3). $\rho$ is the detector's returned confidence where available.
+
+\textbf{\textcircled{4} Generate-or-crop decision.} Following the teacher-confirmed setting (output = \emph{generation} of a new image, with crop demoted to an ablation), the main path conditions a generator on the best keyframe:
+
+\begin{align}
+\text{keyframe}(o) &= \arg\max_{F\in I^*} \rho(o,F) \\
+\text{cond}(o) &= \text{full keyframe}(o) + \text{one instruction text} \quad \text{[verified runs: FLUX-Kontext edit, \S6.7]} \\
+&= \{\text{subject crop},\ \text{SVO/scene text},\ \text{structure map}\} \quad \text{[design options; crop = ablation A3, \S4.4, \S6.6]} \\
+\text{image}(o) &= G(\text{cond}(o))
+\end{align}
+In every verified generation run, $\text{cond}(o)$ is the \textbf{full selected keyframe plus a single instruction string} (no subject crop, no structure map); the braced richer conditioning is a design option, with the crop path evaluated only as the (not-yet-run) ablation A3.
+
+Two generator lines serve as comparisons: \textbf{(A) subject-preserving} (FLUX.1-dev + OminiControl(subject) \citep{ominicontrol2411}) and \textbf{(B) instruction edit} (FLUX.1 Kontext-dev --- the line used in all \S6.7 runs --- or Qwen-Image-Edit). The decision rule (a designed fallback gate; the crop path is ablation A3, \textbf{not yet run} --- \S6.6; no verified number uses it):
+
+\begin{align}
+\rho^*(o) &= \max_{F\in I^*} \rho(o,F); \qquad r^*(o) = \max_{cand\in RAG} \mathrm{sim}(\psi(o), \psi(cand)) \\
+\text{decide}(o) &= \begin{cases} \text{CROP} & \text{if } \rho^*(o) \ge \tau_g \text{ and } r^*(o) \ge \tau_r \\ \text{GENERATE} & \text{otherwise} \end{cases}
+\end{align}
+
+This surpasses M2RAG's ``select-only'' \citep{m2rag2411} by \textbf{generating} when no faithful candidate exists.
+
+\textbf{\textcircled{5} Interleaved layout.} The Generation Agent aligns each $img_i$ to the answer sentence mentioning $o_i$, writes captions, and emits $A$.
+
+\subsection{Hallucination control; design extensions (not enabled in verified runs)}
+
+\textbf{Hallucination control.} Lifting ScaleCap's contrastive idea \citep{scalecap2506} from images to the video$\rightarrow$image-text setting, we score whether image and text \textbf{mutually evidence} each other, and use it as a RAG factuality gate.
+
+\textbf{Design extensions.} The following are part of the method design but \textbf{disabled in every verified run} (\S6), so no reported number depends on them:
+\begin{itemize}
+\item \emph{BGE-M3 caption pruning} \citep{videoespresso2411} before Stage A;
+\item \emph{AKS-style coverage} $c(I)$ when a budget $B>1$ of keyframes is requested --- the form below is our instantiation (AKS publishes no closed form):
+\begin{equation}
+I^* = \arg\max_{I\subseteq W, |I|\le B} \Big[ \sum_{F\in I} S(F) + \lambda\cdot c(I) \Big], \qquad c(I) = -\sum_j \left| n_j(I) - \frac{|I|}{M} \right|
+\end{equation}
+\item \emph{Full SVO parsing} (POS + dependency, \S4.3\textcircled{1}): verified runs use the per-source target object (V-STaR annotation / HC-STVG noun-phrase heuristic) instead.
+\item \emph{Shared-RAG retrieval/write-back and the two feedback loops} (\S4.2): the store and loops are specified but not activated in the reported runs.
+\item \emph{Optional LoRA consistency losses} (only if training is ever enabled; the main line is deliberately training-free, plug-and-play):
+\begin{align}
+L_{cons} &= 1 - \mathrm{sim}\big(\psi_{img}(img), \psi_{txt}(\text{corresponding sentence})\big) \\
+L &= L_{ret} + \beta\cdot L_{gnd} + \gamma\cdot L_{cons}
+\end{align}
+with $L_{ret} = \mathrm{InfoNCE}(\psi(o), \psi(\text{correct evidence}))$ and $L_{gnd} = L_{box}(\mathrm{GIoU}) + L_{cls}$.
+\end{itemize}
+
+\subsection{Analysis: why temporal selection is the bottleneck}
+
+\emph{(An analytical account --- not formal theorems --- of the empirical bottleneck, tying \S6.5--6.6 to the method. Numbers are recomputed in \texttt{pipeline/analysis\_bottleneck.py}.)}
+
+\textbf{(1) An exact factorization of joint localization.} For any selector, joint accuracy at threshold $\tau$ factorizes as
+\begin{equation}
+A(\tau) = R_t \cdot S_t(\tau)
+\end{equation}
+where $R_t = P(\text{keyframe} \in \text{gold window})$ is temporal recall and $S_t(\tau) = P(\text{IoU} \ge \tau \mid \text{temporally correct})$ is conditional spatial precision --- an identity from the joint metric's definition (verified to hold exactly on all nine selector runs, both $\tau$). Empirically \textbf{$S_t$ is near-invariant across selectors} --- 0.78--0.81 for every content selector (E0/E1/E2/uniform/oracle/g15/g20; the sole outlier is \texttt{random} at 0.73, depressed by its 23\% no-box rate). Because grounding is held fixed, a selector can move $R_t$ but not $S_t$; the temporal-oracle ceiling $A_{oracle} = 1\cdot S_t = 0.787$ is \emph{mechanically} the conditional spatial precision. This turns ``timing is the bottleneck'' from an empirical remark into an identity: the entire selectable gap lives in $R_t$.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Selector & $A$ (acc@0.3) & $R_t$ & $S_t$ & no-box rate \\
+\midrule
+random (n=300) & 0.257 & 0.350 & 0.733 & 23.3\% \\
+uniform/midpoint (n=300) & 0.440 & 0.557 & 0.790 & 16.0\% \\
+E0 (n=1000) & 0.419 & 0.524 & 0.800 & 6.3\% \\
+E1 (n=300) & 0.497 & 0.613 & 0.810 & 7.7\% \\
+E2 g=10 (n=300) & 0.570 & 0.717 & 0.795 & 6.3\% \\
+E2 g=10 (n=1000) & 0.540 & 0.688 & 0.785 & 5.7\% \\
+E2 g=15 (n=300) & 0.603 & 0.753 & 0.801 & 7.7\% \\
+E2 g=20 (n=300) & 0.627 & 0.783 & 0.800 & 6.7\% \\
+temporal oracle (n=300) & 0.787 & 1.000 & 0.787 & 6.0\% \\
+\bottomrule
+\end{tabular}
+\caption{The factorization $A = R_t\cdot S_t$ holds exactly on every run; $S_t$ stays in a 0.78--0.81 band for every content selector (sole outlier: random at 0.73, depressed by its 23\% no-box rate) while $R_t$ spans 0.35--1.00 --- selectors move timing, not box quality.}
+\end{table}
+
+\textbf{(2) Why frame-wise appearance scoring cannot localize timing.} A frame-wise score $S(F) = g(\psi_{img}(F), \psi_{txt}(o))$ is an isolated function of each frame. On frames that are \emph{appearance-equivalent} for the queried object (the subject is visible before, during, and after the event), $\arg\max S$ is invariant to any permutation of their temporal order --- it cannot separate ``when the action happens'' from ``when the subject is merely present.'' For events defined by temporal \emph{ordering} (e.g.\ ``walks toward the car''), no appearance score --- however strong the embedding --- localizes the moment; a position-blind selector attains expected recall $E[|W|/L]$ (the gold-window fraction). This is what we observe: \texttt{random} recall $\mathbf{0.350 \approx E[|W|/L] = 0.365}$, and the appearance-argmax E0 (recall $\mathbf{0.524}$) does \emph{not} beat the centered-midpoint prior (uniform, $\mathbf{0.557}$) --- appearance scoring buys nothing over a positional guess on this dataset. The two-stage selector escapes the invariance precisely because \textbf{Stage A's MLLM reads the \emph{ordered} frame grid}, supplying the cross-frame temporal signal a per-frame embedding lacks; its recall gain over E0 is near-constant across gold-window widths ($\mathbf{+0.165 / +0.168 / +0.159}$ in narrow/medium/wide terciles, n=1000), i.e.\ it adds temporal discrimination rather than exploiting window size. \emph{(Idealization: ``appearance-equivalent'' is an approximation --- real frames vary; the claim is that the discriminative signal for timing is weak in the appearance channel, which the terciles and the E0$\approx$uniform result bear out, not that it is exactly zero.)}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Gold-window tercile & chance $= E[|W|/L]$ & E0 recall & E2 recall & E2 gain \\
+\midrule
+narrow & 0.211 & 0.408 & 0.574 & +0.165 \\
+medium & 0.320 & 0.514 & 0.682 & +0.168 \\
+wide & 0.563 & 0.650 & 0.808 & +0.159 \\
+\bottomrule
+\end{tabular}
+\caption{Temporal recall by gold-window width (terciles of the same 1000 clips). E2's gain over E0 is near-constant across difficulty --- added temporal discrimination, not window-size exploitation.}
+\end{table}
+
+\section{VKIG-Bench}
+
+\subsection{Why a new benchmark}
+
+MRAMG-Bench \citep{mramgbench2502} and similar interleaved-generation benchmarks evaluate factual image generation but have \textbf{no video and no keyframe-provenance consistency}; V-STaR \citep{vstar2503} has video + bounding boxes but scores QA, not \emph{generated} images. \textbf{VKIG-Bench unifies video provenance + generated image + keyframe consistency} --- a slot that, to our knowledge, existing benchmarks do not fill. This is the moat against unified models \citep{bagel2505,showo22506}: it directly measures whether displayed images are \emph{traceable to and consistent with} a source frame.
+
+\subsection{Sample schema}
+
+\begin{verbatim}
+{
+  "video": "clip_0001.mp4",
+  "query": "Where and what did the protagonist's red sports car look like at first sight?",
+  "gold": {
+    "text": ["The protagonist first sees the red sports car at the theater entrance,",
+             "parked to the right of the steps."],
+    "evidence": [
+      {"keyframe_ts": 87.3, "bbox": [x1,y1,x2,y2], "object": "red sports car",
+       "gold_image_ref": "kf_0001_car.png", "pseudo_bbox": false}
+    ]
+  },
+  "meta": {"source": "vstar|self_drama", "split": "test"}
+}
+\end{verbatim}
+
+\subsection{Data sources and scale}
+
+\begin{enumerate}
+\item \textbf{V-STaR seed} \citep{vstar2503}: 2,094 videos / 16,793 boxes / when-where-what CoT, fully public; converted to the schema above as the labeled backbone.
+\item \textbf{Self-built film/short-drama} (scene anchor pending): subtitle extraction + OCR + Grounding-DINO pseudo-boxes, semi-automatic with human spot-checks.
+\item \textbf{Box fallback:} Grounding-DINO pseudo-boxes for box-free sources, flagged \texttt{pseudo\_bbox=true}, with a human-verified subset.
+\end{enumerate}
+
+Scale: start at \textbf{300--500} samples (dev 100 / test 300+), later 1--2k. Optionally seed strong supervision from Open-o3-Video / STGR \citep{openo3video2510} (keyframe+box+timestamp+CoT; release to be confirmed).
+
+\subsection{Evaluation dimensions (the moat)}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lll}
+\toprule
+Dimension & Metric & Unique? \\
+\midrule
+Text correctness & GPT-4o-judge / accuracy & No \\
+Image-text consistency & \textbf{VQAScore} \citep{vqascore} & No \\
+\textbf{Keyframe consistency} & \textbf{DreamSim / DINO} (gen image vs.\ source keyframe object) & \textbf{Yes --- core} \\
+\textbf{Spatio-temporal localization} & \textbf{temporal IoU(ts) + spatial AP/IoU(bbox)} & \textbf{Yes} \\
+Image quality & FID / KID & No \\
+Overall & human win-rate (A/B) & No \\
+\bottomrule
+\end{tabular}
+\caption{VKIG-Bench evaluation dimensions.}
+\end{table}
+
+\subsection{Construction pipeline}
+
+\begin{verbatim}
+raw video -> Q-driven keyframe extraction -> object grounding (box/segment)
+          -> gold image (crop reference, optional model-generated reference)
+          -> human spot-check (box correct? image correct?) -> store (schema 5.2)
+\end{verbatim}
+
+\section{Experiments}
+
+\subsection{Setup}
+
+\begin{itemize}
+\item \textbf{Base models.} Understand Agent: Qwen3-VL \citep{qwen3vl2511} (native long video, frame timestamps); Generation Agent: FLUX.1-dev/Kontext-dev with OminiControl \citep{ominicontrol2411}, or Qwen-Image-Edit; detector: Grounding-DINO / APE \citep{videorag2411}; embeddings: BGE-M3.
+\item \textbf{Hardware.} Single RTX 4090(D) 24GB for the MVP; large runs on A100-80G. Main line is training-free; optional LoRA fits in 16--18GB (gradient checkpointing, $512^2$, 8-bit optimizer).
+\item \textbf{Baselines.} Main external head-to-head (run, \S6.6): \textbf{Zero-Shot STVG with MLLMs} \citep{zeroshotstvg2509}, bridged to our joint keyframe metric. Cited but not run as baselines: VideoRAG \citep{videorag2502} (understanding-side); Open-o3-Video \citep{openo3video2510} (under review, most-aligned I/O); M2IO-R1 \citep{m2ior12508} and M2RAG \citep{m2rag2411} (interleaved-output references). A first unified-model control is run with Janus-Pro-7B (\S6.8); BAGEL/Show-o2 remain planned (\S6.5).
+\item \textbf{Metrics.} As in \S5.4.
+\end{itemize}
+
+\subsection{Preliminary results --- real-video end-to-end \texorpdfstring{\normalfont\textsc{[Verified]}}{[VERIFIED]}}
+
+We ran the full five-stage pipeline on a real V-STaR street-scene clip (\texttt{7771650716}), query \emph{``what walks in front of a man in white?''}, target object = dog, on a single RTX 4090D 24GB.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{p{2.6cm}p{5.6cm}p{6.2cm}}
+\toprule
+Stage & Action & Result \\
+\midrule
+\textcircled{1} Q-driven selection & select keyframe by relevance (+ coverage; this single-clip MVP is the one run that exercised coverage, unlike the $B=1$ aggregate runs) from 61 frames & \checkmark\ selected $t=3.0$s (man walking a dog), keyframe score 0.261 \\
+\textcircled{2} Grounding-DINO & localize ``dog'' in keyframe & \textbf{[WARN] mislocalized} (box on empty ground at right, conf 0.49) \\
+\textcircled{3} Qwen3-VL understanding & answer the question & \checkmark\ \textbf{correct}: ``a brown dog walks in front of the man in white'' \\
+\textcircled{4} FLUX/SDXL generation & generate a new image conditioned on keyframe & \checkmark\ new image of a brown dog on the street (gen model: sdxl-turbo) \\
+\textcircled{5} Evaluation & localization / consistency metrics & temporal hit \checkmark; \textbf{spatial IoU = 0}; subject CLIP sim \textbf{0.673}; CLIP text align \textbf{0.285} \\
+\bottomrule
+\end{tabular}
+\caption{Real-video end-to-end pipeline trace (clip \texttt{7771650716}).}
+\end{table}
+
+\textbf{Honest reading.} The full chain \textbf{runs end to end on real video}, with understanding and generation both succeeding --- a step up from earlier synthetic single-image proofs. Localization with Grounding-DINO-base initially failed (the small, distant dog was boxed on adjacent empty ground, IoU = 0) --- a failure only real data exposes. \textbf{Fix \normalfont\textsc{[Verified]}:} replacing the detector with \textbf{Qwen3-VL's native grounding} (same model used for understanding) corrected this on the same sample to a confident box on the dog, raising \textbf{spatial IoU from 0.0 $\rightarrow$ 0.363}. \emph{Aggregate numbers follow in \S6.3.}
+
+\subsection{Dev-set results --- V-STaR, our system \texorpdfstring{\normalfont\textsc{[Verified]}}{[VERIFIED]}}
+
+We ran the full pipeline (object-conditioned keyframe selection $\rightarrow$ Qwen3-VL grounding $\rightarrow$ SDXL-Turbo generation) over the \textbf{first 150 videos from the V-STaR test split, used here as a development subset}, on a single RTX 4090D 24GB (\textbf{1 primary keyframe/clip}; 0--1000 grounding). All 150 completed.
+
+\textbf{Localization is reported \emph{jointly} (temporal $\wedge$ spatial) --- the honest metric.} A keyframe counts as correct only if its timestamp falls in the gold temporal window \textbf{and} its box matches the gold box (IoU $\ge \tau$). We also report a \emph{diagnostic} spatial-only number (box vs.\ the nearest-in-time gold box), which is \textbf{optimistic} because it ignores whether the moment is right.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lc}
+\toprule
+Metric ($n=150$) & Value \\
+\midrule
+\textbf{Localization acc (temporal-hit $\wedge$ IoU $\ge 0.3$)} & \textbf{0.233} \\
+\textbf{Localization acc (temporal-hit $\wedge$ IoU $\ge 0.5$)} & \textbf{0.213} \\
+Temporal recall (keyframe ts $\in$ gold window) & \textbf{0.26} \\
+\textbf{Spatial IoU when temporally correct} & \textbf{0.72} \\
+CLIP subject sim (gen vs.\ keyframe) & 0.66 \\
+CLIP text align (gen vs.\ instruction) & 0.29 \\
+\emph{diag:} mean spatial IoU (nearest-frame) & 0.39 \\
+\bottomrule
+\end{tabular}
+\caption{V-STaR dev-set localization and generation metrics ($n=150$).}
+\end{table}
+
+\textbf{Honest reading --- the bottleneck is \emph{when}, not \emph{where}.} When the pipeline picks a keyframe at the right moment, grounding is accurate (\textbf{IoU 0.72}); but only \textbf{26\%} of keyframes land in the gold window, so end-to-end localization is \textbf{0.23}. The open problem is \emph{temporal keyframe selection}, not the detector or box regression.
+
+\textbf{Keyframe-selection ablation (50 videos, Qwen grounding).} Object-conditioned scoring (frames scored by target-\emph{object} presence, not whole-question relevance) mainly improves the \emph{quality} of the chosen frame:
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Selection & loc.\ acc@0.3 (joint) & IoU when temporally correct \\
+\midrule
+Query-relevance & 0.24 & 0.69 \\
++ temporal smoothing & 0.22 & 0.56 \\
+\textbf{+ object-conditioned (ours)} & \textbf{0.28} & \textbf{0.79} \\
+\bottomrule
+\end{tabular}
+\caption{Keyframe-selection ablation (50 videos, Qwen grounding).}
+\end{table}
+
+\textbf{Grounding head-to-head (50 videos, identical keyframes: query-relevance + smoothing selection).} On matched keyframes, Qwen3-VL native grounding beats Grounding-DINO-base on the diagnostic spatial IoU (\textbf{0.323 vs.\ 0.292}) but \emph{not} on the joint metric (acc@0.3 \textbf{0.22 vs.\ 0.24}) --- its boxes are better, but grounding cannot fix timing. (The 0.28 in the ablation table above uses object-conditioned \emph{selection}, i.e., different keyframes, and is not a same-keyframe grounding comparison.) We adopt Qwen3-VL grounding for its box quality and single-model economy; stronger G-DINO-large / DINO-X (API/less-available) remain future work.
+
+\emph{Implementation note (MVP).} The grounding target object on V-STaR is the benchmark's \textbf{annotated} object (i.e., object identity is given, not inferred from the instruction); this deliberately isolates \emph{temporal/spatial} localization --- the paper's focus --- from object \emph{naming}, but means the V-STaR object channel is oracle on identity (HC-STVG, the main dataset, instead infers it via the noun-phrase heuristic, \S6.4). The runs above use CLIP 1 fps frame scoring with z-normalized object conditioning and temporal smoothing for selection, Qwen3-VL for grounding, and SDXL-Turbo (V-STaR) for generation; the design components BGE-M3 pruning, recursive AKS coverage, and shared-RAG feedback (\S4) are \textbf{not fully enabled} in this run. \emph{Frame-reading cap (disclosed):} the 1-fps reader caps at 64 frames, i.e.\ the first $\sim$64 s of each clip; on the small fraction of V-STaR clips longer than this whose gold window falls after 64 s, a hit is structurally impossible, so the V-STaR numbers here are a mild \textbf{lower bound} (removing the cap can only raise them). HC-STVG v2 clips are 20 s and never reach the cap, so \S6.4--6.6 are unaffected; part of the V-STaR$\rightarrow$HC-STVG temporal-recall gap in \S6.4 is therefore attributable to this reader cap rather than to the data alone. Numbers span V-STaR 150 and HC-STVG 200--1000 (per-section $n$ as stated); the bridged external baseline is in \S6.6 and the FLUX-Kontext faithfulness study in \S6.7.
+
+\subsection{Cross-dataset main results --- HC-STVG v2 (test) \texorpdfstring{\normalfont\textsc{[Verified, n=1000]}}{[VERIFIED, n = 1000]}}
+
+To test whether the ``\emph{when}, not \emph{where}'' finding is V-STaR-specific or general, we run the same localization pipeline on \textbf{HC-STVG v2} --- an independent, human-annotated spatio-temporal grounding benchmark of 20 s clips with per-frame person tubes and a natural-language description. We evaluate on \textbf{1000 video-ready samples} from the community HF mirror (\texttt{ShijianW01/hc-stvg2}, test split with gold tubes; 6 samples skipped for missing videos). Grounding target = the noun phrase before the caption's first verb (HC-STVG \texttt{sub} field as fallback). Same joint metric; \textbf{temporal hit is strict (pad = 0 s), consistent with the V-STaR \texttt{batch\_eval.py} numbers above} (the generic \texttt{eval/spatiotemporal\_iou.py} must be run with \texttt{--t\_pad 0} to match this strict setting; its default is 0.5 s); spatial gold = the tube box nearest in time to the predicted keyframe (appropriate for moving-person tubes). Results are stable across scale (n = 200 $\rightarrow$ 1000 move acc@0.3 0.430 $\rightarrow$ 0.419).
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Metric (HC-STVG v2 test, $\mathbf{n=1000}$) & Value & (V-STaR, $n=150$) \\
+\midrule
+\textbf{Localization acc (temporal-hit $\wedge$ IoU $\ge 0.3$)} & \textbf{0.419} & 0.233 \\
+\textbf{Localization acc (temporal-hit $\wedge$ IoU $\ge 0.5$)} & \textbf{0.396} & 0.213 \\
+Temporal recall (keyframe ts $\in$ gold window) & \textbf{0.524} & 0.26 \\
+\textbf{Spatial IoU when temporally correct} & \textbf{0.664} & 0.72 \\
+\emph{diag:} temporal recall ($\pm0.5$s pad) & 0.587 & --- \\
+\emph{diag:} mean spatial IoU (nearest-frame) & 0.564 & 0.39 \\
+\bottomrule
+\end{tabular}
+\caption{Cross-dataset main results: HC-STVG v2 vs.\ V-STaR.}
+\end{table}
+
+\textbf{Cross-dataset reading --- the finding generalizes, and the temporal gap shrinks on well-scoped clips.} On HC-STVG's 20 s single-action clips, temporal recall roughly \textbf{doubles} (0.52 vs.\ V-STaR's 0.26) and end-to-end localization nearly doubles (\textbf{0.42 vs.\ 0.23}), while box accuracy when temporally correct stays high (\textbf{0.66}). The bottleneck ordering is identical across both datasets --- \emph{temporal keyframe selection}, not grounding --- indicating the bottleneck is not benchmark-specific under our evaluated datasets and grounding setup. (A few points of the recall gap are an instrument artifact: the 64-frame reading cap truncates long V-STaR clips but never the 20 s HC-STVG clips, \S6.3; the ordering is unchanged --- HC-STVG's temporal recall stays clearly higher --- though the measured gap would \emph{narrow} somewhat once the cap is removed, since only V-STaR's side rises.) \textbf{Conservative note:} on HC-STVG our heuristic noun-phrase extractor still yields an over-long grounding phrase ($>8$ words) in $\sim$29\% of samples (293/1000), which \emph{depresses} these numbers; a proper parser/LLM extractor is expected to raise them.
+
+\textbf{Metric convention (disclosed).} The joint accuracies use $n=1000$ as denominator; a sample whose grounding returns \emph{no box} has no IoU and is counted as \textbf{incorrect} (it does not inflate acc). The diagnostic ``\emph{spatial IoU when temporally correct}'' is averaged only over temporal hits that \textbf{did} produce a box --- grounding returns a box on \textbf{96.6\%} of temporal hits, so this excludes 3.4\% (18/524); if the no-box cases were scored as IoU = 0 the value would be 0.641 instead of 0.664. The headline localization accuracies are unaffected by this choice.
+
+\emph{(Produced by \texttt{pipeline/hcstvg\_eval.py}; \textbf{numbers independently recomputed from raw per-sample data in multiple verification passes} --- a 45-agent audit re-derived every \S6.3--6.7 figure from the per-sample JSON; the discrepancies it surfaced (one \S6.3 comparison quoted from a mismatched run, and several rounding-level errata) were corrected, after which every figure matches the raw data bit-for-bit. The strict temporal convention (pad = 0) matches the generic \texttt{eval/spatiotemporal\_iou.py} when run with \texttt{--t\_pad 0}; note that the two scripts use different spatial-gold conventions (nearest-in-time tube box here vs.\ a fixed reference box there), so they agree on the temporal-hit gating but are not expected to match box-for-box --- the headline joint accuracies are defined by \texttt{hcstvg\_eval.py}. $n=$ video-ready samples from the mirror subset; the full 1901-clip test split is fetched and a full-split run is straightforward.)}
+
+\subsection{Selection-strategy baselines --- isolating the temporal bottleneck \texorpdfstring{\normalfont\textsc{[Verified, n=300]}}{[VERIFIED, n = 300]}}
+
+To quantify \emph{how much} of the localization score is due to content-based keyframe selection versus a positional prior, we hold grounding fixed (Qwen3-VL) and swap only the selection step, on the same 300 HC-STVG test clips. \texttt{random} = a seeded random frame (floor); \texttt{uniform} = the video-midpoint frame (a strong positional prior, since HC-STVG action windows are temporally centred); \texttt{middle\_gt} = the frame nearest the \emph{gold interval's} midpoint --- a \textbf{temporal oracle} that upper-bounds what perfect selection would give.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Selection ($n=300$, grounding fixed) & Temporal recall & \textbf{Loc.\ acc@0.3 (joint)} & acc@0.5 & IoU when correct \\
+\midrule
+\texttt{random} (floor) & 0.350 & 0.257 & --- & 0.643 \\
+\textbf{Ours (object-conditioned CLIP)} & 0.563 & \textbf{0.443} & 0.423 & 0.655 \\
+\texttt{uniform} (video midpoint, positional prior) & 0.557 & 0.440 & --- & 0.667 \\
+\texttt{middle\_gt} (\textbf{temporal oracle}, upper bound) & 1.000 & \textbf{0.787} & --- & 0.664 \\
+\bottomrule
+\end{tabular}
+\caption{Selection-strategy baselines isolating the temporal bottleneck ($n=300$).}
+\end{table}
+
+\textbf{Honest reading.} (1) Content selection clearly beats chance --- \textbf{ours 0.443 vs.\ random 0.257} (+73\%). (2) On HC-STVG, ours \textbf{ties} the trivial midpoint prior (0.443 vs.\ 0.440): because this dataset's action windows are centred, a positional prior is already strong, and our current content scoring does not yet beat it here (on street-scene V-STaR, object-conditioning \emph{did} help --- \S6.3). (3) The decisive number is the \textbf{oracle: 0.787}. With grounding and box regression unchanged, \emph{perfect temporal selection alone} would lift end-to-end localization from 0.44 to \textbf{0.79} --- quantifying the open problem at $\mathbf{\approx +0.34}$ absolute. This is the paper's central, load-bearing evidence that \textbf{temporal keyframe selection --- not the detector --- is the bottleneck}, and it is measured, not asserted.
+
+\emph{The bridged NeurIPS'25 zero-shot STVG comparison appears in \S6.6 and a unified-model control in \S6.8; DreamSim/DINO/LPIPS generation metrics are reported in \S6.7, while VQAScore/FID and further external baselines remain future work. The comparison above isolates the selection component, which is where our diagnosis localizes the problem. Planned external baselines (all top-venue accepted, per advisor guidance 2026-07): \textbf{Zero-Shot STVG with MLLMs} \citep{zeroshotstvg2509} --- the primary head-to-head (same task, same datasets HC-STVG/VidSTG, same training-free MLLM route, code released); \textbf{LLaVA-ST} (CVPR 2025) and \textbf{VideoRefer Suite} (CVPR 2025) as trained-SOTA references; \textbf{Video-RAG} (visually-aligned) \citep{videorag2411} for the video-RAG side; \textbf{M2RAG} \citep{m2rag2411} for interleaved generation; and a fuller \textbf{unified-model control} (BAGEL / Show-o2 bolted onto an off-the-shelf video RAG) to extend the Janus-Pro-7B monolith control already run (\S6.8). Open-o3-Video (under review) and M2IO-R1/SpaceVLLM (arXiv-only) are cited but not used as baselines.}
+
+\subsection{Selection ablation --- the two-stage selector \texorpdfstring{\normalfont\textsc{[Verified, n=282]}}{[VERIFIED, n = 282]}}
+
+Holding grounding fixed (Qwen3-VL) and evaluating on the \textbf{282-clip common subset} (the clips shared by our runs and the bridged baseline; identical denominators across all five rows, strict temporal pad = 0). \S6.5's selector study uses the fuller 300-clip set; oracle values are reported per-denominator (0.787 @300, 0.780 @282).
+
+\textbf{Bridging protocol (tube $\rightarrow$ keyframe).} The zero-shot STVG baseline emits a spatio-temporal tube; we convert it to a keyframe prediction: keyframe timestamp = the midpoint of its predicted temporal interval; predicted box = the tube box nearest that timestamp; gold box = the gold-tube box nearest the keyframe; then score with exactly our joint metric (strict pad = 0; no box = incorrect). The midpoint's frame rounding is computed both ways --- floor/ceil: temporal recall 0.642/0.667, acc@0.3 0.447/0.443, acc@0.5 0.394/0.390. The table reports \textbf{floor}, the variant more favorable to the baseline on the headline acc@0.3; E2 wins under both roundings (\texttt{pipeline/hcstvg\_compare.py}). Sanity anchor: the baseline's \emph{native-protocol} reproduction in our environment (m\_vIoU 0.221 over our full 299-clip reproduction run, before intersecting to the 282 common set) is consistent with the community-reported 0.207 (repo issue \#4) and the paper's 0.236, so the bridged numbers rest on a faithful reproduction.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Selection & Temporal recall & \textbf{acc@0.3 (joint)} & acc@0.5 \\
+\midrule
+E0: object-conditioned scoring (\S6.4 system) & 0.557 & 0.433 & 0.411 \\
+E1: E0 + action-phrase channel & 0.610 & 0.489 & 0.468 \\
+\textbf{E2: two-stage (MLLM window $\rightarrow$ in-window selection)} & \textbf{0.720} & \textbf{0.567} & \textbf{0.539} \\
+(ref) NeurIPS'25 zero-shot STVG, bridged (protocol above; floor rounding) & 0.642 & 0.447 & 0.394 \\
+(ref) temporal oracle upper bound & 1.000 & 0.780 & --- \\
+\bottomrule
+\end{tabular}
+\caption{Two-stage selector ablation (282-clip common subset).}
+\end{table}
+
+\textbf{Reading.} (1) Both improvements outperform E0 and E2 is strongest (0.433$\rightarrow$0.489$\rightarrow$0.567, two independent modifications); box quality when temporally correct stays in a narrow band (0.61--0.64 across E0/E1/E2 on the 282 subset, no-box counted as IoU 0), so the improvement is \textbf{primarily associated with higher temporal recall} (conditional spatial IoU moves by $\le 0.035$, versus $+0.16$ temporal recall) --- exactly where \S6.5 located the bottleneck. Note E2 changes which keyframe is grounded, so this is an association, not a strictly controlled causal decomposition; E1 and E2 are two independent modifications (not a nested stack), and the full factorial ablation is future work. (2) \textbf{E2 outperforms the bridged NeurIPS'25 zero-shot STVG baseline by +0.121 acc@0.3 under our joint keyframe metric on the same clips} (bridged per the protocol above) while requiring no gradient-based test-time adaptation (it adds one MLLM call per clip --- measured at \textbf{+1.46 s/clip}, \S6.7 Cost). (3) The remaining oracle gap is $0.780-0.567 \approx 0.21$ (was $\approx 0.35$ at the same 282 denominator): grid density, iterative window refinement, and audio/subtitle cues are natural next steps. \textbf{Exploratory leakage sanity check} (not a full audit): Stage A receives only the sparse frame grid and the query text --- the gold interval is never passed in. Among the 203 temporally-correct predictions in the 282-clip subset, the median keyframe distance to the nearest gold boundary is 1.76 s (no boundary-snapping signature). Stage-A raw window outputs were not persisted in this run, so an end-to-end audit of the MLLM responses is future work.
+
+\textbf{Scale confirmation \normalfont\textsc{[Verified, n=1000]}.} Re-running E2 (grid $g=10$) on 1000 HC-STVG test clips: temporal recall \textbf{0.688}, acc@0.3 \textbf{0.540}, acc@0.5 0.517 --- versus the E0 system's 0.524/0.419/0.396 on the same 1000 clips (\S6.4). The improvement holds at scale (mild regression from the 300-clip subset is expected).
+
+\textbf{Stage-A grid density \normalfont\textsc{[Verified, n=300]}.} Densifying the sparse grid improves the window and the end metric up to $g=20$ --- $g=10/15/20$ $\rightarrow$ temporal recall 0.717/0.753/0.783, acc@0.3 \textbf{0.570/0.603/0.627} --- shrinking the oracle gap to $\approx0.16$ at the peak (cost: proportionally more image tokens in the single Stage-A call). (Numbers are from the fixed selector: an earlier single-frame-window collapse bug silently reverted 10--13\% of $g\ge15$ samples to the E0 baseline, mildly depressing those runs; $g=10$ --- and therefore every headline number --- was unaffected, regression-verified bit-for-bit after the fix.) \textbf{The sweep saturates --- and then inverts \normalfont\textsc{[Verified, n=300]}.} Extending the grid beyond 20 frames \emph{reverses} the gains: the curve is an inverted U peaking at $g=20$, with $g=30$ falling below even $g=10$. Since the single-frame-window fix rules out the earlier collapse mode (zero collapsed windows, zero fallbacks at g=25/30), the decline is genuine model behavior --- packing more frames into the one Stage-A call dilutes the MLLM's cross-frame temporal attention. Practically, $g=20$ is the operating point; conceptually, the coarse window cannot be densified for free.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Stage-A grid & Temporal recall & acc@0.3 [95\% CI] & acc@0.5 \\
+\midrule
+g = 10 & 0.717 & 0.570 [0.513, 0.627] & 0.543 \\
+g = 15 & 0.753 & 0.603 [0.547, 0.660] & 0.587 \\
+\textbf{g = 20 (peak)} & \textbf{0.783} & \textbf{0.627} [0.570, 0.680] & \textbf{0.607} \\
+g = 25 & 0.727 & 0.580 [0.523, 0.637] & 0.557 \\
+g = 30 & 0.677 & 0.537 [0.480, 0.593] & 0.513 \\
+\bottomrule
+\end{tabular}
+\caption{Full Stage-A grid-density sweep ($n=300$, fixed selector). Rise--peak--fall; conditional spatial precision $S_t$ stays in the 0.78--0.81 band on every row (0.798/0.793 at g=25/30) --- consistent with \S4.5, density moves temporal recall only, in both directions.}
+\end{table}
+
+\textbf{Statistical significance \normalfont\textsc{[Verified]}.} All point estimates carry 95\% bootstrap CIs (10k resamples), and the two-stage gains are significant on paired tests over identical clips (\texttt{pipeline/stats\_significance.py}). E0$\rightarrow$E2 lifts acc@0.3 $\mathbf{0.419\rightarrow0.540}$ at $n=1000$ ($\Delta+0.121$; McNemar $p < 10^{-4}$; Wilcoxon on box IoU $p < 10^{-4}$); E2 also significantly beats the strong midpoint prior at $n=300$ ($0.440\rightarrow0.570$, $\Delta+0.130$; McNemar $p = 0.0006$). The E1$\rightarrow$E2 step is weaker and honestly reported as such ($\Delta+0.073$; McNemar $p = 0.015$; Wilcoxon on box IoU $p = 0.079$, n.s.), consistent with E1/E2 being independent, non-stacked modifications. Most tellingly, densifying the grid g10$\rightarrow$g20 \textbf{raises acc@0.3 ($\Delta+0.057$; McNemar $p = 0.043$) while leaving per-sample box IoU statistically unchanged (Wilcoxon $p = 0.90$)} --- the selector's benefit is overwhelmingly temporal (the $A = R_t\cdot S_t$ decomposition attributes $\approx$94\% of this gain to $R_t$), exactly where \S6.5 located the bottleneck.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{lccccc}
+\toprule
+Paired comparison (same clips) & acc@0.3 & $\Delta$ & McNemar b/c & McNemar $p$ & Wilcoxon (IoU) $p$ \\
+\midrule
+E0 $\rightarrow$ E2 ($n=1000$) & $0.419 \rightarrow 0.540$ & +0.121 & 61/182 & $<10^{-4}$ *** & $<10^{-4}$ *** \\
+uniform/midpoint $\rightarrow$ E2 ($n=300$) & $0.440 \rightarrow 0.570$ & +0.130 & 42/81 & 0.0006 *** & 0.0001 *** \\
+E1 $\rightarrow$ E2 ($n=300$) & $0.497 \rightarrow 0.570$ & +0.073 & 27/49 & 0.015 * & 0.079 n.s. \\
+E2 g10 $\rightarrow$ g20 ($n=300$) & $0.570 \rightarrow 0.627$ & +0.057 & 23/40 & 0.043 * & 0.90 n.s. \\
+\bottomrule
+\end{tabular}
+\caption{Paired significance tests. b/c = discordant pairs (first-only-correct / second-only-correct).}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Selector run & acc@0.3 [95\% CI] & Temporal recall & acc@0.5 \\
+\midrule
+random (n=300) & 0.257 [0.210, 0.307] & 0.350 & 0.250 \\
+uniform/midpoint (n=300) & 0.440 [0.383, 0.497] & 0.557 & 0.423 \\
+E0 (n=1000) & 0.419 [0.388, 0.450] & 0.524 & 0.396 \\
+E1 (n=300) & 0.497 [0.440, 0.553] & 0.613 & 0.477 \\
+E2 (n=300) & 0.570 [0.513, 0.627] & 0.717 & 0.543 \\
+E2 (n=1000) & 0.540 [0.509, 0.571] & 0.688 & 0.517 \\
+temporal oracle (n=300) & 0.787 [0.740, 0.833] & 1.000 & 0.753 \\
+\bottomrule
+\end{tabular}
+\caption{Bootstrap 95\% CIs (10k resamples) for all headline localization runs, full-set denominators (282-subset values in the ablation table above).}
+\end{table}
+
+\emph{Still planned:} A1 remove object conditioning; A2 whole-frame conditioning; A3 crop-only (=M2RAG); A4 BGE-M3 pruning; A5 shared RAG; A6 $\tau_g/\tau_r$ sweep; A7 feedback loop; A8 $w$ mixtures; A9 generator choice; A10 condition ablation; full factorial E1$\times$E2.
+
+\subsection{Keyframe-faithfulness protocol and results --- generation \texorpdfstring{\normalfont\textsc{[Verified: Round 1 n=40, A/B n=10, dual-axis n=30, Round 3 n=40]}}{[VERIFIED]}}
+
+This section operationalizes the paper's faithfulness claim. \textbf{Protocol.} A generated image is \emph{semantically faithful} to its source keyframe iff it depicts the \emph{same moment}: same person(s), same clothing, same pose/action, same scene layout, and an emotional expression consistent with the source (crying$\rightarrow$smiling is a violation; micro-level facial redraw without an emotion change is not --- refined in Round 3); lighting/color/style changes are permitted (\S2 motivation; identity-level pixel fidelity is explicitly out of scope, \S7). We evaluate with (i) \textbf{human annotation} (one author; binary + unsure) and (ii) an \textbf{MLLM judge} (Qwen3-VL, two-image prompt asking strictly for a same-moment judgment, JSON output).
+
+\textbf{Round 1 --- baseline generation ($n=40$).} FLUX.1-Kontext-dev conditioned on E2-selected keyframes with a \emph{permissive} instruction (``re-render as a cinematic promotional poster shot, dramatic lighting''):
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lc}
+\toprule
+Measure & Value \\
+\midrule
+Human faithfulness rate & \textbf{12/40 (30\%)} \\
+CLIP subject similarity (same images) & 0.60 \\
+MLLM judge faithfulness & 4/40 (10\%) \\
+Human--judge agreement (excl.\ unsure) & \textbf{31/39 (79.5\%)}, with \textbf{zero false-accepts} (all 27 human-``unfaithful'' caught) \\
+\bottomrule
+\end{tabular}
+\caption{Round 1 baseline generation faithfulness measures ($n=40$).}
+\end{table}
+
+Failure modes (human-categorized): \textbf{(a) wholesale re-imagination} --- the scene is replaced entirely (e.g., an outdoor group scene regenerated as a studio portrait of one man); \textbf{(b) clothing/identity drift}; \textbf{(c) over-darkening} (the ``dramatic lighting'' token over-executed). Two takeaways. First, \textbf{CLIP subject similarity is a weak, unreliable proxy for faithfulness}: it \emph{does} correlate with human judgment (AUC 0.85, Mann-Whitney $p=0.001$; faithful mean 0.72 vs.\ unfaithful 0.55), but it admits \textbf{no usable threshold} --- 72\% of pairs fall in the class-overlap band [0.45, 0.76], and the best single cutoff still misclassifies 6/39; the reassuring mean of 0.60 conceals that 70\% are unfaithful. A metric that ranks yet cannot gate is precisely why a dedicated protocol is needed. Second, the MLLM judge, while conservative, never passed an unfaithful image in this sample, making it a conservative \emph{candidate} gate --- held-out independent validation is required before large-scale use. \emph{(CLIP-AUC analysis: \texttt{pipeline/clip\_faithfulness\_auc.py}.)}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcc}
+\toprule
+CLIP subject sim as a faithfulness proxy & permissive (Round 1, n=39) & constrained (Round 3, n=40) \\
+\midrule
+AUC vs.\ human label & 0.846 & 0.673 \\
+Mann-Whitney $p$ & 0.001 & 0.087 (n.s.) \\
+best single-threshold accuracy & 84.6\% & 70.0\% (= majority base rate) \\
+samples inside class-overlap band & 72\% & 68\% \\
+\bottomrule
+\end{tabular}
+\caption{CLIP's discriminative power over human faithfulness labels, by prompting regime --- it ranks in the permissive regime but cannot gate, and collapses to base-rate performance when failures become expression-level.}
+\end{table}
+
+\textbf{The automatic-metric family degrades together \normalfont\textsc{[Verified, 2$\times$40 pairs]}.} To test whether CLIP's collapse is idiosyncratic, we computed three further standard image-similarity metrics on the same 80 keyframe/generation pairs --- \textbf{DreamSim} (perceptual distance), \textbf{DINOv2} CLS-cosine, and \textbf{LPIPS} --- and scored each against the human labels (\texttt{pipeline/gen\_metrics\_auc.py}):
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Automatic metric & mean, permissive $\rightarrow$ constrained & AUC (permissive) & AUC (constrained) \\
+\midrule
+DreamSim $\downarrow$ & $0.535 \rightarrow 0.377$ & \textbf{0.873} & 0.756 \\
+DINOv2 CLS cosine $\uparrow$ & $0.388 \rightarrow 0.701$ & 0.870 & \textbf{0.766} \\
+CLIP subject sim $\uparrow$ & $0.601 \rightarrow 0.708$ & 0.846 & 0.673 \\
+LPIPS $\downarrow$ & $0.661 \rightarrow 0.557$ & 0.719 & 0.640 \\
+\bottomrule
+\end{tabular}
+\caption{Every metric's mean moves in the faithful direction under content-locking ($\downarrow$ = distance, lower is closer; $\uparrow$ = similarity), and every metric ranks well in the permissive regime --- yet \textbf{all four lose discriminative power in the constrained regime}, where the residual failures are expression-level. DreamSim/DINO are the strongest rankers in both regimes but are not exempt from the degradation.}
+\end{table}
+
+The finding is therefore not a CLIP quirk but a \textbf{family-wide property}: appearance-level automatic metrics separate wholesale re-imagination from faithful renders, but none of them can adjudicate the subtle failures that remain once content is locked --- which is exactly the regime a deployed system operates in.
+
+\textbf{Round 2 --- instruction-constrained A/B (same 10 keyframes).} Replacing the instruction with an explicit preservation constraint (``enhance this exact frame\ldots STRICTLY KEEP the same people, faces, clothing, poses and scene layout; only improve lighting/color/sharpness; keep bright; no text''):
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Instruction & Human faithful & MLLM judge \\
+\midrule
+Permissive & 1/10 (10\%) & 0/10 \\
+\textbf{Constrained} & \textbf{10/10 (100\%)} & 3/10 \\
+\bottomrule
+\end{tabular}
+\caption{Round 2 instruction-constrained A/B comparison (same 10 keyframes).}
+\end{table}
+
+\textbf{In this matched sample, unfaithfulness behaves as an instruction-constraint problem rather than a hard capability ceiling} (n=10; capability limits at scale remain untested) --- and our protocol is what makes this dimension measurable.
+
+\textbf{The faithfulness--creativity trade-off (measured).} We added a second human-rated axis --- \emph{poster-likeness} (1 = looks like a screenshot, 2 = some polish, 3 = looks like a real poster) --- and rated four instruction tiers on the same 10 keyframes (tiers A/B/C = 30 pairs rated tier-blind in one shuffled session; tier D added later as a separate 10-pair batch, \S6.7 Round 3):
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Instruction tier & Human faithful & Poster-likeness (1--3) \\
+\midrule
+A: permissive (``\ldots promotional poster shot, dramatic lighting'', abbrev.) & 1/10 (10\%) & \textbf{2.50} \\
+B: maximally constrained (preserve everything, enhance only) & \textbf{10/10 (100\%)} & 1.10 \\
+C: content locked, lighting/grading freed & \textbf{9/10 (90\%)} & 1.20 \\
+D: content locked, artistry maximized (cinematic re-grade, rim light, depth) & \textbf{9/10 (90\%)} & \textbf{1.50} \\
+\bottomrule
+\end{tabular}
+\caption{Faithfulness--creativity trade-off across instruction tiers.}
+\end{table}
+
+\textbf{Reading.} Once content is locked, poster-likeness rises monotonically as the stylistic vocabulary is pushed --- B 1.10 $\rightarrow$ C 1.20 $\rightarrow$ D 1.50 --- while faithfulness holds at 90--100\%. So this is \emph{not} a hard ``faithfulness kills all artistry'' wall: text instructions do recover some polish. But even maximal artistic instruction (D) plateaus at \textbf{1.50, well short of the 2.50} reached only when content is \emph{unlocked} (A, at 10\% faithfulness). Under single-instruction control, FLUX-Kontext lets us buy back partial artistry but cannot reach the faithful-\emph{and}-striking sweet spot: the two axes compose only partway. This is a \textbf{bounded negative result for single-instruction control} ($n=10$, one annotator), motivating \emph{decoupled} control --- which the next block tests head-to-head: sequential two-pass editing \textbf{breaks this plateau} (100\% faithful at 1.90), while parallel semantic conditioning does not.
+
+\textbf{Breaking the plateau: sequential vs.\ parallel decoupling \normalfont\textsc{[Verified, 3$\times$10 pairs]}.} If the single-instruction budget is zero-sum, \emph{decoupling} content-locking from style-amplification should recover the frontier. We instantiated the two designed decoupling routes on the same 10 keyframes (same set as tiers A--D; shuffled joint annotation, one annotator): \textbf{(i) sequential (two-pass editing)} --- pass 1 = the D-tier content-locked edit, pass 2 = a pure style-amplification instruction on pass-1's output; \textbf{(ii) parallel-semantic (dual-channel)} --- FLUX.1-dev with the keyframe as an IP-Adapter image condition (scales 0.75/0.95) and an unconstrained artistic text prompt.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Decoupling route & Human faithful & Poster-likeness \\
+\midrule
+single-pass best (tier D, reference) & 9/10 (90\%) & 1.50 \\
+\textbf{sequential: two-pass editing} & \textbf{10/10 (100\%)} & \textbf{1.90} \\
+sequential: three-pass & 8/10 (80\%) & 1.90 \\
+sequential: four-pass & 10/10 (100\%) & 1.90 \\
+parallel: IP-Adapter, scale 0.75 & 0/10 & 1.60 \\
+parallel: IP-Adapter, scale 0.95 & 0/10 & 1.60 \\
+parallel: ControlNet-depth (geometry) & 0/10 & \textbf{2.30} \\
+\bottomrule
+\end{tabular}
+\caption{Sequential decoupling \textbf{dominates the single-instruction frontier on both axes} (100\% vs.\ 90\% faithful, 1.90 vs.\ 1.50 poster-likeness, identical keyframes) --- the first point beyond the single-call plateau --- but \textbf{saturates at 1.90}: deeper chains (3--4 passes, same style instruction) add no further artistry while faithfulness stays high (80--100\%). Parallel \emph{semantic} conditioning fails moment-fidelity at every scale: IP-Adapter transfers the clip's \emph{gist} (setting, palette, cast type) but not the \emph{moment} (0/10). Parallel \emph{geometric} conditioning (ControlNet-depth over the keyframe's depth map + free artistic text) reaches the \textbf{highest artistry of any anchored arm (2.30, approaching the unlocked 2.50)} and visibly preserves the composition skeleton --- yet re-imagines all appearance (0/10 faithful).}
+\end{table}
+
+\textbf{Reading.} The constraint budget of a single call is zero-sum (\S6.7 above), but it \textbf{resets across calls}: chaining a content-locked edit with a style-only edit spends two full budgets, and the image handed to pass 2 carries the content so the text no longer must. The chain then \textbf{saturates}: by pass 2 the style instruction's content is fully absorbed, and passes 3--4 change nothing measurable --- a second, higher plateau at 1.90. The parallel arms complete a \textbf{conditioning-modality taxonomy}: each anchor preserves exactly the modality it encodes --- \textbf{pixel-level editing preserves the moment} (faithful, style-capped at 1.90); \textbf{semantic conditioning preserves the gist} (neither faithful nor notably artistic); \textbf{geometric conditioning preserves the layout} (composition-true and the most artistic anchored arm at 2.30, but appearance-false at 0/10). The residual gap (1.90 $\rightarrow$ 2.30/2.50) is precisely \emph{appearance-preserving stylization}, which no single anchor provides; composing anchors (pixel identity + geometric layout + free style text) is the natural next design. \emph{(Scope: n = 10 per arm, single annotator; chained passes inherit earlier-pass biases; arm tags visible in the annotation ids as in prior rounds.)}
+
+\textbf{Round 3 --- the best tier at scale \normalfont\textsc{[Verified, n=40]}.} Applying the D-tier instruction to all 40 E2-selected keyframes (same keyframes and denominator as Round 1): human faithfulness \textbf{28/40 (70\%)} vs.\ the permissive baseline's 12/40 (30\%) --- instruction control holds at scale, though below the 10-pair probe's 90\% (small-n optimism). Poster-likeness averages \textbf{1.78} ($n=40$; the 10-pair probe gave 1.50), confirming partial-artistry recovery. The annotation standard was sharpened for this round: an image whose \textbf{emotional expression contradicts the source moment} (e.g., crying $\rightarrow$ smiling) counts as unfaithful; micro-level facial redraw without an emotion change does not. CLIP subject similarity rises to \textbf{0.708} (vs.\ 0.601 permissive), but its discriminative power \textbf{collapses in this regime}: AUC drops from 0.85 (permissive) to \textbf{0.67} (constrained, $p=0.087$ --- no longer significant), because here the failures are expression-level rather than wholesale, and CLIP cannot see them. \textbf{Both automatic signals degrade together}: the MLLM judge passes 32/40, agrees with the human on 30/40 (75\%), but \textbf{accepts 7 pairs the human rejected} --- its zero-false-accept property (Round 1) does \emph{not} transfer to the constrained regime. The joint lesson is sharp --- \textbf{automatic proxies (the four-metric family above, and the MLLM judge) get less reliable exactly as the failures get subtler}, so the human protocol is the stable anchor and every automatic gate needs held-out validation before any automated use.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Measure (same 40 keyframes) & permissive (Round 1) & best tier D (Round 3) \\
+\midrule
+Human faithfulness & 12/40 (30\%) & \textbf{28/40 (70\%)} \\
+MLLM judge pass & 4/40 & 32/40 \\
+Judge false-accepts (vs.\ human) & \textbf{0} & 7 \\
+Human--judge agreement & 31/39 (79.5\%) & 30/40 (75.0\%) \\
+Cohen $\kappa$ (human vs.\ judge) & 0.41 & 0.34 \\
+CLIP subject similarity (mean) & 0.601 & 0.708 \\
+CLIP AUC vs.\ human label & 0.846 & 0.673 \\
+Poster-likeness (1--3) & --- & 1.78 \\
+\bottomrule
+\end{tabular}
+\caption{Instruction control at scale, and the simultaneous degradation of both automatic proxies. Cohen $\kappa$ stays fair-to-moderate in both regimes --- quantitative grounds for treating the judge as a candidate gate only.}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{2}{c}{Round 1 (n=39)} & \multicolumn{2}{c}{Round 3 (n=40)} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+Human $\backslash$ Judge & yes & no & yes & no \\
+\midrule
+\textbf{yes} & 4 & 8 & 25 & 3 \\
+\textbf{no} & \textbf{0} & 27 & \textbf{7} & 5 \\
+\bottomrule
+\end{tabular}
+\caption{Human$\times$judge confusion matrices (Round 1, n=39 excl.\ one unsure; Round 3, n=40). The zero false-accept cell (bold) in Round 1 becomes 7 in Round 3 --- the regime shift in one number.}
+\end{table}
+
+\textbf{Cost (measured, single RTX 4090D, n=20 clips, per-sample averages).}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Stage (per clip) & E0 pipeline & E2 pipeline \\
+\midrule
+Frame reading & 1.07 s & 1.07 s \\
+Stage-A MLLM coarse window & --- & \textbf{+1.46 s} \\
+CLIP frame scoring & 0.34 s & 0.34 s \\
+Qwen3-VL grounding & 0.90 s & 0.90 s \\
+\textbf{Total} & \textbf{$\approx$2.31 s} & \textbf{$\approx$3.77 s} \\
+One-time model loading & CLIP 16.3 s & + Qwen3-VL 10.4 s \\
+\bottomrule
+\end{tabular}
+\caption{Measured per-clip latency. The two-stage selector's accuracy gain (\S6.6) costs $\sim$1.5 s per clip with \textbf{no gradient computation}, versus per-sample test-time \emph{tuning} in the NeurIPS'25 baseline.}
+\end{table}
+
+\subsection{Unified-model (monolith) control \texorpdfstring{\normalfont\textsc{[Verified, n=20]}}{[VERIFIED, n = 20]}}
+
+\textbf{Protocol.} The \S2 hypothesis --- that a single unified model does not replace the localization-grounded pipeline --- gets its first instantiation. \textbf{Janus-Pro-7B} \citep{januspro2501} (a unified understanding+generation model) receives an 8-frame uniform grid of the clip plus the query, \emph{describes} the queried moment, then \emph{generates} the answer image from its own description (describe-then-generate; the model offers no image-conditioned generation). Its outputs carry \textbf{no timestamp and no bounding box --- the localization protocol is structurally absent}, not merely unmeasured (recorded per-sample in \texttt{demo\_2026-07-21/janus\_ctrl/meta.json}). Same 20 HC-STVG clips, same human protocol and annotator as \S6.7.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Measure ($n=20$) & Unified control (Janus-Pro-7B) & Ours (best tier D, \S6.7) \\
+\midrule
+Human faithfulness & \textbf{0/20 (0\%)} & 28/40 (70\%) \\
+Poster-likeness (1--3; stylization only --- does not penalize deformation) & 2.15 & 1.78 \\
+Temporal localization output & none (structural) & keyframe timestamp, IoU-evaluated \\
+Spatial localization output & none (structural) & bbox, IoU-evaluated \\
+\bottomrule
+\end{tabular}
+\caption{Unified-model (monolith) control: Janus-Pro-7B vs.\ our best-tier pipeline ($n=20$).}
+\end{table}
+
+\textbf{Reading.} The poster-likeness score of 2.15 must be read carefully: the scale (1 = screenshot, 2 = some polish, 3 = real poster) rewards \emph{surface stylization} --- cinematic grading, collage layouts --- and does \textbf{not} penalize content deformation. The unified model's outputs score high on stylization while being \textbf{anatomically and scenically deformed throughout} (annotator-reported: duplicated heads, warped bodies, invented scenes), and \textbf{not one of the twenty depicts the actual moment}: subjects are re-imagined wholesale. On the faithfulness-artistry map (\S6.7) the monolith lands in the same corner as permissive prompting: \textbf{style without provenance}. This is the \S2 argument made measurable: without explicit localization and keyframe binding, there is nothing anchoring generation to the real clip --- and no way even to audit the failure, since the model reports no \emph{when} or \emph{where}. \textbf{Scope (honest):} one 7B unified model under one protocol, $n=20$, single annotator; stronger unified models (BAGEL, Show-o2) and richer prompting may narrow the style-consistency gap, but the missing when/where output is architecture-level --- precisely the property VKIG-Bench is built to measure.
+
+\section{Conclusion and Limitations}
+
+\paragraph{Conclusion.} We formalize \emph{video-grounded interleaved image-text generation}, position it in a precisely-scoped gap, and propose a cooperative two-agent framework over a shared multimodal RAG with a question-driven, object-level localization-to-generation method and a keyframe-consistency-aware benchmark (VKIG-Bench). A temporal-oracle study isolates keyframe timing as the dominant bottleneck, and our \textbf{two-stage temporal selector} (MLLM windowing $\rightarrow$ in-window selection) lifts joint localization from 0.433 to 0.567 on a 282-clip HC-STVG v2 subset, outperforming a bridged NeurIPS'25 zero-shot STVG method on identical clips under our joint keyframe metric. A real-video prototype runs end to end on a single 24GB GPU.
+
+\paragraph{Limitations (honest).}
+\begin{itemize}
+\item \textbf{Temporal keyframe selection was the dominant bottleneck --- partially addressed, gap remains.} \emph{Before the two-stage selector}, temporal recall was \textbf{0.26 (V-STaR) / 0.52--0.56 (HC-STVG)}, capping joint localization at \textbf{0.23 / 0.42--0.44} even though the box is accurate once the moment is right (IoU 0.72 / 0.66). The two-stage selector (\S4.3\textcircled{2}, \S6.6) lifts HC-STVG temporal recall to \textbf{0.720} and joint acc@0.3 to \textbf{0.567} (282-clip subset), but an oracle gap of $\approx$\textbf{0.21} remains, and Stage A adds one MLLM call per clip (+1.46 s, measured \S6.7). Future work: iterative window refinement, audio/subtitle cues, a learned selector (the grid-density sweep is complete --- inverted-U with peak at g=20, \S6.6); the two-stage result is not yet re-verified on V-STaR. \normalfont\textsc{[Verified]}
+\item \textbf{Grounding \& generation.} Qwen3-VL native grounding beats Grounding-DINO-base on box quality (same-keyframe diagnostic spatial IoU 0.323 vs.\ 0.292) but not on the joint metric (0.22 vs.\ 0.24, \S6.3); stronger detectors (G-DINO-large / DINO-X, API-gated) are future work. The end-to-end V-STaR runs used SDXL-Turbo; the faithfulness study (\S6.7) already uses the full FLUX-Kontext generator.
+\item \textbf{Scale, data provenance \& generator.} Numbers are on dev subsets (V-STaR 150 / HC-STVG 200--1000; selector comparison on a 282-clip common subset) with SDXL-Turbo for the end-to-end runs (FLUX-Kontext used in the \S6.7 faithfulness study), \textbf{not the full splits}; the external baselines run so far are the bridged NeurIPS'25 zero-shot STVG (\S6.6), whose full DSTH mode could not be reproduced from the official code (issue filed), and a single 7B unified-model control (\S6.8, n=20 --- BAGEL/Show-o2 still TODO). HC-STVG videos are from a \emph{community HF mirror} (\texttt{ShijianW01/hc-stvg2}), not the official package --- we verified its annotation schema and gold tubes match the official format, but a re-run on the official release is on the list. The grounding-target noun phrase is a \emph{heuristic} extractor (verb-boundary + \texttt{sub} fallback), over-long in $\sim$29\% of HC-STVG samples, which conservatively lowers the reported numbers. Scaling to full splits (HC-STVG 1901 / VKIG-Bench 300+$\rightarrow$1--2k), the full FLUX-Kontext generator, remaining metrics (VQAScore/FID --- DreamSim/DINO/LPIPS already reported \S6.7), and stronger unified-model baselines are TODO.
+\item \textbf{Cross-domain generalization.} Validated on street-scene V-STaR and film-clip HC-STVG; short-drama (the target domain) and other domains remain a qualitative-demo plan, not yet quantified.
+\item \textbf{Human evaluation is single-annotator and small-n.} The faithfulness and dual-axis ratings (\S6.7) come from one author annotator across the Round-1 (n=40), A/B (n=10), three-tier dual-axis (n=30), and Round-3 best-tier (n=40) sets, with no inter-annotator agreement; the MLLM judge is validated only against those same labels. Independent multi-annotator re-labeling and a held-out judge validation are required before camera-ready or any large-scale use.
+\item \textbf{The faithfulness--creativity trade-off is narrowed but not closed.} The single-instruction plateau (D: 90\%/1.50 probe, 70\%/1.78 at n=40) is now \textbf{broken by sequential decoupling} --- two-pass editing reaches 100\% faithful at poster-likeness 1.90 on the same keyframes (\S6.7) --- but the chain itself saturates at 1.90 (passes 3--4 add nothing). Parallel anchors preserve only the modality they encode: semantic (IP-Adapter) fails moment-fidelity at every scale (0/10); geometric (ControlNet-depth) reaches 2.30 artistry with the composition skeleton intact yet 0/10 appearance-fidelity. The residual gap (1.90 $\rightarrow$ 2.30/2.50) is \emph{appearance-preserving stylization}; composing anchors (pixel identity + geometric layout + free style) is the designed next step. All frontier measurements are n = 10 per arm, single annotator. A further instruction-level datapoint: adding a strong no-text constraint to the demo prompt visibly crowded out content preservation in one qualitative sample --- single-instruction constraint budgets are zero-sum, which is precisely why decoupling across calls works.
+\item \textbf{Faithfulness is semantic, not forensic.} Our keyframe-consistency protocol measures \emph{semantic} fidelity (subject/scene/composition); generative enhancement cannot recover identity-level detail absent from low-resolution sources (information-theoretically ill-posed; cf.\ face-hallucination failures and courtroom rejection of AI-enhanced evidence). The generation path is therefore scoped to creation-type outputs; identity-critical forensic scenarios receive localization + the original frame only. Multi-frame (burst) super-resolution, which can recover genuine sub-pixel information, is orthogonal future work.
+\item \textbf{Unverified design choices.} Coverage $c(I)$ is our instantiation of AKS, not its published form; SVO extraction is a transfer of GROVE; several 2026 preprint references and the M2RAG metric set must be re-checked against source repos before camera-ready.
+\end{itemize}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
