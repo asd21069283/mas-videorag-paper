@@ -1,0 +1,22 @@
+\section{Extended notes for Table~\ref{tab:capability}}
+\label{app:table1}
+
+The seven columns of Table~\ref{tab:capability} operationalize the capability axes induced by our task definition (Section~\ref{sec:method-task}): video input; an output image that is newly generated rather than retrieved or selected; a long-form interleaved image-text answer; an explicit when-plus-where evidence protocol, that is, a time interval and a bounding box evaluated by IoU; a declared protocol and metric for the faithfulness of the generated image to the localized source keyframe; a benchmark that scores this keyframe consistency; and a training-free main pipeline. The MAS-plus-shared-RAG property of our task definition is an architectural axis rather than a per-system capability column and is discussed in the text. Every cell was checked against the cited paper's own text, and every $\times$ or $\triangle$ we assign was additionally stress-tested by an adversarial pass instructed to overturn it from the cited work's own claims; per-cell source quotes are archived in the supplementary file \texttt{table1\_evidence.json}.
+
+\paragraph{Note a (temporal-only, informal localization).}
+The localization in both video RAG systems is temporal-only and informal. VideoRAG \citep{videorag2502} retrieves 30-second clip intervals and narrates them in case studies without an IoU protocol; Video-RAG \citep{videorag2411} carries internal detector boxes that it never exposes as output evidence.
+
+\paragraph{Note b (consistency metrics without localized faithfulness).}
+Consistency-style metrics exist for X-VILA \citep{xvila2405}, Emu3.5 \citep{emu352510}, and Show-o2 \citep{showo22506}, but they score generations against conditioning or reference inputs in image-to-X or embodied settings: X-VILA evaluates X2A outputs against ground-truth targets, Emu3.5 reports ICE-Bench SRC and an embodied Background-Consistency score, and Show-o2 reports VBench-I2V subject and background consistency. None of these constitutes a protocol for question-driven, localized video-keyframe faithfulness, and all of them lack the when-plus-where column.
+
+\paragraph{Note c (PVTG).}
+PVTG \citep{pvtg2607} is concurrent work that produces a single thumbnail per video. Its highlight retrieval operates at the frame level without an output box or interval protocol, and fidelity is measured with LPIPS and DINO-Sim together with a VLM verify-and-retry loop. It is the closest neighbor to our setting and still lacks full versions of columns 3 and 4.
+
+\paragraph{Note d (zero-shot with test-time gradients).}
+The method of \citet{zeroshotstvg2509} uses no training data but performs per-sample test-time gradient optimization; our pipeline computes no gradients.
+
+\paragraph{Note e (single image per query in reported runs).}
+In all reported end-to-end runs (Section~\ref{sec:exp}) the system emits the answer text and one generated image per query. Multi-image interleaving is part of the design (Section~\ref{sec:method}) and has not yet been demonstrated; the reported runs cover the single-image-per-query case.
+
+\paragraph{Note f (benchmark status).}
+Keyframe-consistency scoring is operationalized as a stated protocol with human and MLLM-judge evaluation at $n=40$ (Section~\ref{sec:exp}). The full VKIG-Bench construction, growing from 300+ samples toward 1--2k with DreamSim and VQAScore metrics, is in progress (Sections~\ref{sec:bench} and~\ref{sec:concl}).

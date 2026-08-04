@@ -1,0 +1,51 @@
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Video multimodal RAG.}
+Retrieval-augmented systems for video answer questions in text. VideoRAG \citep{videorag2502} builds cross-video knowledge graphs over hundreds of hours of footage and answers through a single retrieval pipeline, while Video-RAG \citep{videorag2411} is a training-free plug-in that extracts OCR, ASR, and open-vocabulary detections as auxiliary text for a video LLM. VimRAG \citep{vimrag2602} extends multimodal retrieval on the video side. All of these systems produce text as their only output; their video front-ends are reusable for our Understand Agent, but none closes the loop to a generated image. Video-RAG in particular computes detector boxes and keyframes internally and then flattens them into text, whereas we route the same signal into image production.
+
+\paragraph{Interleaved generation and retrieval-augmented image generation.}
+M2RAG \citep{m2rag2411} retrieves web image-text pairs and produces interleaved answers, but it selects existing images rather than generating new ones. M2IO-R1 \citep{m2ior12508} makes interleaved insertion trainable with reinforcement learning, and MRAMG-Bench \citep{mramgbench2502} benchmarks multimodal answer generation. Retrieval-augmented generation of new images, as in ImageRAG \citep{imagerag2502}, ORIG \citep{orig2510}, and Gen-Searcher \citep{gensearcher2603}, is the closest line on the output side, but these methods take text input and never video. On the video-to-generated-image axis the closest work is PVTG \citep{pvtg2607}, a concurrent thumbnail-generation method in which preference-aware highlight retrieval selects a keyframe and VLM-guided diffusion renders a faithful thumbnail. PVTG emits a single cover image per video, without a bounding-box or temporal-IoU localization protocol, without a protocolized faithfulness metric, and without an interleaved answer. We inherit the interleaving and judging scaffolds of this line and replace the retrieved image pool with video-derived keyframe conditions.
+
+\paragraph{Keyframe selection and grounded captioning.}
+AKS \citep{aks2502} frames keyframe selection as maximizing question relevance and temporal coverage without any training. VideoEspresso \citep{videoespresso2411} de-duplicates frames through BGE-M3 caption similarity and reasons over roughly two frames per question. GROVE \citep{grove2503} generates captions while densely grounding the mentioned objects through subject-verb-object triples. Our selector combines these ingredients: question-driven selection in the spirit of AKS is conditioned on the target objects following GROVE, redundant frames are pruned with BGE-M3 caption similarity as in VideoEspresso, and the selected keyframe is then grounded at the object level.
+
+\paragraph{Hallucination control and causal video understanding.}
+ScaleCap \citep{scalecap2506} removes hallucinated caption content with heuristic question answering and contrastive sentence scoring. We lift this test-time idea to cross-modal consistency, in which image and text serve as mutual evidence, and use it as a factuality gate for the shared RAG memory. CUVA \citep{cuva2405} reframes video anomaly understanding as What/Why/How questions with multi-dimensional metrics; we borrow its causal dimensions for evaluation.
+
+\paragraph{Video multi-agent systems and unified models.}
+Existing video multi-agent systems are largely single-direction pipelines with weak role asymmetry and no retrieval memory shared between the understanding and generation ends. MAGNET \citep{magnet2506} chains retrieval, scoring agents, and a meta-agent; LVAS-Agent \citep{lvasagent2503} organizes a role-based dubbing crew; MovieAgent \citep{movieagent2503} employs director and writer agents with per-character LoRA; Mora \citep{mora2403} chains generation agents. Our two-agent design differs in its bidirectional feedback and its shared memory. Unified image-text models such as BAGEL \citep{bagel2505} and Show-o2 \citep{showo22506} motivate our controllability and traceability argument: they could in principle approximate the pipeline end to end, but they expose neither keyframe-grounded, source-traceable outputs nor a way to verify them. We run a first control of this kind with Janus-Pro-7B \citep{januspro2501} in Section~\ref{sec:exp}; the unified model renders heavily stylized yet content-deformed answers, is faithful to the actual clip in 0 of 20 cases, and emits no localization output, and we leave comparisons against BAGEL and Show-o2 to future work. The any-to-any models discussed in Section~\ref{sec:intro}, namely X-VILA \citep{xvila2405}, NExT-GPT \citep{nextgpt2309}, and Emu3.5 \citep{emu352510}, likewise map video to generated images without an explicit localization protocol or a faithfulness metric.
+
+Table~\ref{tab:capability} summarizes the surveyed systems along the seven capability axes induced by our task definition (Section~\ref{sec:method-task}). Every cell was checked against the cited paper's own text, and each $\times$ or $\triangle$ assignment was additionally stress-tested by an adversarial pass instructed to overturn it from the cited work's own claims; per-cell notes and source-quote provenance appear in Appendix~\ref{app:table1}. No surveyed system provides both explicit spatio-temporal localization and a declared keyframe-faithfulness protocol (columns 4 and 5), which is the conjunction our task and benchmark formalize. The nearest neighbor, the concurrent PVTG, emits a single thumbnail with partial versions of both properties and no interleaved answer.
+
+\begin{table}[t]
+\centering
+\caption{Capability comparison across the surveyed systems; \checkmark\ provided, $\times$ absent, $\triangle$ partial, with detailed per-cell notes in Appendix~\ref{app:table1}.}
+\label{tab:capability}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccccc}
+\toprule
+System & Video input & Newly gen.\ image & Interleaved answer & Explicit ST-loc. & Faithfulness protocol & Keyframe-consist.\ bench. & Training-free \\
+\midrule
+VideoRAG \citep{videorag2502} & \checkmark & $\times$ & $\times$ & $\triangle$\textsuperscript{a} & $\times$ & $\times$ & \checkmark \\
+Video-RAG \citep{videorag2411} & \checkmark & $\times$ & $\times$ & $\triangle$\textsuperscript{a} & $\times$ & $\times$ & \checkmark \\
+M2RAG \citep{m2rag2411} & $\times$ & $\times$ & \checkmark & $\times$ & $\times$ & $\times$ & $\triangle$ \\
+M2IO-R1 \citep{m2ior12508} & $\times$ & $\times$ & \checkmark & $\times$ & $\times$ & $\times$ & $\triangle$ \\
+MRAMG-Bench \citep{mramgbench2502} & $\times$ & $\times$ & \checkmark & $\times$ & $\times$ & $\times$ & \checkmark \\
+ImageRAG \citep{imagerag2502} & $\times$ & \checkmark & $\times$ & $\times$ & $\times$ & $\times$ & \checkmark \\
+X-VILA \citep{xvila2405} & \checkmark & \checkmark & $\triangle$ & $\times$ & $\triangle$\textsuperscript{b} & $\triangle$\textsuperscript{b} & $\times$ \\
+NExT-GPT \citep{nextgpt2309} & \checkmark & \checkmark & $\triangle$ & $\times$ & $\times$ & $\times$ & $\times$ \\
+Emu3.5 \citep{emu352510} & $\triangle$ & \checkmark & \checkmark & $\times$ & $\triangle$\textsuperscript{b} & $\triangle$\textsuperscript{b} & $\times$ \\
+Show-o2 \citep{showo22506} & \checkmark & \checkmark & \checkmark & $\times$ & $\triangle$\textsuperscript{b} & $\triangle$\textsuperscript{b} & $\times$ \\
+BAGEL \citep{bagel2505} & $\times$ & \checkmark & $\triangle$ & $\times$ & $\times$ & $\times$ & $\times$ \\
+PVTG \citep{pvtg2607} & \checkmark & \checkmark & $\times$ & $\triangle$\textsuperscript{c} & $\triangle$\textsuperscript{c} & $\triangle$\textsuperscript{c} & $\triangle$ \\
+Zero-Shot STVG \citep{zeroshotstvg2509} & \checkmark & $\times$ & $\times$ & \checkmark & $\times$ & $\times$ & \checkmark\textsuperscript{d} \\
+AKS \citep{aks2502} & \checkmark & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & \checkmark \\
+V-STaR \citep{vstar2503} & \checkmark & $\times$ & $\times$ & \checkmark & $\times$ & $\times$ & \checkmark \\
+\textbf{Ours (VKIG)} & \checkmark & \checkmark & \checkmark\textsuperscript{e} & \checkmark & \checkmark & \checkmark\textsuperscript{f} & \checkmark \\
+\bottomrule
+\end{tabular}%
+}
+\par\smallskip
+{\footnotesize Legend: \checkmark\ provided; $\times$ absent; $\triangle$ partial. Columns: video input; newly generated (not retrieved or selected) output image; interleaved image-text answer; explicit spatio-temporal localization (time interval and bounding box, IoU-evaluated); declared protocol and metric for generated-image faithfulness to the localized keyframe; benchmark scoring keyframe consistency; training-free main pipeline. Superscripts a--f refer to the notes in Appendix~\ref{app:table1}.}
+\end{table}

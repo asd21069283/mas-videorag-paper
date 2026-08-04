@@ -1,0 +1,146 @@
+% ============================================================
+% 01_front.tex — title, abstract, and Introduction (W1)
+% Pure fragment: no \documentclass, no \begin{document}.
+% \maketitle is issued here; main.tex must not call it again.
+%
+% Title candidates (T1/T2/T3; chosen = Candidate A):
+%   Candidate B: Localize, then Generate: Faithful Interleaved
+%                Image-Text Answers from Video
+%   Candidate C: Generating Keyframe-Faithful Interleaved
+%                Image-Text Answers from Video
+% ============================================================
+
+\title{VKIG: Keyframe-Grounded Interleaved Image-Text Generation from Video}
+\author{Zizhou Liu\\City University of Hong Kong}
+\date{}
+
+\maketitle
+
+\begin{abstract}
+Turning moments inside a video into faithful, presentable visual assets is an
+increasingly important capability for video platforms, enterprise
+documentation, and short-form media production.
+However, existing video-language systems either describe video content in text
+alone or generate images with no provenance in a source frame, and recent
+any-to-any models map video to generated images without localization or
+verifiable faithfulness.
+To address this, we propose VKIG, a two-agent framework in which an
+understanding agent localizes question-relevant evidence and a generation
+agent renders images that are newly generated from, and faithful to,
+explicitly localized keyframes, coupled through a shared multimodal
+retrieval-augmented memory.
+Specifically, a training-free two-stage selector combines coarse temporal
+windowing by a multimodal language model with object-conditioned in-window
+selection, addressing keyframe timing, the bottleneck identified by our
+temporal-oracle study; we further formalize the task and construct
+VKIG-Bench, a benchmark scoring keyframe consistency and spatio-temporal
+localization alongside text and image quality.
+Experiments on HC-STVG v2 show that the selector raises joint localization
+accuracy to 0.567, surpassing a bridged zero-shot spatio-temporal grounding
+baseline at 0.447 on identical clips, and that our faithfulness protocol
+exposes generation failures which automatic similarity metrics cannot
+reliably detect.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+Video is now the dominant medium on consumer platforms, and a large share of
+practical content work consists of turning moments inside video into
+presentable visual assets.
+A creator needs a cover image that depicts a real highlight of a clip, an
+enterprise converts screen recordings into step-by-step illustrated manuals,
+and a short-drama studio produces posters from its episodes.
+In each case the desired answer is an image with a few words of text,
+traceable to a real moment yet rendered for presentation; faithfulness here
+means semantic consistency with the source moment, such as the same subject,
+scene, and composition, rather than pixel-level identity recovery.
+However, frontier multimodal large language models (MLLMs) can describe video
+content yet neither localize the relevant moment precisely nor produce an
+accountable image, and text-to-image models generate images with no
+provenance in a source video.
+
+Existing routes each cover part of this task.
+Retrieval-augmented video question answering, including VideoRAG
+\citep{videorag2502} and Video-RAG \citep{videorag2411}, reads long videos
+but answers in text only.
+Retrieval-augmented image generation methods such as ImageRAG
+\citep{imagerag2502} and ORIG \citep{orig2510}, together with interleaved
+generators such as M2RAG \citep{m2rag2411} and M2IO-R1 \citep{m2ior12508},
+produce image-text output but take text or image input, and the displayed
+images are usually retrieved rather than newly generated from a specific
+source frame.
+Any-to-any models such as X-VILA \citep{xvila2405} and NExT-GPT
+\citep{nextgpt2309} can map video input to a generated image, and unified
+generators \citep{emu352510,showo22506} natively produce interleaved
+image-text; none of them, however, provides explicit spatio-temporal
+localization of the evidence or a stated protocol verifying that the
+generated image is faithful to a localized source keyframe.
+A concurrent preprint \citep{pvtg2607} does generate faithful thumbnails from
+video, but it emits a single cover image without an explicit localization
+protocol or an interleaved answer.
+
+We introduce VKIG, a two-agent framework for \emph{video-grounded interleaved
+image-text generation}.
+Given a video and a textual instruction, an \emph{Understand Agent} extracts
+the queried target objects, temporally localizes the relevant event, grounds
+the objects in the selected keyframe, and drafts the textual answer; a
+\emph{Generation Agent} turns each grounded keyframe into a newly generated,
+faithfulness-constrained image and lays out the interleaved answer
+(Section~\ref{sec:method}).
+The two agents are designed to share a multimodal retrieval-augmented memory
+with feedback loops between grounding and reselection and between generation
+and memory write-back; the reported experiments execute the localization,
+grounding, and generation backbone of this design.
+The main pipeline is training-free end to end.
+
+A central empirical question is where such a pipeline fails.
+A temporal-oracle study shows that keyframe timing, rather than spatial
+grounding, is the dominant bottleneck: when the selected keyframe falls
+inside the gold temporal window, grounding is accurate, but frame-wise
+appearance scoring often misses the window because it fires whenever the
+subject is visible.
+We therefore design a two-stage selector that adapts the coarse-to-fine
+paradigm of long-video question answering \citep{unitime2506,focus2510} to
+keyframe selection for faithful generation: an MLLM first localizes a coarse
+temporal window over an ordered sparse frame grid, and object-conditioned
+scoring then selects the keyframe within that window.
+The selector requires no parameter training or adaptation.
+
+To make these properties measurable, we formalize the task and construct
+VKIG-Bench (Section~\ref{sec:bench}), to our knowledge the first benchmark
+that scores keyframe consistency, that is, whether a generated image
+preserves the target object of its source keyframe, and spatio-temporal
+localization, in addition to text correctness, image-text alignment, and
+image quality.
+On the generation side we specify a keyframe-faithfulness protocol with human
+and MLLM-judge evaluation, which lets us study how instruction design and
+multi-pass editing trade faithfulness against artistry.
+
+On an HC-STVG v2 subset, the two-stage selector raises joint localization
+accuracy from 0.433 to 0.567 and outperforms a bridged zero-shot
+spatio-temporal video grounding method \citep{zeroshotstvg2509} on identical
+clips, and the improvement persists at larger scale
+(Section~\ref{sec:exp}).
+Our faithfulness study finds that standard automatic similarity metrics
+separate wholesale failures well yet lose discriminative power once failures
+become expression-level.
+Faithfulness proves largely controllable through instruction design and
+sequential editing, whereas a unified-model control produces stylized but
+unfaithful answers with no localization output.
+A real-video prototype runs end to end on a single consumer GPU.
+
+Our contributions are summarized as follows:
+\begin{itemize}
+\item We propose VKIG, a two-agent framework that couples video understanding
+and image generation through a shared multimodal retrieval-augmented memory,
+producing interleaved answers in which every image is newly generated from an
+explicitly localized keyframe.
+\item We design a training-free two-stage keyframe selector that combines
+coarse MLLM temporal windowing with object-conditioned in-window selection,
+addressing the timing bottleneck identified by our temporal-oracle study and
+reaching a joint localization accuracy of 0.567 on HC-STVG v2.
+\item We formalize video-grounded interleaved image-text generation and
+construct VKIG-Bench, a benchmark scoring keyframe consistency and
+spatio-temporal localization alongside text and image quality, together with
+a human-anchored keyframe-faithfulness protocol.
+\end{itemize}

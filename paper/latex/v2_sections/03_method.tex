@@ -1,0 +1,138 @@
+% W3: Method, rewritten from old_main_v1.tex sections 4.1-4.5 per teacher notes T14-T18.
+% Fragment only: no preamble, no \begin{document}. TikZ libs required: positioning, arrows.meta.
+
+\section{Method}\label{sec:method}
+
+Given a video $V$ and an instruction $Q$, the \textbf{Understand Agent} extracts the queried target object(s) from $Q$, temporally localizes the event with a two-stage selector, grounds the target object in the selected keyframe, and drafts the textual answer; the \textbf{Generation Agent} turns each grounded keyframe into a newly generated, faithfulness-constrained image and lays out the interleaved answer. The main pipeline is training-free end to end. This section describes the full design. The reported runs (Section~\ref{sec:exp}) execute the localization, grounding, and generation backbone, whereas the shared-RAG retrieval and write-back memory, the two feedback loops (grounding-to-reselection and generation-to-memory), and the multi-image interleaved layout are part of the design and were not activated in the reported runs; Section~\ref{sec:method-halluc} lists these components. No reported number depends on any non-activated component.
+
+\subsection{Task formulation}\label{sec:method-task}
+
+The input is a video clip $V = \{F_1, \ldots, F_N\}$ together with a textual instruction $Q$, where $F_i$ denotes the $i$-th frame and $N$ the number of frames. The output is an interleaved answer
+\begin{equation}
+A = [t_1, img_1, t_2, img_2, \ldots],
+\end{equation}
+where each $t_i$ is a text span and each $img_i$ is a new image generated from a keyframe of $V$, carrying the provenance record $(\text{keyframe\_ts}_i, \text{bbox}_i, o_i)$ of its source timestamp, bounding box, and target object. We seek a mapping $f: (V, Q) \rightarrow A$ that satisfies four objectives. First, the text spans must correctly answer $Q$ (text correctness). Second, each image $img_i$ must be semantically consistent with its adjacent text $t_i$ (image-text consistency). The third objective, central to this paper, is \emph{keyframe consistency}: $img_i$ must faithfully preserve the target object $o_i$ from its source keyframe $V[\text{keyframe\_ts}_i]$. The fourth is localization correctness, requiring that $(\text{keyframe\_ts}_i, \text{bbox}_i)$ be the correct spatio-temporal location of the queried content in $V$. A consolidated notation table is provided in Appendix~\ref{app:notation}.
+
+\subsection{Architecture: two agents over a shared multimodal RAG}\label{sec:method-arch}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  font=\small,
+  box/.style={draw, rounded corners=2pt, align=center, inner sep=5pt},
+  membox/.style={draw, dashed, rounded corners=2pt, align=center, inner sep=5pt},
+  flow/.style={-{Stealth[length=2.4mm]}, semithick},
+  design/.style={-{Stealth[length=2.4mm]}, semithick, dashed},
+  designboth/.style={{Stealth[length=2.4mm]}-{Stealth[length=2.4mm]}, semithick, dashed}
+]
+\node[box] (input) at (0,0) {Video $V$\\[1pt] Instruction $Q$};
+\node[box] (ua) at (3.9,0) {Understand Agent\\[1pt] {\scriptsize keyframe selection}\\ {\scriptsize temporal and spatial grounding}\\ {\scriptsize answer drafting}};
+\node[box] (ga) at (9.0,0) {Generation Agent\\[1pt] {\scriptsize keyframe-conditioned generation}\\ {\scriptsize interleaved layout}};
+\node[box] (output) at (12.7,0) {Interleaved\\[1pt] answer $A$};
+\node[membox] (rag) at (6.4,-2.6) {Shared multimodal RAG memory\\[1pt] {\scriptsize frame embeddings, crops, detection cache; OCR/ASR/caption text}};
+\draw[flow] (input) -- (ua);
+\draw[flow] (ua) -- node[above, align=center]{\scriptsize grounded\\[-2pt] \scriptsize evidence} (ga);
+\draw[flow] (ga) -- (output);
+\draw[design] (ua.60) to[out=70, in=110, looseness=2.6] node[above]{\scriptsize grounding-to-reselection} (ua.120);
+\draw[designboth] (ua.south) -- node[left]{\scriptsize read/write} (rag.160);
+\draw[design] (ga.south) -- node[right]{\scriptsize generation-to-memory} (rag.20);
+\draw[design] (9.0,-3.7) -- (9.8,-3.7);
+\node[right, align=left] at (9.8,-3.7) {\scriptsize design level (not active in reported runs)};
+\end{tikzpicture}
+\caption{Architecture of the proposed system. Solid elements form the backbone executed in all reported runs; dashed elements (the shared memory store, its read/write links, and the grounding-to-reselection and generation-to-memory feedback loops) are design level and were not active in any reported run.}
+\label{fig:arch}
+\end{figure}
+
+Figure~\ref{fig:arch} shows the architecture. The Understand Agent parses $Q$, selects keyframes, grounds objects, and writes a textual answer; the Generation Agent turns the grounded evidence into images and lays out the interleaved answer. By design, the two agents read and write a shared multimodal RAG store holding frame embeddings, cropped images, a detection cache, and OCR, ASR, and caption text. The store is queried by the rule $\mathrm{sim}(\psi(o), \psi(cand)) \ge \tau_r$, where $\psi$ is the BGE-M3 text embedding, $cand$ ranges over stored candidates, and $\tau_r$ is the retrieval threshold. Two feedback loops connect the agents. The grounding-to-reselection loop returns to keyframe selection with a larger budget $B$ or relaxed pruning whenever every keyframe for an object $o$ has grounding confidence $\rho(o,F) < \tau_g$, where $\tau_g$ is the grounding threshold. The generation-to-memory loop writes newly generated images back to the shared store for reuse, avoiding redundant generation. The store, its retrieval, and both loops are architectural: they were not activated in any reported run (Section~\ref{sec:method-halluc}), and inter-stage state is instead passed as per-sample JSON. Prior video pipelines \citep{magnet2506,lvasagent2503} run in a single direction; our design closes a loop between understanding and generation over shared memory.
+
+\subsection{Question-driven object-level localization-to-generation}\label{sec:method-pipeline}
+
+The Understand Agent executes Steps 1 to 3 and the Generation Agent Steps 4 and 5. All steps are training-free.
+
+\paragraph{Step 1: Target-object extraction.} The grounding target set $O_Q$ is obtained per data source. On HC-STVG, the main-results dataset, a verb-boundary noun-phrase heuristic over the caption extracts the object, with the annotation \texttt{sub} field as fallback; the heuristic yields an over-long phrase in roughly 29\% of samples, a disclosed conservative factor (Section~\ref{sec:exp}). On the V-STaR dev subset we take the benchmark's annotated target object directly, an oracle-style input on object identity that deliberately isolates temporal and spatial localization from object naming (also disclosed in Section~\ref{sec:exp}). Short-drama demos take a user-supplied object. Full subject-verb-object parsing (POS tagging and dependency parsing, with optional LLM synonym expansion) would reverse GROVE \citep{grove2503} by extracting objects from the instruction rather than grounding caption objects; it is a design-level generalization (Section~\ref{sec:method-halluc}) and was not instantiated in the reported runs.
+
+\paragraph{Step 2: Two-stage temporal grounding and keyframe selection.} This step is the paper's core selection contribution. Frame-wise similarity scoring, whether query-level $s(Q,F)$ \citep{aks2502} or our object-level $s(o,F)$, measures appearance rather than action timing: it fires whenever the subject is visible, which on person-centric video is most of the clip. We therefore split temporal localization from appearance scoring.
+
+Stage~A obtains a coarse temporal window from a video MLLM. We sample a sparse uniform grid $G = \{F_1, \ldots, F_g\}$ of $g = 10$ frames and ask the MLLM $M$ (Qwen3-VL) to localize the queried event over the ordered grid,
+\begin{equation}
+W = [t_s, t_e] = M(G, Q),
+\end{equation}
+where $W$ is the predicted time window, obtained by mapping the returned grid indices to timestamps with half-cell dilation at the borders. The call exploits the MLLM's cross-frame reasoning, which frame-wise embedding similarity lacks, at the cost of one extra MLLM call per clip. Coarse-to-fine temporal selection is an established paradigm in long-video question answering \citep{unitime2506,focus2510,himu2603,leadqa2507}; our contribution is the diagnosis-driven adaptation of this paradigm to keyframe selection for faithful generation. The oracle study in Section~\ref{sec:exp} localizes the pipeline's bottleneck to timing, and the adaptation resolves a large share of that gap. The stage is training-free, and the gold interval is never revealed to $M$; we sanity-check this in Section~\ref{sec:exp}.
+
+Stage~B performs object-conditioned selection within $W$. Restricted to frames in $W$, we score each frame with a z-normalized two-channel mixture of query and object relevance and take the temporally smoothed peak:
+\begin{align}
+s(o, F) &= \mathrm{sim}\big(\psi_{img}(F), \psi_{txt}(o)\big), \\
+S(F) &= (1-w_o)\,\hat{s}(Q,F) + w_o\,\hat{s}(o,F), \qquad F \in W, \\
+F^* &= \arg\max_{F \in W}\, \mathrm{smooth}\big(S(F)\big),
+\end{align}
+where $\psi_{img}$ and $\psi_{txt}$ are the CLIP ViT-B/32 image and text encoders used in all reported frame scoring, $\hat{s}$ denotes a z-scored channel, $w_o = 0.6$ is the object weight, and $\mathrm{smooth}$ applies temporal smoothing over adjacent frames. This configuration is the one evaluated as E2 in Section~\ref{sec:exp}. A three-channel variant that adds an action-phrase channel $\hat{s}(a,F)$ with untuned default weights $w_q, w_o, w_a = 0.3/0.4/0.3$ is evaluated separately as E1; combining it with Stage~A is left to future work, as no factorial run exists yet. With the default keyframe budget $B = 1$, used in all reported runs, $I^* = \{F^*\}$; the multi-keyframe coverage objective is a design extension (Section~\ref{sec:method-halluc}).
+
+\paragraph{Step 3: Object-level grounding.} For each pair of a selected frame $F \in I^*$ and object $o \in O_Q$, open-vocabulary detection yields a box and a confidence $(box, \rho(o,F))$, producing the evidence set $E = \{(F, o, box, \rho)\}$. In all reported runs this role is filled by Qwen3-VL's native grounding, invoked with a bounding-box prompt on the selected keyframe; Grounding-DINO and the APE detector of Video-RAG \citep{videorag2411} were evaluated as alternatives on 50 clips and dropped in favor of Qwen3-VL (Section~\ref{sec:exp}). The confidence $\rho$ is the detector's returned confidence where available.
+
+\paragraph{Step 4: Keyframe-conditioned generation.} Following the confirmed task setting, the output is a newly generated image, with cropping demoted to an ablation. The main path conditions a generator $\mathcal{G}$ on the best keyframe:
+\begin{align}
+\mathrm{keyframe}(o) &= \arg\max_{F \in I^*}\, \rho(o,F), \\
+\mathrm{image}(o) &= \mathcal{G}\big(\mathrm{cond}(o)\big),
+\end{align}
+where $\mathrm{cond}(o)$ is the conditioning input to $\mathcal{G}$. In every reported generation run, $\mathrm{cond}(o)$ is the full selected keyframe plus a single instruction string, with no subject crop and no structure map; richer conditioning on a subject crop, SVO or scene text, and a structure map is a design option, and the crop path is scheduled only as ablation A3, which has not been run. Two generator lines serve as comparisons: a subject-preserving line, FLUX.1-dev with OminiControl subject conditioning \citep{ominicontrol2411}, and an instruction-edit line, FLUX.1 Kontext-dev or Qwen-Image-Edit, of which the Kontext model is the one used in all reported generation runs (Section~\ref{sec:exp}). A designed fallback gate decides between cropping and generating:
+\begin{align}
+\rho^*(o) &= \max_{F \in I^*} \rho(o,F), \qquad r^*(o) = \max_{cand \in \mathrm{RAG}} \mathrm{sim}\big(\psi(o), \psi(cand)\big), \\
+\mathrm{decide}(o) &= \begin{cases} \text{crop} & \text{if } \rho^*(o) \ge \tau_g \text{ and } r^*(o) \ge \tau_r, \\ \text{generate} & \text{otherwise}, \end{cases}
+\end{align}
+where $\rho^*(o)$ is the best grounding confidence for $o$ and $r^*(o)$ is the best retrieval similarity over stored candidates. Unlike the select-only decision of M2RAG \citep{m2rag2411}, the gate falls back to generating a new image when no faithful candidate exists. The gate and the crop path are design components; no reported number uses them.
+
+\paragraph{Step 5: Interleaved layout.} The Generation Agent aligns each $img_i$ with the answer sentence mentioning $o_i$, writes captions, and emits the final answer $A$.
+
+\subsection{Hallucination control and design extensions}\label{sec:method-halluc}
+
+In all reported runs (Section~\ref{sec:exp}), the executed pipeline is the backbone of Section~\ref{sec:method-pipeline}: two-stage keyframe selection, object grounding on the selected keyframe, and keyframe-conditioned generation, with inter-stage state passed as per-sample JSON. For hallucination control, the design lifts the contrastive idea of ScaleCap \citep{scalecap2506} from images to the video-to-image-and-text setting: we score whether image and text mutually evidence each other and use the score as a factuality gate on writes to the RAG store. This mutual-evidence gate, like the extensions below, was not activated in any reported run.
+
+The design further specifies five extensions. BGE-M3 caption pruning \citep{videoespresso2411} shrinks the candidate set before Stage~A. When a budget $B > 1$ of keyframes is requested, selection maximizes summed relevance plus a temporal-coverage term $c(I)$; AKS \citep{aks2502} publishes no closed form for this objective, and our instantiation is given in Appendix~\ref{app:lora}. Full SVO parsing generalizes the per-source target-object extraction of Step 1. The shared-RAG retrieval and write-back and the two feedback loops of Section~\ref{sec:method-arch} activate the memory store. Optional LoRA consistency losses (Appendix~\ref{app:lora}) would apply only if training were ever enabled, whereas the main line is deliberately training-free and plug-and-play. Every extension in this list is disabled in every reported run, so no reported number depends on any of them.
+
+\subsection{Analysis: why temporal selection is the bottleneck}\label{sec:method-analysis}
+
+This subsection gives an analytical account, rather than formal theorems, of the empirical bottleneck, connecting the oracle and selector studies of Section~\ref{sec:exp} to the method.
+
+\paragraph{An exact factorization of joint localization.} For any selector, joint accuracy at IoU threshold $\tau$ factorizes as
+\begin{equation}
+A(\tau) = R_t \cdot S_t(\tau),
+\end{equation}
+where $R_t = P(\text{keyframe} \in \text{gold window})$ is temporal recall and $S_t(\tau) = P(\mathrm{IoU} \ge \tau \mid \text{temporally correct})$ is conditional spatial precision. The identity follows from the definition of the joint metric, and it holds exactly on all nine selector runs at both thresholds. Empirically, $S_t$ is near-invariant across selectors: it stays between 0.78 and 0.81 for every content selector (E0, E1, E2, uniform, the temporal oracle, and the $g=15$ and $g=20$ grids), with random the sole outlier at 0.73, depressed by its 23\% no-box rate (Table~\ref{tab:factorization}). Because grounding is held fixed, a selector can move $R_t$ but not $S_t$, and the temporal-oracle ceiling $A_{\mathrm{oracle}} = 1 \cdot S_t = 0.787$ is mechanically the conditional spatial precision. The factorization therefore upgrades the bottleneck claim from an empirical remark to an identity: the entire selectable gap lives in $R_t$.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Selector & $A$ (acc@0.3) & $R_t$ & $S_t$ & no-box rate \\
+\midrule
+random ($n=300$) & 0.257 & 0.350 & 0.733 & 23.3\% \\
+uniform/midpoint ($n=300$) & 0.440 & 0.557 & 0.790 & 16.0\% \\
+E0 ($n=1000$) & 0.419 & 0.524 & 0.800 & 6.3\% \\
+E1 ($n=300$) & 0.497 & 0.613 & 0.810 & 7.7\% \\
+E2 $g=10$ ($n=300$) & 0.570 & 0.717 & 0.795 & 6.3\% \\
+E2 $g=10$ ($n=1000$) & 0.540 & 0.688 & 0.785 & 5.7\% \\
+E2 $g=15$ ($n=300$) & 0.603 & 0.753 & 0.801 & 7.7\% \\
+E2 $g=20$ ($n=300$) & 0.627 & 0.783 & 0.800 & 6.7\% \\
+temporal oracle ($n=300$) & 0.787 & 1.000 & 0.787 & 6.0\% \\
+\bottomrule
+\end{tabular}
+\caption{The factorization $A = R_t \cdot S_t$ holds exactly on every run. $S_t$ stays in a 0.78--0.81 band for every content selector (sole outlier: random at 0.73, depressed by its 23\% no-box rate), while $R_t$ spans 0.35--1.00; selectors move timing, not box quality.}
+\label{tab:factorization}
+\end{table}
+
+\paragraph{Why frame-wise appearance scoring cannot localize timing.} A frame-wise score computes $S(F) = h(\psi_{img}(F), \psi_{txt}(o))$ for some per-frame function $h$, so it depends on each frame in isolation. On frames that are appearance-equivalent for the queried object, meaning the subject is visible before, during, and after the event, $\arg\max_F S(F)$ is invariant to any permutation of their temporal order: such a score cannot separate when the action happens from when the subject is merely present. For events defined by temporal ordering, such as ``walks toward the car,'' no appearance score localizes the moment, however strong the embedding, and a position-blind selector attains expected recall $E[|W_{\mathrm{gold}}|/L]$, where $W_{\mathrm{gold}}$ is the gold window and $L$ the clip length. This is what we observe. The random selector attains recall 0.350, close to $E[|W_{\mathrm{gold}}|/L] = 0.365$, and the appearance-argmax selector E0 (recall 0.524) does not beat the centered-midpoint prior (uniform, 0.557); on this dataset, appearance scoring buys nothing over a positional guess. The two-stage selector escapes the invariance because Stage~A's MLLM reads the ordered frame grid, supplying the cross-frame temporal signal that a per-frame embedding lacks. Its recall gain over E0 is near-constant across gold-window widths, at $+0.165$, $+0.168$, and $+0.159$ in the narrow, medium, and wide terciles ($n=1000$; Table~\ref{tab:tercile}), so the stage adds temporal discrimination rather than exploiting window size. The appearance-equivalence premise is an idealization, since real frames vary; the claim borne out by the terciles and by the E0-versus-uniform comparison is that the discriminative signal for timing in the appearance channel is weak, not that it is exactly zero.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Gold-window tercile & chance $= E[|W_{\mathrm{gold}}|/L]$ & E0 recall & E2 recall & E2 gain \\
+\midrule
+narrow & 0.211 & 0.408 & 0.574 & $+0.165$ \\
+medium & 0.320 & 0.514 & 0.682 & $+0.168$ \\
+wide & 0.563 & 0.650 & 0.808 & $+0.159$ \\
+\bottomrule
+\end{tabular}
+\caption{Temporal recall by gold-window width (terciles of the same 1000 clips). E2's gain over E0 is near-constant across difficulty, indicating added temporal discrimination rather than window-size exploitation.}
+\label{tab:tercile}
+\end{table}

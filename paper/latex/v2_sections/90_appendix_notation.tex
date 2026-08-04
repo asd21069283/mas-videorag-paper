@@ -1,0 +1,53 @@
+% W3: Appendix, notation reference (moved from old section 4.1 per T14) and design-level
+% objective formulations (moved from old section 4.4 per T17). Fragment only: no preamble.
+
+\section{Notation reference}\label{app:notation}
+
+Table~\ref{tab:notation} consolidates the notation used throughout Section~\ref{sec:method}. Each symbol is also defined at its first occurrence in the text.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}lp{8.6cm}@{}}
+\toprule
+Symbol & Meaning \\
+\midrule
+$V = \{F_1,\ldots,F_N\}$ & input frame sequence; $N$ frames \\
+$Q$ & user instruction \\
+$A = [t_1, img_1, \ldots]$ & interleaved answer of text spans $t_i$ and generated images $img_i$ \\
+$T = \{(s,v,o)_k\}$ & SVO triples from $Q$ (design level, Section~\ref{sec:method-pipeline}; reported runs use the target object $o$ only) \\
+$o \in O_Q$ & target object; $O_Q$ is the queried object set \\
+$M$ & video MLLM of Stage A (Qwen3-VL in all reported runs) \\
+$G = \{F_1,\ldots,F_g\}$ & sparse uniform frame grid of Stage A; $g$ is the grid size \\
+$W = [t_s, t_e]$ & coarse time window predicted by Stage A \\
+$s(o,F)$ & object-conditioned frame relevance \\
+$S(F)$ & mixed selection score; $\hat{s}$ denotes a z-scored channel \\
+$c(I)$ & temporal coverage of a frame subset $I \subseteq V$ \\
+$I^*$ & selected keyframe subset of size at most $B$ (keyframe budget; $B=1$ in all reported runs) \\
+$E = \{b_k\}$ & object-level evidence set; item $b = (F,o,box,\rho)$ \\
+$\rho(o,F)$ & grounding confidence of $o$ in frame $F$ \\
+$\tau_g, \tau_r$ & grounding and retrieval thresholds (design-level gate, Section~\ref{sec:method-halluc}) \\
+$\psi_{img}, \psi_{txt}$ & frame and text embeddings; CLIP ViT-B/32 in all reported frame scoring (Section~\ref{sec:method-pipeline}) \\
+$\psi(\cdot)$ & BGE-M3 text embedding, used only for the design-level RAG retrieval (Section~\ref{sec:method-halluc}) \\
+$\mathcal{G}$ & image generator (Step 4, Section~\ref{sec:method-pipeline}) \\
+\bottomrule
+\end{tabular}
+\caption{Consolidated notation for the method (Section~\ref{sec:method}).}
+\label{tab:notation}
+\end{table}
+
+\section{Design-level objective formulations}\label{app:lora}
+
+The two formulations below complete the design extensions of Section~\ref{sec:method-halluc}. Neither is active in any reported run, and no reported number depends on them.
+
+\paragraph{Multi-keyframe coverage.} When a budget $B > 1$ of keyframes is requested, selection maximizes summed relevance plus a coverage term:
+\begin{equation}
+I^* = \arg\max_{I \subseteq W,\, |I| \le B} \Big[ \sum_{F \in I} S(F) + \lambda \cdot c(I) \Big], \qquad c(I) = -\sum_{j=1}^{m} \Big|\, n_j(I) - \frac{|I|}{m} \,\Big|,
+\end{equation}
+where $\lambda$ weights coverage against relevance, the window $W$ is divided into $m$ equal bins, and $n_j(I)$ counts the frames of $I$ falling in bin $j$, so that $c(I)$ penalizes temporally uneven selections. AKS \citep{aks2502} publishes no closed form for this objective; the instantiation above is ours.
+
+\paragraph{Optional LoRA consistency losses.} If training were ever enabled (the main line is deliberately training-free), the design specifies
+\begin{align}
+L_{cons} &= 1 - \mathrm{sim}\big(\psi_{img}(img), \psi_{txt}(\text{corresponding sentence})\big), \\
+L &= L_{ret} + \beta \cdot L_{gnd} + \gamma \cdot L_{cons},
+\end{align}
+where $L_{ret} = \mathrm{InfoNCE}\big(\psi(o), \psi(\text{correct evidence})\big)$ aligns retrieval, $L_{gnd} = L_{box}(\mathrm{GIoU}) + L_{cls}$ supervises grounding, and $\beta, \gamma$ are loss weights.
