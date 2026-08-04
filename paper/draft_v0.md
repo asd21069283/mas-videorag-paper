@@ -1,5 +1,7 @@
 # Draft v0 — MAS + Multimodal RAG for Video-grounded Interleaved Image-Text Generation
 
+> ⚠️ **SUPERSEDED (2026-08-04)**: 论文正稿已迁移至 `paper/latex/main.tex`(按老师 2026-08-04 的 20 条批注做了 v2 全面改写:去AI化/ICLR体例/图表重组,见 `paper/老师批注_2026-08-04.md`)。本文件停止更新,仅作历史底稿;数字若与 latex 版冲突,以 latex 版为准。
+
 > Working draft for an AI-conference-style paper. English body, LaTeX-portable.
 > Citations use placeholder keys of the form `[Author, arXiv:xxxx]` — do **not** treat numbers as final; verify against source list before submission.
 > Status tags used throughout: **[VERIFIED]** = empirically run; **[PLANNED]** = designed but not yet run; **TODO** = result/table to be filled.
